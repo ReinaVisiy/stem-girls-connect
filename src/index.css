@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brandGreen: #269464;
+  --color-brandPink: #82246d;
+  --color-brandSlate: #486e7c;
+  --color-neutralWhite: #FFFFFF;
+  --color-footerGray: #E2E8F0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  scroll-behavior: smooth;
+}
+.fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
