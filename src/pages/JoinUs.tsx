@@ -68,11 +68,11 @@ const JoinUs: React.FC = () => {
 
       {/* IDGWS Photo */}
       <section className="container mx-auto px-6">
-        <ScrollReveal className="max-w-4xl mx-auto mb-16 rounded-[50px] overflow-hidden shadow-2xl border-4 border-brandPink/10 aspect-video">
+        <ScrollReveal className="max-w-4xl mx-auto mb-16 rounded-[50px] overflow-hidden shadow-2xl border-4 border-brandPink/10 aspect-[3/2]">
           <img
             src="/IDGWS.jpg"
             alt="STEM Girls Connect celebrating International Day of Girls and Women in Science"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover object-top"
           />
         </ScrollReveal>
       </section>

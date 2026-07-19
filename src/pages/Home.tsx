@@ -23,11 +23,11 @@ const Home: React.FC = () => {
             </p>
             
             {/* Added Picture */}
-            <div className="max-w-4xl mx-auto mb-12 rounded-[50px] overflow-hidden shadow-2xl border-4 border-brandPink/10 aspect-video">
+            <div className="max-w-4xl mx-auto mb-12 rounded-[50px] overflow-hidden shadow-2xl border-4 border-brandPink/10 aspect-[4/3]">
               <img 
                 src="/Group SGC pic.jpg" 
                 alt="STEM Girls Connect in Action" 
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover object-top"
               />
             </div>
 
