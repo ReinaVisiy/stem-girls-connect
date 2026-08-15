@@ -2,10 +2,16 @@ import React from 'react';
 import { Mail, Facebook, Linkedin, MessageSquare, MapPin } from 'lucide-react';
 import ScrollReveal from '../components/ScrollReveal';
 import PageHeader from '../components/PageHeader';
+import Seo from '../components/Seo';
 
 const Contact: React.FC = () => {
   return (
     <div className="pb-24">
+      <Seo
+        title="Contact Us | STEM Girls Connect"
+        description="Get in touch with STEM Girls Connect to learn more, collaborate, or support our mission to empower girls and young women in STEM in Cameroon."
+        path="/contact"
+      />
       <PageHeader 
         title="Contact Us" 
         subtitle="Connect with our global STEM movement." 

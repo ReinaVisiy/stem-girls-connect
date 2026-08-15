@@ -2,6 +2,7 @@ import React from 'react';
 import { Target, Eye, Users, CheckCircle2 } from 'lucide-react';
 import ScrollReveal from '../components/ScrollReveal';
 import PageHeader from '../components/PageHeader';
+import Seo from '../components/Seo';
 
 const About: React.FC = () => {
   const bureau = [
@@ -24,6 +25,11 @@ const About: React.FC = () => {
 
   return (
     <div className="pb-24">
+      <Seo
+        title="About Us | STEM Girls Connect"
+        description="Learn about STEM Girls Connect's mission, vision, and the bureau leading efforts to empower girls and young women in STEM across Cameroon."
+        path="/about"
+      />
       <PageHeader 
         title="Who We Are" 
         subtitle="Nuturing Women in STEM" 

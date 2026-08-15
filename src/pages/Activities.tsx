@@ -2,10 +2,16 @@ import React from 'react';
 import { Layers, Presentation, Users2, ExternalLink, CheckCircle2 } from 'lucide-react';
 import ScrollReveal from '../components/ScrollReveal';
 import PageHeader from '../components/PageHeader';
+import Seo from '../components/Seo';
 
 const Activities: React.FC = () => {
   return (
     <div className="pb-24">
+      <Seo
+        title="Our Activities | STEM Girls Connect"
+        description="Explore STEM Girls Connect's programs, mentorship, and outreach activities supporting girls and young women in STEM across Cameroon."
+        path="/activities"
+      />
       <PageHeader 
         title="Impact & Evidence" 
         subtitle="Transforming passion into profession through curated STEM excellence." 

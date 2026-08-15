@@ -2,6 +2,7 @@ import React from 'react';
 import { Heart, Zap, Award, Share2, UserPlus, MessageSquare, Microscope, GraduationCap } from 'lucide-react';
 import ScrollReveal from '../components/ScrollReveal';
 import PageHeader from '../components/PageHeader';
+import Seo from '../components/Seo';
 
 const JoinUs: React.FC = () => {
   const perks = [
@@ -29,6 +30,11 @@ const JoinUs: React.FC = () => {
 
   return (
     <div className="pb-24">
+      <Seo
+        title="Join Us | STEM Girls Connect"
+        description="Join STEM Girls Connect and become part of a community empowering girls and young women pursuing STEM in Cameroon."
+        path="/join"
+      />
       <PageHeader 
         title="Join Our Community" 
         subtitle="Be a part of a global movement redefining the scientific landscape." 

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Smartphone, Landmark, Heart, Copy, CheckCircle2 } from 'lucide-react';
 import ScrollReveal from '../components/ScrollReveal';
 import PageHeader from '../components/PageHeader';
+import Seo from '../components/Seo';
 
 const Donate: React.FC = () => {
   const [copiedId, setCopiedId] = useState<string | null>(null);
@@ -37,6 +38,11 @@ const Donate: React.FC = () => {
 
   return (
     <div className="pb-24">
+      <Seo
+        title="Donate | STEM Girls Connect"
+        description="Support STEM Girls Connect's mission to empower girls and young women in STEM across Cameroon with a donation."
+        path="/donate"
+      />
       <PageHeader 
         title="Support Us" 
         subtitle="Investing in the future of STEM leadership." 

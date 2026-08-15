@@ -3,12 +3,18 @@ import { Link } from 'react-router-dom';
 import { Heart, Presentation, Layers, Users2 } from 'lucide-react';
 import ScrollReveal from '../components/ScrollReveal';
 import PageHeader from '../components/PageHeader';
+import Seo from '../components/Seo';
 
 const Home: React.FC = () => {
   return (
     <div className="overflow-hidden">
+      <Seo
+        title="STEM Girls Connect | Empowering Girls in STEM in Cameroon"
+        description="STEM Girls Connect is a Cameroon-based nonprofit empowering girls and young women in science, technology, engineering, and mathematics through mentorship, training, and advocacy."
+        path="/"
+      />
       <PageHeader 
-        title="Exploring the Future of STEM for the Benefit of All"
+        title="STEM Girls Connect: Exploring the Future of STEM for the Benefit of All"
       />
 
       {/* Core Identity Section */}
