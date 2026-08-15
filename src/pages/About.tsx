@@ -5,12 +5,12 @@ import PageHeader from '../components/PageHeader';
 
 const About: React.FC = () => {
   const bureau = [
-    { name: "Visiy Edna Buhnyuy", position: "Chairperson and CEO", initials: "VE", link: "https://www.linkedin.com/in/reina-visiy", image:""},
+    { name: "Visiy Edna Buhnyuy", position: "Chairperson and CEO", initials: "VE", link: "https://www.linkedin.com/in/visiy-edna-buhnyuy-phd-53a382188", image: "/Visiy Edna Buhnyuy.jpg"},
     { name: "Visiy Reina Kinyuy", position: "Programs Officer", initials: "VR", link: "https://www.linkedin.com/in/reina-visiy", image: "/Reina.jpg"},
     { name: "Lendzele Odile Berinyuy", position: "Accounting Officer", initials: "LO", link: "https://www.linkedin.com/company/stem-girls-connect/", image: ""},
-    { name: "Mbako Precious", position: "Administrative Secretary", initials: "MP", link: "https://www.linkedin.com/company/stem-girls-connect/", image: ""},
-    { name: "Lemnyuy Telma", position: "Deputy Administrative Secretary", initials: "LT", link: "https://www.linkedin.com/company/stem-girls-connect/", image: ""},
-    { name: "Gracious Rinyu", position: "Deputy Programs Officer", initials: "GR", link: "https://www.linkedin.com/company/stem-girls-connect/", image: ""},
+    { name: "Mbako Precious", position: "Administrative Secretary", initials: "MP", link: "https://www.linkedin.com/in/mbako-precious-3434aa360", image: ""},
+    { name: "Lemnyuy Telma", position: "Deputy Administrative Secretary", initials: "LT", link: "https://www.linkedin.com/in/lemnyuy-telma", image: ""},
+    { name: "Gracious Rinyu", position: "Deputy Programs Officer", initials: "GR", link: "https://www.linkedin.com/in/gracious-ringnyu-8a1523343", image: "/Gracious Rinyu.jpg"},
   ];
 
   const objectives = [
