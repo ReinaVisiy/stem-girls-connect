@@ -14,7 +14,7 @@ const Home: React.FC = () => {
         path="/"
       />
       <PageHeader 
-        title="STEM Girls Connect: Exploring the Future of STEM for the Benefit of All"
+        title="Exploring the Future of STEM for the Benefit of All"
       />
 
       {/* Core Identity Section */}
