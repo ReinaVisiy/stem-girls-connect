@@ -1,5 +1,5 @@
 
-import React, { Suspense } from 'react';
+import React from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -22,20 +22,14 @@ const App: React.FC = () => {
     <div className="flex flex-col min-h-screen">
       <Navbar />
       <main className="flex-grow pt-20">
-        <Suspense fallback={
-          <div className="h-screen w-full flex items-center justify-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-brandPink"></div>
-          </div>
-        }>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/activities" element={<Activities />} />
-            <Route path="/join" element={<JoinUs />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/donate" element={<Donate />} />
-          </Routes>
-        </Suspense>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/activities" element={<Activities />} />
+          <Route path="/join" element={<JoinUs />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/donate" element={<Donate />} />
+        </Routes>
       </main>
       <Footer />
     </div>
@@ -43,3 +37,4 @@ const App: React.FC = () => {
 };
 
 export default App;
+

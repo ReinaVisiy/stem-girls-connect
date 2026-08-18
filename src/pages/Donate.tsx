@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Smartphone, Landmark, Heart, Copy, CheckCircle2 } from 'lucide-react';
+import { Smartphone, Heart, Copy, CheckCircle2 } from 'lucide-react';
 import ScrollReveal from '../components/ScrollReveal';
 import PageHeader from '../components/PageHeader';
 import Seo from '../components/Seo';
+import { paymentMethods } from '../config/payments';
 
 const Donate: React.FC = () => {
   const [copiedId, setCopiedId] = useState<string | null>(null);
@@ -12,29 +13,6 @@ const Donate: React.FC = () => {
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 2000);
   };
-
-  const paymentMethods = [
-    {
-      id: 'mtn',
-      name: "MTN Mobile Money",
-      recipient: "Visiy Edna Buhnyuy",
-      number: "+237 678 55 97 39",
-      icon: <Smartphone color="#82246d" size={48} />,
-      color: "border-yellow-100",
-      action: "tel:*126*1*678559739#",
-      btnText: "Donate Now"
-    },
-    {
-      id: 'orange',
-      name: "Orange Money",
-      recipient: "Visiy Edna Buhnyuy",
-      number: "+237 657 65 27 33",
-      icon: <Smartphone color="#82246d" size={48} />,
-      color: "border-orange-100",
-      action: "tel:*150*1*1*657652733#",
-      btnText: "Donate Now"
-    }
-  ];
 
   return (
     <div className="pb-24">
@@ -60,21 +38,16 @@ const Donate: React.FC = () => {
         </ScrollReveal>
       </section>
 
-      {/* Donation Cards */}
       <section className="container mx-auto px-6 pb-24">
         <div className="grid lg:grid-cols-2 gap-10 max-w-5xl mx-auto">
           {paymentMethods.map((method) => (
             <ScrollReveal key={method.id} className={`bg-white p-12 rounded-[50px] shadow-2xl border-2 ${method.color} flex flex-col hover:border-brandPink transition-all duration-300`}>
               <div className="mb-10 flex justify-between items-center">
-                {method.icon}
+                <Smartphone color="#82246d" size={48} />
               </div>
               <h3 className="text-2xl font-extrabold text-brandGreen mb-6 uppercase tracking-tight">{method.name}</h3>
               
               <div className="space-y-6 mb-12 flex-grow text-left">
-                <div>
-                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Recipient</label>
-                  <p className="text-brandSlate font-extrabold text-lg">{method.recipient}</p>
-                </div>
                 <div>
                   <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Account Details</label>
                   <div className="flex items-center justify-between bg-gray-50 p-5 rounded-2xl border border-gray-100 mt-2">
@@ -90,8 +63,8 @@ const Donate: React.FC = () => {
               </div>
 
               <button 
-                onClick={() => method.action !== '#' && (window.location.href = method.action)}
-                className={`w-full bg-brandPink text-white py-5 rounded-2xl font-extrabold shadow-xl shadow-brandPink/30 hover:scale-[1.03] transition-all text-center uppercase tracking-widest text-sm ${method.action === '#' ? 'opacity-70 cursor-not-allowed' : ''}`}
+                onClick={() => window.location.href = method.action}
+                className="w-full bg-brandPink text-white py-5 rounded-2xl font-extrabold shadow-xl shadow-brandPink/30 hover:scale-[1.03] transition-all text-center uppercase tracking-widest text-sm"
               >
                 {method.btnText}
               </button>

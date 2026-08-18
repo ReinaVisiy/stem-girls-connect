@@ -1,8 +1,9 @@
 import React from 'react';
-import { Heart, Zap, Award, Share2, UserPlus, MessageSquare, Microscope, GraduationCap } from 'lucide-react';
+import { Heart, Zap, Award, Share2, UserPlus, MessageSquare, Microscope, GraduationCap, ExternalLink } from 'lucide-react';
 import ScrollReveal from '../components/ScrollReveal';
 import PageHeader from '../components/PageHeader';
 import Seo from '../components/Seo';
+import { organization } from '../config/organization';
 
 const JoinUs: React.FC = () => {
   const perks = [
@@ -40,7 +41,6 @@ const JoinUs: React.FC = () => {
         subtitle="Be a part of a global movement redefining the scientific landscape." 
       />
 
-      {/* Roles Section */}
       <section className="container mx-auto px-6 py-16">
         <ScrollReveal className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-extrabold text-brandGreen uppercase tracking-tighter">Choose Your Path</h2>
@@ -48,7 +48,6 @@ const JoinUs: React.FC = () => {
         </ScrollReveal>
 
         <div className="grid justify-items-center lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
-          {/* Professional Mentor Card */}
           <ScrollReveal className="bg-[#486e7c]/5 p-8 rounded-[50px] border border-gray-100 flex flex-col h-full hover:bg-white hover:shadow-2xl transition-all group">
             <div className="mb-8 p-6 bg-white rounded-3xl shadow-sm w-fit group-hover:scale-110 transition-transform duration-500">
               <Microscope color="#82246d" size={48} />
@@ -59,7 +58,6 @@ const JoinUs: React.FC = () => {
             </p>
           </ScrollReveal>
 
-          {/* Peer Mentor Card */}
           <ScrollReveal delay={200} className="bg-brandGreen/5 p-8 rounded-[50px] border border-gray-100 flex flex-col h-full hover:bg-white hover:shadow-2xl transition-all group">
             <div className="mb-8 p-6 bg-white rounded-3xl shadow-sm w-fit group-hover:scale-110 transition-transform duration-500">
               <GraduationCap color="#82246d" size={48} />
@@ -72,7 +70,6 @@ const JoinUs: React.FC = () => {
         </div>
       </section>
 
-      {/* IDGWS Photo */}
       <section className="container mx-auto px-6">
         <ScrollReveal className="max-w-4xl mx-auto mb-16 rounded-[50px] overflow-hidden shadow-2xl border-4 border-brandPink/10 aspect-[3/2]">
           <img
@@ -83,7 +80,6 @@ const JoinUs: React.FC = () => {
         </ScrollReveal>
       </section>
 
-      {/* Perks Section - What's in it for you? */}
       <section className="bg-white py-6">
         <div className="container mx-auto px-6">
           <ScrollReveal className="text-center mb-20">
@@ -103,7 +99,6 @@ const JoinUs: React.FC = () => {
         </div>
       </section>
 
-      {/* Community Hub CTA */}
       <section className="bg-brandPink py-16 text-white mb-24 relative overflow-hidden">
         <div className="container mx-auto px-6 text-center relative z-10">
           <ScrollReveal>
@@ -111,7 +106,7 @@ const JoinUs: React.FC = () => {
             <h2 className="text-3xl font-extrabold mb-4 uppercase tracking-tighter">Join Our Community</h2>
             <p className="mb-10 opacity-90 max-w-xl mx-auto font-medium">Connect with our official WhatsApp community for real-time scientific collaboration and global STEM news.</p>
             <a 
-              href="https://chat.whatsapp.com/BlVCmJA4c6Q5qYIbgNkrJC" 
+              href={organization.social.whatsapp} 
               target="_blank" 
               rel="noopener noreferrer"
               className="inline-flex items-center space-x-3 bg-white text-brandPink px-10 py-4 rounded-2xl font-extrabold hover:scale-105 transition-all shadow-2xl uppercase tracking-widest text-sm"
@@ -123,29 +118,23 @@ const JoinUs: React.FC = () => {
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -mr-32 -mt-32"></div>
       </section>
 
-      {/* Membership Form (Compact Iframe) */}
       <section className="container mx-auto px-6 py-8">
         <ScrollReveal className="max-w-4xl mx-auto bg-white rounded-[50px] shadow-2xl overflow-hidden border border-gray-100">
-          <div className="p-10 border-b border-gray-100 bg-gray-50/50 flex items-center space-x-6">
-            <UserPlus color="#82246d" size={40} />
-            <div>
-              <a 
-                  href="https://forms.gle/vw5ruqbunzcHWRXD8"
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="inline-block group"
-                >
-                  <h2 className="text-2xl font-extrabold text-brandGreen uppercase">Official Membership</h2>
-                </a>
-              <p className="text-brandSlate text-sm font-bold mt-1">Submit your details to finalize your STEM onboarding.</p>
+          <div className="p-10 flex flex-col md:flex-row items-center md:items-center gap-6 md:gap-8">
+            <UserPlus color="#82246d" size={40} className="flex-shrink-0" />
+            <div className="flex-grow text-center md:text-left">
+              <h2 className="text-2xl font-extrabold text-brandGreen uppercase">Official Membership</h2>
+              <p className="text-brandSlate text-sm font-bold mt-1">Complete the official registration form to finalize your STEM onboarding.</p>
             </div>
-          </div>
-          <div className="w-full h-[330px] bg-white overflow-hidden">
-            <iframe 
-              src="https://forms.gle/vw5ruqbunzcHWRXD8" 
-              className="w-full h-full border-none"
-              title="Membership Registration Form"
-            ></iframe>
+            <a
+              href={organization.forms.membership}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-shrink-0 inline-flex items-center space-x-3 bg-brandPink text-white px-8 py-4 rounded-2xl font-extrabold hover:scale-105 transition-all shadow-lg shadow-brandPink/20 uppercase tracking-widest text-sm"
+            >
+              <span>Complete Registration</span>
+              <ExternalLink size={18} />
+            </a>
           </div>
         </ScrollReveal>
       </section>

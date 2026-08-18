@@ -1,12 +1,11 @@
 import { useEffect } from 'react';
+import { organization } from '../config/organization';
 
 interface SeoProps {
   title: string;
   description: string;
   path: string; // e.g. '/about'
 }
-
-const SITE_URL = 'https://stemgirlsconnect.org';
 
 /**
  * Lightweight, dependency-free helper to keep <title>, meta description,
@@ -32,7 +31,7 @@ const Seo: React.FC<SeoProps> = ({ title, description, path }) => {
       canonicalTag.setAttribute('rel', 'canonical');
       document.head.appendChild(canonicalTag);
     }
-    canonicalTag.setAttribute('href', `${SITE_URL}${path}`);
+    canonicalTag.setAttribute('href', `${organization.website}${path}`);
   }, [title, description, path]);
 
   return null;

@@ -1,21 +1,12 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
+import { navigation } from '../config/navigation';
+import { organization } from '../config/organization';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-
-  const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'About', path: '/about' },
-    { name: 'Activities', path: '/activities' },
-    { name: 'Join Us', path: '/join' },
-    { name: 'Contact', path: '/contact' },
-    { name: 'Donate', path: '/donate' },
-  ];
-
-  const whatsappLink = "https://chat.whatsapp.com/BlVCmJA4c6Q5qYIbgNkrJC";
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -37,19 +28,19 @@ const Navbar: React.FC = () => {
 
         {/* Desktop Menu */}
         <div className="hidden lg:flex items-center space-x-8">
-          {navLinks.map((link) => (
+          {navigation.map((link) => (
             <Link
-              key={link.name}
+              key={link.path}
               to={link.path}
               className={`text-sm font-semibold transition-colors duration-200 hover:text-brandPink ${
                 isActive(link.path) ? 'text-brandPink border-b-2 border-brandPink pb-1' : 'text-brandSlate'
               }`}
             >
-              {link.name}
+              {link.label}
             </Link>
           ))}
           <a
-            href={whatsappLink}
+            href={organization.social.whatsapp}
             target="_blank"
             rel="noopener noreferrer"
             className="bg-brandPink text-white px-6 py-2.5 rounded-full text-sm font-bold shadow-lg shadow-brandPink/20 hover:scale-105 transition-transform"
@@ -70,20 +61,20 @@ const Navbar: React.FC = () => {
         {isOpen && (
           <div className="absolute top-14 right-0 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 lg:hidden transform fade-in-up z-[100] overflow-hidden transition-all duration-1000">
             <div className="flex flex-col p-4">
-              {navLinks.map((link) => (
+              {navigation.map((link) => (
                 <Link
-                  key={link.name}
+                  key={link.path}
                   to={link.path}
                   className={`py-3 px-4 rounded-xl text-lg font-medium ${
                     isActive(link.path) ? 'bg-brandPink/5 text-brandPink' : 'text-brandSlate'
                   }`}
                   onClick={() => setIsOpen(false)}
                 >
-                  {link.name}
+                  {link.label}
                 </Link>
               ))}
               <a
-                href={whatsappLink}
+                href={organization.social.whatsapp}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-4 bg-brandPink text-white py-4 rounded-xl text-center font-bold"

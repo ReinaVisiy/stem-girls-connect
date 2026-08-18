@@ -17,7 +17,6 @@ const Home: React.FC = () => {
         title="Exploring the Future of STEM for the Benefit of All"
       />
 
-      {/* Core Identity Section */}
       <section className="py-24 bg-white">
         <div className="container mx-auto px-6 text-center">
           <ScrollReveal>
@@ -28,7 +27,6 @@ const Home: React.FC = () => {
               STEM Girls Connect is a powerhouse for the next generation of female scientists, engineers, and leaders. We provide the mentorship and resources needed to turn curiosity into global impact. The future of science is female; and it starts here.
             </p>
             
-            {/* Added Picture */}
             <div className="max-w-4xl mx-auto mb-12 rounded-[50px] overflow-hidden shadow-2xl border-4 border-brandPink/10 aspect-[4/3]">
               <img 
                 src="/Group SGC pic.jpg" 
@@ -55,7 +53,6 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Streamlined Activities Preview */}
       <section className="py-24 bg-white border-y border-gray-100">
         <div className="container mx-auto px-6">
           <ScrollReveal className="text-center mb-16">
@@ -83,7 +80,6 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Support Our Mission Section */}
       <section className="py-24 bg-brandSlate text-white relative">
         <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
           <ScrollReveal>

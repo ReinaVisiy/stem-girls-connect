@@ -54,7 +54,6 @@ const About: React.FC = () => {
           </ScrollReveal>
         </div>
 
-        {/* Team Photo */}
         <ScrollReveal className="max-w-4xl mx-auto mb-24 rounded-[50px] overflow-hidden shadow-2xl border-4 border-brandPink/10 aspect-video">
           <img
             src="/Group SGC pic Bamenda.jpg"
@@ -63,7 +62,6 @@ const About: React.FC = () => {
           />
         </ScrollReveal>
 
-        {/* Our Objectives Section */}
         <ScrollReveal className="bg-white p-5 rounded-[60px] border-2 border-brandPink/10 shadow-xl max-w-5xl mx-auto">
           <h2 className="text-3xl font-extrabold text-brandGreen mb-10 uppercase tracking-tighter text-center">Our Objectives</h2>
           <div className="grid md:grid-cols-2 gap-6">
@@ -77,7 +75,6 @@ const About: React.FC = () => {
         </ScrollReveal>
       </section>
 
-      {/*Official Bureau */}
       <section className="bg-white py-12">
         <div className="container mx-auto px-6">
           <ScrollReveal className="text-center mb-20">

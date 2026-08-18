@@ -1,13 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Linkedin, Mail, MapPin } from 'lucide-react';
+import { Facebook, Linkedin, Instagram, Youtube, Mail, MapPin } from 'lucide-react';
+import { organization } from '../config/organization';
 
 const Footer: React.FC = () => {
   return (
     <footer className="bg-footerGray pt-16 pb-8 border-t border-gray-200">
       <div className="container mx-auto px-6">
         <div className="flex flex-col items-center text-center mb-12 space-y-2">
-          <h3 className="text-brandGreen font-extrabold text-3xl tracking-tighter uppercase">STEM Girls Connect</h3>
+          <h3 className="text-brandGreen font-extrabold text-3xl tracking-tighter uppercase">{organization.name}</h3>
           <p className="text-brandPink font-bold text-sm tracking-[0.2em] uppercase">Nurturing Women in STEM</p>
         </div>
 
@@ -31,12 +32,22 @@ const Footer: React.FC = () => {
             <p className="text-brandSlate text-sm leading-relaxed text-justify font-medium">
               Empowering the next generation of females in STEM through focused advocacy, rigorous STEM training, and professional mentorship.
             </p>
-            <div className="flex space-x-4 pt-2">
-              <a href="https://www.facebook.com/share/1ARdQejW2F/" target="_blank" rel="noopener noreferrer" className="bg-brandPink text-white p-2.5 rounded-xl hover:scale-110 transition-transform shadow-lg shadow-brandPink/20">
+            <div className="flex flex-wrap items-center gap-3 pt-2">
+              <a href={organization.social.facebook} target="_blank" rel="noopener noreferrer" className="bg-brandPink text-white p-2.5 rounded-xl hover:scale-110 transition-transform shadow-lg shadow-brandPink/20">
                 <Facebook size={18} />
               </a>
-              <a href="https://www.linkedin.com/company/stem-girls-connect/" target="_blank" rel="noopener noreferrer" className="bg-brandPink text-white p-2.5 rounded-xl hover:scale-110 transition-transform shadow-lg shadow-brandPink/20">
+              <a href={organization.social.linkedin} target="_blank" rel="noopener noreferrer" className="bg-brandPink text-white p-2.5 rounded-xl hover:scale-110 transition-transform shadow-lg shadow-brandPink/20">
                 <Linkedin size={18} />
+              </a>
+              <a href={organization.social.instagram} target="_blank" rel="noopener noreferrer" className="bg-brandPink text-white p-2.5 rounded-xl hover:scale-110 transition-transform shadow-lg shadow-brandPink/20">
+                <Instagram size={18} />
+              </a>
+              <a href={organization.social.youtube} target="_blank" rel="noopener noreferrer" className="bg-brandPink text-white p-2.5 rounded-xl hover:scale-110 transition-transform shadow-lg shadow-brandPink/20">
+                <Youtube size={18} />
+              </a>
+              {/* Lucide has no TikTok icon; a text badge avoids misrepresenting the platform with a substitute icon */}
+              <a href={organization.social.tiktok} target="_blank" rel="noopener noreferrer" className="bg-brandPink text-white px-2.5 py-2 rounded-xl hover:scale-110 transition-transform shadow-lg shadow-brandPink/20 text-xs font-extrabold">
+                TikTok
               </a>
             </div>
           </div>
@@ -47,11 +58,11 @@ const Footer: React.FC = () => {
             <ul className="space-y-4 text-sm text-brandSlate font-medium">
               <li className="flex items-center space-x-3">
                 <Mail color="#82246d" size={18} className="flex-shrink-0" />
-                <span>stemgirlsconnect@gmail.com</span>
+                <span>{organization.contact.email}</span>
               </li>
               <li className="flex items-start space-x-3">
                 <MapPin color="#82246d" size={18} className="flex-shrink-0 mt-1" />
-                <span>Headquarters: Foumban, West Region, Cameroon.</span>
+                <span>Headquarters: {organization.contact.location}.</span>
               </li>
             </ul>
           </div>
@@ -66,7 +77,7 @@ const Footer: React.FC = () => {
         </div>
 
         <div className="border-t border-gray-300 pt-8 text-center text-[10px] text-brandSlate font-extrabold uppercase tracking-[0.3em]">
-          <p>© {new Date().getFullYear()} STEM Girls Connect</p>
+          <p>© {new Date().getFullYear()} {organization.name}</p>
         </div>
       </div>
     </footer>
