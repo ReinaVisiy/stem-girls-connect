@@ -35,17 +35,17 @@ const Home: React.FC = () => {
         path="/"
       />
       <PageHeader 
-        title="Exploring the Future of STEM for the Benefit of All"
+        title="Find Your Place in STEM"
       />
 
       <section className="py-24 bg-white">
         <div className="container mx-auto px-6 text-center">
           <ScrollReveal>
             <h2 className="text-3xl md:text-5xl font-extrabold text-brandGreen mb-8 uppercase tracking-tighter">
-              Training and Mentoring Tomorrow's Women in STEM
+              Learn. Connect. Grow.
             </h2>
             <p className="text-brandSlate text-xl mb-12 text-justify leading-relaxed font-semibold max-w-4xl mx-auto">
-              We run hands-on STEM workshops, pair girls and young women with professional mentors, and help members find scholarships and funding to pursue science, technology, engineering, and math. If you're curious about a STEM career, this is where you start building it.
+              Build practical skills, connect with mentors, discover scholarships and opportunities, and grow alongside a community of girls and young women building their futures in STEM.
             </p>
 
             <HomeSlideshow />
@@ -55,13 +55,13 @@ const Home: React.FC = () => {
                 to="/activities" 
                 className="w-full sm:w-auto bg-brandPink text-white px-10 py-5 rounded-2xl font-extrabold shadow-xl shadow-brandPink/30 hover:scale-[1.02] transition-all text-center uppercase tracking-widest text-sm"
               >
-                Explore Our Activities
+                Explore Our Programs
               </Link>
               <Link 
                 to="/join" 
                 className="w-full sm:w-auto border-2 border-brandPink text-brandPink px-10 py-5 rounded-2xl font-extrabold hover:bg-brandPink hover:text-white transition-all text-center uppercase tracking-widest text-sm"
               >
-                Join the Movement
+                Join STEM Girls Connect
               </Link>
             </div>
           </ScrollReveal>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Trash2, GripVertical } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 import { uploadToBucket } from './uploadFile';
-import { AdminPageHeader, AdminCard, AdminButton, AdminInput, AdminLabel, AdminBanner } from './AdminUI';
+import { AdminPageHeader, AdminCard, AdminButton, AdminInput, AdminLabel, AdminBanner, AdminFileName } from './AdminUI';
 
 interface SiteImageRow {
   placement_key: string;
@@ -194,6 +194,7 @@ const AdminPhotos: React.FC = () => {
                   onChange={(e) => setNewFile(e.target.files?.[0] ?? null)}
                   className="block w-full text-sm text-brandSlate file:mr-4 file:py-2.5 file:px-5 file:rounded-xl file:border-0 file:text-xs file:font-extrabold file:uppercase file:tracking-widest file:bg-brandPink/10 file:text-brandPink hover:file:bg-brandPink/20"
                 />
+                <AdminFileName file={newFile} />
               </div>
               <div className="md:col-span-2">
                 <AdminButton type="submit" disabled={saving}>{saving ? 'Adding...' : 'Add Slide'}</AdminButton>

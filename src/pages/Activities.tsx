@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layers, Presentation, Users2, CheckCircle2 } from 'lucide-react';
+import { Layers, Users2, Award, Briefcase, Network, Megaphone, CheckCircle2 } from 'lucide-react';
 import ScrollReveal from '../components/ScrollReveal';
 import PageHeader from '../components/PageHeader';
 import Seo from '../components/Seo';
@@ -8,27 +8,45 @@ import { useSiteImage } from '../hooks/useSiteImage';
 
 const pillars = [
   {
-    title: 'Advocacy',
-    icon: Presentation,
-    points: [
-      'Promoting STEM inclusion and policy changes to create a safer, more equitable environment for women.',
-      'Raising awareness on vital women’s issues, including gender-based violence (GBV) and menstrual health.',
-    ],
-  },
-  {
-    title: 'Workshops',
+    title: 'Skills & Training',
     icon: Layers,
     points: [
-      'Specialized training on scholarship searches, grant applications, and professional opportunity navigation.',
-      'Hands-on leadership development and technical skill-building sessions for career readiness.',
+      'Practical STEM, digital, leadership, and professional skills training designed to help girls and young women build confidence and prepare for future opportunities.',
     ],
   },
   {
     title: 'Mentorship',
     icon: Users2,
     points: [
-      'One-on-one pairing with women STEM professionals for ongoing guidance.',
-      'Regular experience-sharing sessions to support career growth.',
+      'Connecting girls and young women with STEM professionals and experienced peers who can provide guidance, encouragement, and career support.',
+    ],
+  },
+  {
+    title: 'Opportunities',
+    icon: Award,
+    points: [
+      'Helping members discover scholarships, fellowships, training programs, grants, competitions, and other educational or professional opportunities in STEM.',
+    ],
+  },
+  {
+    title: 'Career Development',
+    icon: Briefcase,
+    points: [
+      'Supporting girls and young women with school applications, scholarship applications, grant writing, career preparation, and professional development.',
+    ],
+  },
+  {
+    title: 'Leadership & Networking',
+    icon: Network,
+    points: [
+      'Creating spaces for girls and young women to connect with peers and professionals, strengthen their leadership skills, and build valuable personal and professional networks.',
+    ],
+  },
+  {
+    title: 'Outreach & Advocacy',
+    icon: Megaphone,
+    points: [
+      'Reaching schools and communities to encourage girls to explore STEM, while raising awareness around issues that affect the participation and advancement of girls and women in STEM.',
     ],
   },
 ];
@@ -53,7 +71,7 @@ const Activities: React.FC = () => {
       <section className="container mx-auto px-6 py-20">
         <ScrollReveal className="max-w-4xl mx-auto text-center mb-16">
           <p className="text-xl md:text-2xl text-brandSlate font-bold leading-relaxed text-justify">
-            Our primary activity focuses on orientating, training, and mentoring girls and young women on learning opportunities and scholarships in STEM related fields.
+            We create opportunities for girls and young women to learn, grow, connect, and build their futures in STEM through training, mentorship, career support, outreach, and access to opportunities.
           </p>
           <div className="h-1.5 w-24 bg-brandPink mx-auto mt-10 rounded-full"></div>
         </ScrollReveal>

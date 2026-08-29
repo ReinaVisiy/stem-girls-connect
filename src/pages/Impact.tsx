@@ -43,7 +43,7 @@ const Impact: React.FC = () => {
       />
       <PageHeader
         title="Impact & Evidence"
-        subtitle="Transforming passion into profession through curated STEM excellence."
+        subtitle="Our work in numbers, stories, and reports."
       />
 
       <section className="container mx-auto px-6 py-20">

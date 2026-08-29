@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heart, Zap, Award, Share2, UserPlus, MessageSquare, Microscope, GraduationCap, ExternalLink } from 'lucide-react';
+import { Heart, Zap, Award, Share2, UserPlus, MessageSquare, GraduationCap, HandHeart, Handshake, ExternalLink } from 'lucide-react';
 import ScrollReveal from '../components/ScrollReveal';
 import PageHeader from '../components/PageHeader';
 import Seo from '../components/Seo';
@@ -33,6 +33,34 @@ const JoinUs: React.FC = () => {
     }
   ];
 
+  const paths = [
+    {
+      title: "Become a Member",
+      desc: "Join STEM Girls Connect as an official member and become part of a community supporting girls and women in STEM.",
+      icon: <UserPlus color="#82246d" size={48} />
+    },
+    {
+      title: "Get Mentorship",
+      desc: "Connect with mentors and professionals who can support your academic, personal, and career growth.",
+      icon: <Heart color="#82246d" size={48} />
+    },
+    {
+      title: "Become a Mentor",
+      desc: "Share your knowledge and experience with girls and young women who are exploring or building careers in STEM.",
+      icon: <GraduationCap color="#82246d" size={48} />
+    },
+    {
+      title: "Volunteer",
+      desc: "Contribute your time and skills to support programs, outreach, events, communications, or other SGC activities.",
+      icon: <HandHeart color="#82246d" size={48} />
+    },
+    {
+      title: "Partner With Us",
+      desc: "Work with STEM Girls Connect to expand access to STEM education, mentorship, opportunities, and community impact.",
+      icon: <Handshake color="#82246d" size={48} />
+    }
+  ];
+
   return (
     <div className="pb-24">
       <Seo
@@ -51,26 +79,18 @@ const JoinUs: React.FC = () => {
           <div className="h-1.5 w-24 bg-brandPink mx-auto mt-4 rounded-full"></div>
         </ScrollReveal>
 
-        <div className="grid justify-items-center lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
-          <ScrollReveal className="bg-[#486e7c]/5 p-8 rounded-[50px] border border-gray-100 flex flex-col h-full hover:bg-white hover:shadow-2xl transition-all group">
-            <div className="mb-8 p-6 bg-white rounded-3xl shadow-sm w-fit group-hover:scale-110 transition-transform duration-500">
-              <Microscope color="#82246d" size={48} />
-            </div>
-            <h3 className="text-2xl font-extrabold text-brandGreen mb-6 uppercase tracking-tight">Professional Mentor</h3>
-            <p className="text-brandSlate text-lg mb-8 text-justify leading-relaxed font-bold">
-              An experienced woman in science ready to mentor and empower the younger generation.
-            </p>
-          </ScrollReveal>
-
-          <ScrollReveal delay={200} className="bg-brandGreen/5 p-8 rounded-[50px] border border-gray-100 flex flex-col h-full hover:bg-white hover:shadow-2xl transition-all group">
-            <div className="mb-8 p-6 bg-white rounded-3xl shadow-sm w-fit group-hover:scale-110 transition-transform duration-500">
-              <GraduationCap color="#82246d" size={48} />
-            </div>
-            <h3 className="text-2xl font-extrabold text-brandGreen mb-6 uppercase tracking-tight">Peer Mentor</h3>
-            <p className="text-brandSlate text-lg mb-8 text-justify leading-relaxed font-bold">
-              A girl or young woman in science eager to inspire others while receiving guidance from professionals.
-            </p>
-          </ScrollReveal>
+        <div className="grid justify-items-center sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          {paths.map((path, i) => (
+            <ScrollReveal key={path.title} delay={i * 100} className="w-full bg-[#486e7c]/5 p-8 rounded-[50px] border border-gray-100 flex flex-col h-full hover:bg-white hover:shadow-2xl transition-all group">
+              <div className="mb-8 p-6 bg-white rounded-3xl shadow-sm w-fit group-hover:scale-110 transition-transform duration-500">
+                {path.icon}
+              </div>
+              <h3 className="text-2xl font-extrabold text-brandGreen mb-6 uppercase tracking-tight">{path.title}</h3>
+              <p className="text-brandSlate text-lg mb-8 text-justify leading-relaxed font-bold">
+                {path.desc}
+              </p>
+            </ScrollReveal>
+          ))}
         </div>
       </section>
 
@@ -113,7 +133,7 @@ const JoinUs: React.FC = () => {
           <ScrollReveal>
             <MessageSquare color="#FFFFFF" size={48} className="mx-auto mb-6 opacity-80" />
             <h2 className="text-3xl font-extrabold mb-4 uppercase tracking-tighter">Join Our Community</h2>
-            <p className="mb-10 opacity-90 max-w-xl mx-auto font-medium">Connect with our official WhatsApp community for real-time scientific collaboration and global STEM news.</p>
+            <p className="mb-10 opacity-90 max-w-xl mx-auto font-medium">Join our WhatsApp community for STEM opportunities, updates, conversations, and events.</p>
             <a 
               href={organization.social.whatsapp} 
               target="_blank" 
@@ -132,8 +152,8 @@ const JoinUs: React.FC = () => {
           <div className="p-10 flex flex-col md:flex-row items-center md:items-center gap-6 md:gap-8">
             <UserPlus color="#82246d" size={40} className="flex-shrink-0" />
             <div className="flex-grow text-center md:text-left">
-              <h2 className="text-2xl font-extrabold text-brandGreen uppercase">Official Membership</h2>
-              <p className="text-brandSlate text-sm font-bold mt-1">Complete the official registration form to finalize your STEM onboarding.</p>
+              <h2 className="text-2xl font-extrabold text-brandGreen uppercase">Become an Official Member</h2>
+              <p className="text-brandSlate text-sm font-bold mt-1">Complete the official membership form to become a registered member of STEM Girls Connect.</p>
             </div>
             <a
               href={organization.forms.membership}

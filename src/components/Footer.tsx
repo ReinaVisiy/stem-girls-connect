@@ -38,7 +38,7 @@ const Footer: React.FC = () => {
           <div className="space-y-4">
             <h4 className="font-bold text-gray-800 uppercase text-xs tracking-widest">About</h4>
             <p className="text-brandSlate text-sm leading-relaxed text-justify font-medium">
-              Empowering the next generation of females in STEM through focused advocacy, rigorous STEM training, and professional mentorship.
+              Helping girls and young women explore STEM, build practical skills, access opportunities, and grow through mentorship and community.
             </p>
             <div className="flex flex-wrap items-center gap-3 pt-2">
               <a href={organization.social.facebook} target="_blank" rel="noopener noreferrer" className="bg-brandPink text-white p-2.5 rounded-xl hover:scale-110 transition-transform shadow-lg shadow-brandPink/20">
@@ -79,7 +79,7 @@ const Footer: React.FC = () => {
           <div className="space-y-4">
             <h4 className="font-bold text-gray-800 uppercase text-xs tracking-widest">Legal Status</h4>
             <p className="text-[11px] text-brandSlate text-justify leading-relaxed font-semibold">
-              Registered Association (No. 023/RDA/F.32/SASC) since April 23, 2024. Established under Law No. 90/053 of Dec 19, 1990, dedicated to global scientific and educational advancement.
+              Registered Association (No. 023/RDA/F.32/SASC) since April 23, 2024. Established under Law No. 90/053 of Dec 19, 1990, a nonprofit association supporting girls and young women in STEM through education, mentorship, opportunities, and community.
             </p>
           </div>
         </div>

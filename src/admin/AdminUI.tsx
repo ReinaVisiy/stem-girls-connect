@@ -45,6 +45,27 @@ export const AdminLabel: React.FC<{ children: React.ReactNode }> = ({ children }
   <label className="block text-xs font-extrabold text-brandSlate uppercase tracking-widest mb-2">{children}</label>
 );
 
+function formatFileSize(bytes: number): string {
+  return bytes < 1024 * 1024 ? `${Math.round(bytes / 1024)} KB` : `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+/**
+ * Shows the name(s) of the currently selected file(s) below a file
+ * input. Native browsers do show a selected filename next to the file
+ * picker button, but it's easy to lose track of on mobile or once the
+ * button itself is heavily restyled — this makes the selection
+ * unambiguous regardless of browser/OS rendering.
+ */
+export const AdminFileName: React.FC<{ file: File | File[] | null }> = ({ file }) => {
+  const files = file == null ? [] : Array.isArray(file) ? file : [file];
+  if (files.length === 0) return null;
+  return (
+    <p className="mt-2 text-xs font-bold text-brandGreen">
+      {files.map((f) => `${f.name} (${formatFileSize(f.size)})`).join(', ')}
+    </p>
+  );
+};
+
 export const AdminBanner: React.FC<{ type: 'error' | 'success'; children: React.ReactNode }> = ({ type, children }) => (
   <div
     className={`p-4 rounded-2xl text-sm font-bold mb-6 ${

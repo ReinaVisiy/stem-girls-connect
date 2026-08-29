@@ -52,7 +52,20 @@ const About: React.FC = () => {
       />
 
       <section className="container mx-auto px-6 py-10">
-        <div className="grid md:grid-cols-2 gap-12 mb-24">
+        <ScrollReveal className="max-w-3xl mx-auto text-center mb-20">
+          <p className="text-xl md:text-2xl text-brandSlate font-bold leading-relaxed">
+            STEM Girls Connect is a nonprofit association in Cameroon helping girls and young women explore STEM, build practical skills, access opportunities, and grow through mentorship and community.
+          </p>
+        </ScrollReveal>
+
+        <ScrollReveal className="max-w-3xl mx-auto mb-24 text-center">
+          <h2 className="text-2xl font-extrabold text-brandGreen mb-6 uppercase tracking-widest">Our Story</h2>
+          <p className="text-brandSlate text-lg leading-relaxed font-semibold">
+            STEM Girls Connect was established in Cameroon in 2024 with the goal of helping more girls and young women see STEM as a future they can belong in. Through learning, mentorship, opportunities, and community, we support young women as they build confidence, develop skills, and grow in STEM.
+          </p>
+        </ScrollReveal>
+
+        <div className="grid md:grid-cols-2 gap-12 mb-16">
           <ScrollReveal className="bg-[#486e7c]/5 p-10 rounded-[50px] border border-gray-100 flex flex-col h-full hover:shadow-2xl transition-all">
             <Target color="#82246d" size={48} className="mb-6" />
             <h2 className="text-3xl font-extrabold text-brandGreen mb-6 uppercase tracking-tight">Mission</h2>
@@ -68,19 +81,21 @@ const About: React.FC = () => {
               To close the gender gap in STEM fields by empowering and supporting girls and young women to explore, learn and succeed in STEM.
             </p>
           </ScrollReveal>
+        </div>
 
-          <ScrollReveal delay={300} className="bg-[#486e7c]/5 p-10 rounded-[50px] border border-gray-100 flex flex-col h-full hover:shadow-2xl transition-all">
-            <Flag color="#82246d" size={48} className="mb-6" />
-            <h2 className="text-3xl font-extrabold text-brandGreen mb-6 uppercase tracking-tight">Motto</h2>
-            <p className="text-brandSlate text-lg leading-relaxed text-justify font-bold">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-10 mb-24 text-center">
+          <ScrollReveal delay={300} className="flex items-center gap-3">
+            <Flag color="#82246d" size={22} />
+            <p className="text-brandSlate text-sm font-semibold italic">
+              <span className="font-extrabold uppercase tracking-widest text-xs text-brandGreen not-italic mr-2">Motto</span>
               Exploring the Future of STEM for the Benefit of All.
             </p>
           </ScrollReveal>
 
-          <ScrollReveal delay={400} className="bg-[#486e7c]/5 p-10 rounded-[50px] border border-gray-100 flex flex-col h-full hover:shadow-2xl transition-all">
-            <Sparkles color="#82246d" size={48} className="mb-6" />
-            <h2 className="text-3xl font-extrabold text-brandGreen mb-6 uppercase tracking-tight">Slogan</h2>
-            <p className="text-brandSlate text-lg leading-relaxed text-justify font-bold">
+          <ScrollReveal delay={400} className="flex items-center gap-3">
+            <Sparkles color="#82246d" size={22} />
+            <p className="text-brandSlate text-sm font-semibold italic">
+              <span className="font-extrabold uppercase tracking-widest text-xs text-brandGreen not-italic mr-2">Slogan</span>
               Nurturing Women in STEM.
             </p>
           </ScrollReveal>

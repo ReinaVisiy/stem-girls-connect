@@ -36,8 +36,14 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
     const { data: listener } = supabase.auth.onAuthStateChange((_event, s) => {
       setSession(s);
-      setLoading(true);
-      checkAdmin(s).finally(() => setLoading(false));
+      // Deliberately don't call setLoading(true) here. This listener also
+      // fires for background events like TOKEN_REFRESHED whenever the tab
+      // regains focus — flipping loading back to true would unmount the
+      // whole admin page (AdminLayout renders a full-screen "Loading..."
+      // in place of children while loading), wiping out any in-progress
+      // form input. Only the very first session check above should show
+      // the loading screen.
+      checkAdmin(s);
     });
 
     return () => listener.subscription.unsubscribe();

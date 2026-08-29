@@ -26,9 +26,9 @@ const Donate: React.FC = () => {
           <div className="inline-flex p-5 bg-brandPink/10 rounded-full mb-10">
             <Heart color="#82246d" size={32} fill="#82246d" className="animate-pulse" />
           </div>
-          <h2 className="text-3xl md:text-5xl font-extrabold text-brandGreen mb-10 uppercase tracking-tighter italic">Support STEM Girls Connect</h2>
+          <h2 className="text-3xl md:text-5xl font-extrabold text-brandGreen mb-10 uppercase tracking-tighter italic">Help a Girl Go Further in STEM</h2>
           <p className="text-brandSlate max-w-3xl mx-auto text-lg leading-relaxed font-medium text-justify">
-            Support STEM Girls Connect in empowering girls and young women in STEM. Your donation directly funds our training workshops, mentorship programs, and outreach to schools. We're committed to transparency in how these funds are used: see our <Link to="/impact" className="text-brandPink font-extrabold underline underline-offset-2">Reports & Records</Link> for details.
+            Your support helps STEM Girls Connect provide training, mentorship, outreach, and access to opportunities for girls and young women building their futures in STEM. Your donation helps fund our training workshops, mentorship programs, and outreach to schools. We're committed to transparency in how these funds are used: see our <Link to="/impact" className="text-brandPink font-extrabold underline underline-offset-2">Reports & Records</Link> for details.
           </p>
         </ScrollReveal>
       </section>
