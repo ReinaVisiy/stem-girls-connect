@@ -6,6 +6,8 @@ export const navigation = [
   { label: 'Home', path: '/' },
   { label: 'About', path: '/about' },
   { label: 'Activities', path: '/activities' },
+  { label: 'Impact & Evidence', path: '/impact' },
+  { label: 'Blog', path: '/blog' },
   { label: 'Join Us', path: '/join' },
   { label: 'Contact', path: '/contact' },
   { label: 'Donate', path: '/donate' },

@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Facebook, Linkedin, Instagram, Youtube, Mail, MapPin } from 'lucide-react';
 import { organization } from '../config/organization';
+import TikTokIcon from './icons/TikTokIcon';
+import NewsletterForm from './NewsletterForm';
 
 const Footer: React.FC = () => {
   return (
@@ -10,6 +12,10 @@ const Footer: React.FC = () => {
         <div className="flex flex-col items-center text-center mb-12 space-y-2">
           <h3 className="text-brandGreen font-extrabold text-3xl tracking-tighter uppercase">{organization.name}</h3>
           <p className="text-brandPink font-bold text-sm tracking-[0.2em] uppercase">Nurturing Women in STEM</p>
+        </div>
+
+        <div className="mb-12">
+          <NewsletterForm />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12 border-t border-gray-300 pt-12">
@@ -21,6 +27,8 @@ const Footer: React.FC = () => {
               <li><Link to="/" className="hover:text-brandPink transition-colors">Home</Link></li>
               <li><Link to="/about" className="hover:text-brandPink transition-colors">About Us</Link></li>
               <li><Link to="/activities" className="hover:text-brandPink transition-colors">Activities</Link></li>
+              <li><Link to="/impact" className="hover:text-brandPink transition-colors">Impact & Evidence</Link></li>
+              <li><Link to="/blog" className="hover:text-brandPink transition-colors">Blog</Link></li>
               <li><Link to="/join" className="hover:text-brandPink transition-colors">Join Us</Link></li>
               <li><Link to="/donate" className="hover:text-brandPink transition-colors">Support Us</Link></li>
             </ul>
@@ -45,9 +53,9 @@ const Footer: React.FC = () => {
               <a href={organization.social.youtube} target="_blank" rel="noopener noreferrer" className="bg-brandPink text-white p-2.5 rounded-xl hover:scale-110 transition-transform shadow-lg shadow-brandPink/20">
                 <Youtube size={18} />
               </a>
-              {/* Lucide has no TikTok icon; a text badge avoids misrepresenting the platform with a substitute icon */}
-              <a href={organization.social.tiktok} target="_blank" rel="noopener noreferrer" className="bg-brandPink text-white px-2.5 py-2 rounded-xl hover:scale-110 transition-transform shadow-lg shadow-brandPink/20 text-xs font-extrabold">
-                TikTok
+              {/* Custom SVG glyph: lucide-react has no TikTok brand icon */}
+              <a href={organization.social.tiktok} target="_blank" rel="noopener noreferrer" className="bg-brandPink text-white p-2.5 rounded-xl hover:scale-110 transition-transform shadow-lg shadow-brandPink/20">
+                <TikTokIcon size={18} color="white" />
               </a>
             </div>
           </div>

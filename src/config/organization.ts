@@ -14,7 +14,7 @@ export const organization = {
   website: 'https://stemgirlsconnect.org',
 
   contact: {
-    email: 'stemgirlsconnect@gmail.com',
+    email: 'info@stemgirlsconnect.org',
     location: 'Foumban, West Region, Cameroon',
   },
 

@@ -3,9 +3,13 @@ import { Heart, Zap, Award, Share2, UserPlus, MessageSquare, Microscope, Graduat
 import ScrollReveal from '../components/ScrollReveal';
 import PageHeader from '../components/PageHeader';
 import Seo from '../components/Seo';
+import PhotoGallery from '../components/PhotoGallery';
+import { useSiteImage } from '../hooks/useSiteImage';
 import { organization } from '../config/organization';
 
 const JoinUs: React.FC = () => {
+  const heroPhoto = useSiteImage('joinus_hero', '/Group SGC pic.jpg', 'STEM Girls Connect celebrating International Day of Girls and Women in Science');
+
   const perks = [
     {
       title: "Mentorship",
@@ -14,17 +18,17 @@ const JoinUs: React.FC = () => {
     },
     {
       title: "Skills",
-      desc: "Hands-on STEM and Leadership training designed for global workforce readiness.",
+      desc: "Practical STEM and leadership training to help you compete for scholarships, grants, and career opportunities.",
       icon: <Zap color="#82246d" size={40} />
     },
     {
       title: "Opportunities",
-      desc: "Access to Scholarship, Grant, and Funding alerts within scientific domains.",
+      desc: "Access to scholarship, grant, and funding opportunities in STEM fields.",
       icon: <Award color="#82246d" size={40} />
     },
     {
       title: "Networking",
-      desc: "Growth in Engineering, Medical Sciences, ICT, Agriculture, Mathematics, and more.",
+      desc: "Connections with peers and professionals across engineering, medical sciences, ICT, agriculture, mathematics, and more.",
       icon: <Share2 color="#82246d" size={40} />
     }
   ];
@@ -33,12 +37,12 @@ const JoinUs: React.FC = () => {
     <div className="pb-24">
       <Seo
         title="Join Us | STEM Girls Connect"
-        description="Join STEM Girls Connect and become part of a community empowering girls and young women pursuing STEM in Cameroon."
+        description="Join STEM Girls Connect and become part of a community empowering girls and young women pursuing STEM."
         path="/join"
       />
       <PageHeader 
         title="Join Our Community" 
-        subtitle="Be a part of a global movement redefining the scientific landscape." 
+        subtitle="Join a community of girls, young women, and mentors building futures in STEM." 
       />
 
       <section className="container mx-auto px-6 py-16">
@@ -71,13 +75,18 @@ const JoinUs: React.FC = () => {
       </section>
 
       <section className="container mx-auto px-6">
-        <ScrollReveal className="max-w-4xl mx-auto mb-16 rounded-[50px] overflow-hidden shadow-2xl border-4 border-brandPink/10 aspect-[3/2]">
-          <img
-            src="/IDGWS.jpg"
-            alt="STEM Girls Connect celebrating International Day of Girls and Women in Science"
-            className="w-full h-full object-cover object-top"
-          />
-        </ScrollReveal>
+        <PhotoGallery images={[{ src: heroPhoto.src, alt: heroPhoto.alt }]}>
+          {(open) => (
+            <ScrollReveal className="max-w-4xl mx-auto mb-16 rounded-[50px] overflow-hidden shadow-2xl border-4 border-brandPink/10 aspect-[3/2]">
+              <img
+                src={heroPhoto.src}
+                alt={heroPhoto.alt}
+                onClick={() => open(0)}
+                className="w-full h-full object-cover object-top cursor-zoom-in"
+              />
+            </ScrollReveal>
+          )}
+        </PhotoGallery>
       </section>
 
       <section className="bg-white py-6">

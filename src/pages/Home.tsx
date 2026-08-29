@@ -1,16 +1,37 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, Presentation, Layers, Users2 } from 'lucide-react';
+import { Heart, ArrowRight } from 'lucide-react';
 import ScrollReveal from '../components/ScrollReveal';
 import PageHeader from '../components/PageHeader';
 import Seo from '../components/Seo';
+import HomeSlideshow from '../components/HomeSlideshow';
+import Partners from '../components/Partners';
+import PostCard, { Post } from '../components/PostCard';
+import PhotoGallery from '../components/PhotoGallery';
+import CountUp from '../components/CountUp';
+import { useApiData } from '../hooks/useApiData';
+import { useSiteImage } from '../hooks/useSiteImage';
+
+interface Stat {
+  id: number;
+  stat_key: string;
+  value: string;
+  label: string;
+  sub_stat: string | null;
+  display_order: number;
+}
 
 const Home: React.FC = () => {
+  const { data: latestPosts, loading: postsLoading } = useApiData<Post[]>('/api/posts?limit=1');
+  const { data: stats, loading: statsLoading } = useApiData<Stat[]>('/api/stats');
+  const latestPost = latestPosts?.[0];
+  const supportPhoto = useSiteImage('home_support', '/STEMgirl.jpg', 'STEM Girls Connect Member');
+
   return (
     <div className="overflow-hidden">
       <Seo
-        title="STEM Girls Connect | Empowering Girls in STEM in Cameroon"
-        description="STEM Girls Connect is a Cameroon-based nonprofit empowering girls and young women in science, technology, engineering, and mathematics through mentorship, training, and advocacy."
+        title="STEM Girls Connect | Nurturing Women in STEM"
+        description="STEM Girls Connect is a nonprofit training and mentoring girls and young women in science, technology, engineering, and mathematics through workshops, mentorship, and advocacy."
         path="/"
       />
       <PageHeader 
@@ -21,19 +42,13 @@ const Home: React.FC = () => {
         <div className="container mx-auto px-6 text-center">
           <ScrollReveal>
             <h2 className="text-3xl md:text-5xl font-extrabold text-brandGreen mb-8 uppercase tracking-tighter">
-              Empowering the Future of STEM
+              Training and Mentoring Tomorrow's Women in STEM
             </h2>
             <p className="text-brandSlate text-xl mb-12 text-justify leading-relaxed font-semibold max-w-4xl mx-auto">
-              STEM Girls Connect is a powerhouse for the next generation of female scientists, engineers, and leaders. We provide the mentorship and resources needed to turn curiosity into global impact. The future of science is female; and it starts here.
+              We run hands-on STEM workshops, pair girls and young women with professional mentors, and help members find scholarships and funding to pursue science, technology, engineering, and math. If you're curious about a STEM career, this is where you start building it.
             </p>
-            
-            <div className="max-w-4xl mx-auto mb-12 rounded-[50px] overflow-hidden shadow-2xl border-4 border-brandPink/10 aspect-[4/3]">
-              <img 
-                src="/Group SGC pic.jpg" 
-                alt="STEM Girls Connect in Action" 
-                className="w-full h-full object-cover object-top"
-              />
-            </div>
+
+            <HomeSlideshow />
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6 max-w-2xl mx-auto">
               <Link 
@@ -53,30 +68,56 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      <section className="py-24 bg-white border-y border-gray-100">
-        <div className="container mx-auto px-6">
-          <ScrollReveal className="text-center mb-16">
-            <h2 className="text-2xl font-extrabold text-brandGreen uppercase tracking-widest">Core Activity Pillars</h2>
-          </ScrollReveal>
-          <div className="grid md:grid-cols-3 gap-12 text-center">
-            <ScrollReveal delay={100} className="bg-[#486e7c]/5 p-8 rounded-[40px] border border-gray-100">
-              <Presentation color="#82246d" size={40} className="mb-6 mx-auto" />
-              <h4 className="text-lg font-extrabold mb-2 text-brandGreen uppercase">Advocacy</h4>
-              <p className="text-brandSlate text-sm font-medium">Policy influence, STEM research, and promoting vital women's health issues.</p>
+      {!statsLoading && stats && stats.length > 0 && (
+        <section className="py-24 bg-white">
+          <div className="container mx-auto px-6">
+            <ScrollReveal className="text-center mb-16">
+              <h2 className="text-2xl font-extrabold text-brandGreen uppercase tracking-widest">Our Impact So Far</h2>
             </ScrollReveal>
-            
-            <ScrollReveal delay={200} className="bg-[#486e7c]/5 p-8 rounded-[40px] border border-gray-100">
-              <Layers color="#82246d" size={40} className="mb-6 mx-auto" />
-              <h4 className="text-lg font-extrabold mb-2 text-brandGreen uppercase">Workshops</h4>
-              <p className="text-brandSlate text-sm font-medium">Training on school applications, scholarships, and career-ready leadership.</p>
-            </ScrollReveal>
-            
-            <ScrollReveal delay={300} className="bg-[#486e7c]/5 p-8 rounded-[40px] border border-gray-100">
-              <Users2 color="#82246d" size={40} className="mb-6 mx-auto" />
-              <h4 className="text-lg font-extrabold mb-2 text-brandGreen uppercase">Mentorship</h4>
-              <p className="text-brandSlate text-sm font-medium">Professional interactions and experience sharing with scientific leads.</p>
-            </ScrollReveal>
+            <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto text-center mb-12">
+              {stats.map((stat, i) => (
+                <ScrollReveal key={stat.id} delay={i * 100}>
+                  <p className="text-5xl font-extrabold text-brandPink mb-2 tabular-nums">
+                    <CountUp value={stat.value} />
+                  </p>
+                  <p className="text-brandSlate font-bold uppercase tracking-widest text-xs">{stat.label}</p>
+                </ScrollReveal>
+              ))}
+            </div>
+            <div className="text-center">
+              <Link to="/impact" className="inline-flex items-center gap-2 text-brandPink font-extrabold uppercase tracking-widest text-sm hover:underline">
+                See the full picture <ArrowRight size={16} />
+              </Link>
+            </div>
           </div>
+        </section>
+      )}
+
+      {!postsLoading && latestPost && (
+        <section className="py-20 bg-[#486e7c]/5 border-y border-gray-100">
+          <div className="container mx-auto px-6">
+            <ScrollReveal className="text-center mb-12">
+              <h2 className="text-2xl font-extrabold text-brandGreen uppercase tracking-widest">What's New</h2>
+            </ScrollReveal>
+            <div className="max-w-md mx-auto mb-10">
+              <PostCard post={latestPost} />
+            </div>
+            <div className="text-center">
+              <Link to="/blog" className="inline-flex items-center gap-2 text-brandPink font-extrabold uppercase tracking-widest text-sm hover:underline">
+                View all updates <ArrowRight size={16} />
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
+      <section className="py-14 bg-white border-t border-gray-100">
+        <div className="container mx-auto px-6">
+          <ScrollReveal className="text-center mb-8">
+            <h2 className="text-2xl font-extrabold text-brandGreen uppercase tracking-widest mb-2">Our Partners</h2>
+            <p className="text-brandSlate text-sm font-medium">Organizations we work alongside to expand our reach.</p>
+          </ScrollReveal>
+          <Partners />
         </div>
       </section>
 
@@ -85,7 +126,7 @@ const Home: React.FC = () => {
           <ScrollReveal>
             <h2 className="text-4xl font-extrabold mb-8 uppercase tracking-tighter italic">Support Our Mission</h2>
             <p className="text-white/80 text-lg text-justify leading-relaxed font-medium mb-10">
-              We strive to touch lives across scientific domains, preparing individuals for international opportunities while solving complex challenges with STEM-based innovation. Your support fuels this change.
+              Your donation funds STEM training workshops, mentor pairings, and outreach to schools. Every gift helps a girl get access to scholarships, skills, and role models she might not otherwise reach.
             </p>
             <Link to="/donate" className="inline-flex items-center space-x-3 bg-brandPink text-white px-12 py-5 rounded-2xl font-extrabold uppercase tracking-widest shadow-2xl shadow-black/20 hover:scale-105 transition-all text-sm">
               <Heart size={18} fill="currentColor" />
@@ -93,13 +134,20 @@ const Home: React.FC = () => {
             </Link>
           </ScrollReveal>
           <ScrollReveal delay={200}>
-            <div className="rounded-[50px] overflow-hidden shadow-2xl border-4 border-brandPink/30 aspect-[16/9]">
-              <img 
-                src="/STEMgirl.jpg" 
-                alt="STEM Girls Connect Member" 
-                className="w-full h-full object-cover"
-              />
-            </div>
+            {/* Exception to the site-wide "no cropped images" rule: this
+                image intentionally keeps its rounded/cropped treatment. */}
+            <PhotoGallery images={[{ src: supportPhoto.src, alt: supportPhoto.alt }]}>
+              {(open) => (
+                <div className="rounded-[50px] overflow-hidden shadow-2xl border-4 border-brandPink/30 aspect-[16/9]">
+                  <img 
+                    src={supportPhoto.src} 
+                    alt={supportPhoto.alt} 
+                    onClick={() => open(0)}
+                    className="w-full h-full object-cover cursor-zoom-in"
+                  />
+                </div>
+              )}
+            </PhotoGallery>
           </ScrollReveal>
         </div>
       </section>

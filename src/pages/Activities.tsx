@@ -1,9 +1,10 @@
 import React from 'react';
-import { Layers, Presentation, Users2, ExternalLink, CheckCircle2 } from 'lucide-react';
+import { Layers, Presentation, Users2, CheckCircle2 } from 'lucide-react';
 import ScrollReveal from '../components/ScrollReveal';
 import PageHeader from '../components/PageHeader';
 import Seo from '../components/Seo';
-import { organization } from '../config/organization';
+import PhotoGallery from '../components/PhotoGallery';
+import { useSiteImage } from '../hooks/useSiteImage';
 
 const pillars = [
   {
@@ -26,23 +27,27 @@ const pillars = [
     title: 'Mentorship',
     icon: Users2,
     points: [
-      'Direct interactions with STEM leaders.',
-      'Experience sharing for career growth.',
+      'One-on-one pairing with women STEM professionals for ongoing guidance.',
+      'Regular experience-sharing sessions to support career growth.',
     ],
   },
 ];
 
 const Activities: React.FC = () => {
+  const heroPhoto = useSiteImage('activities_hero', '/Little STEM Girls.jpg', 'Nurturing the next generation of STEM girls');
+  const galleryPhoto1 = useSiteImage('activities_gallery_1', '/SGC outreach Foumban.jpg', 'STEM Girls Connect outreach event');
+  const galleryPhoto2 = useSiteImage('activities_gallery_2', '/SGC Outreach class.jpg', 'STEM Girls Connect outreach classroom session');
+
   return (
     <div className="pb-24">
       <Seo
         title="Our Activities | STEM Girls Connect"
-        description="Explore STEM Girls Connect's programs, mentorship, and outreach activities supporting girls and young women in STEM across Cameroon."
+        description="Explore STEM Girls Connect's programs, mentorship, and outreach activities supporting girls and young women in STEM."
         path="/activities"
       />
       <PageHeader 
-        title="Impact & Evidence" 
-        subtitle="Transforming passion into profession through curated STEM excellence." 
+        title="Our Activities" 
+        subtitle="Turning Passion Into Profession Through STEM Training and Mentorship" 
       />
 
       <section className="container mx-auto px-6 py-20">
@@ -53,30 +58,45 @@ const Activities: React.FC = () => {
           <div className="h-1.5 w-24 bg-brandPink mx-auto mt-10 rounded-full"></div>
         </ScrollReveal>
 
-        <ScrollReveal delay={100} className="max-w-5xl mx-auto mb-24 rounded-[60px] overflow-hidden shadow-2xl border-8 border-white">
-          <img 
-            src="/Little STEM Girls.jpg" 
-            alt="Nurturing the next generation of STEM girls" 
-            className="w-full h-[400px] object-cover hover:scale-105 transition-transform duration-700"
-          />
-        </ScrollReveal>
+        <PhotoGallery
+          images={[
+            { src: heroPhoto.src, alt: heroPhoto.alt },
+            { src: galleryPhoto1.src, alt: galleryPhoto1.alt },
+            { src: galleryPhoto2.src, alt: galleryPhoto2.alt },
+          ]}
+        >
+          {(open) => (
+            <>
+              <ScrollReveal delay={100} className="max-w-5xl mx-auto mb-24 rounded-[60px] overflow-hidden shadow-2xl border-8 border-white">
+                <img 
+                  src={heroPhoto.src} 
+                  alt={heroPhoto.alt} 
+                  onClick={() => open(0)}
+                  className="w-full h-[400px] object-cover hover:scale-105 transition-transform duration-700 cursor-zoom-in"
+                />
+              </ScrollReveal>
 
-        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-24">
-          <ScrollReveal className="rounded-[40px] overflow-hidden shadow-xl border-4 border-white aspect-[4/3]">
-            <img
-              src="/SGC outreach Foumban.jpg"
-              alt="STEM Girls Connect outreach in Foumban"
-              className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-            />
-          </ScrollReveal>
-          <ScrollReveal delay={100} className="rounded-[40px] overflow-hidden shadow-xl border-4 border-white aspect-[4/3]">
-            <img
-              src="/SGC Outreach class.jpg"
-              alt="STEM Girls Connect outreach classroom session"
-              className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-            />
-          </ScrollReveal>
-        </div>
+              <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-24">
+                <ScrollReveal className="rounded-[40px] overflow-hidden shadow-xl border-4 border-white aspect-[4/3]">
+                  <img
+                    src={galleryPhoto1.src}
+                    alt={galleryPhoto1.alt}
+                    onClick={() => open(1)}
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-700 cursor-zoom-in"
+                  />
+                </ScrollReveal>
+                <ScrollReveal delay={100} className="rounded-[40px] overflow-hidden shadow-xl border-4 border-white aspect-[4/3]">
+                  <img
+                    src={galleryPhoto2.src}
+                    alt={galleryPhoto2.alt}
+                    onClick={() => open(2)}
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-700 cursor-zoom-in"
+                  />
+                </ScrollReveal>
+              </div>
+            </>
+          )}
+        </PhotoGallery>
 
         <div className="grid md:grid-cols-3 gap-12 mb-24">
           {pillars.map((pillar, i) => {
@@ -99,33 +119,6 @@ const Activities: React.FC = () => {
             );
           })}
         </div>
-
-        <ScrollReveal className="bg-white rounded-[40px] shadow-2xl border border-gray-100 overflow-hidden max-w-5xl mx-auto">
-          <div className="p-8 border-b border-gray-100 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 bg-gray-50/50">
-            <div>
-              <h2 className="text-2xl font-extrabold text-brandGreen uppercase">Reports & Records</h2>
-              <p className="text-brandSlate text-sm font-bold mt-1">Impact Archive of Completed Activities.</p>
-            </div>
-            <a 
-              href={organization.resources.reportsArchive} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="flex items-center space-x-3 bg-brandPink text-white px-8 py-3 rounded-xl font-extrabold hover:scale-105 transition-all shadow-lg text-sm uppercase tracking-widest"
-            >
-              <span>Full Archive</span>
-              <ExternalLink size={18} />
-            </a>
-          </div>
-          <div className="w-full h-[300px] bg-white">
-            <iframe 
-              src={organization.resources.reportsArchiveEmbed} 
-              className="w-full h-full border-none"
-              frameBorder="0"
-              title="STEM Girls Connect Reports Archive"
-              loading="lazy"
-            ></iframe>
-          </div>
-        </ScrollReveal>
       </section>
     </div>
   );

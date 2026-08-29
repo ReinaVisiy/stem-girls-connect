@@ -13,7 +13,7 @@ interface SeoProps {
  * client-rendered SPA. index.html already ships sensible defaults for
  * the homepage, so this only needs to update the DOM after mount/route change.
  */
-const Seo: React.FC<SeoProps> = ({ title, description, path }) => {
+const Seo = ({ title, description, path }: SeoProps) => {
   useEffect(() => {
     document.title = title;
 
