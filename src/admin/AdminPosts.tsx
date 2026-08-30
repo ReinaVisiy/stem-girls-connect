@@ -51,6 +51,7 @@ const AdminPosts: React.FC = () => {
 
   const load = async () => {
     setLoading(true);
+    setError(null);
     const { data, error: err } = await supabase.from('posts').select('*').order('published_at', { ascending: false });
     if (err) setError(err.message);
     else setPosts((data ?? []) as PostRow[]);

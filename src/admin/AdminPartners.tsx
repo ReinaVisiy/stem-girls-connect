@@ -24,6 +24,7 @@ const AdminPartners: React.FC = () => {
 
   const load = async () => {
     setLoading(true);
+    setError(null);
     const { data, error: err } = await supabase.from('partners').select('*').order('display_order');
     if (err) setError(err.message);
     else setPartners(data ?? []);

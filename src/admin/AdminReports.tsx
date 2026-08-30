@@ -33,6 +33,7 @@ const AdminReports: React.FC = () => {
 
   const load = async () => {
     setLoading(true);
+    setError(null);
     const { data, error: err } = await supabase.from('reports').select('*').order('display_order');
     if (err) setError(err.message);
     else setReports(data ?? []);

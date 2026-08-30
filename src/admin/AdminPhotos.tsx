@@ -43,6 +43,7 @@ const AdminPhotos: React.FC = () => {
 
   const load = async () => {
     setLoading(true);
+    setError(null);
     const [{ data: imgData, error: imgErr }, { data: slideData, error: slideErr }] = await Promise.all([
       supabase.from('site_images').select('*'),
       supabase.from('home_slideshow').select('*').order('display_order'),
