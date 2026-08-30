@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Trash2, FileText, ExternalLink } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
-import { uploadToBucket } from './uploadFile';
+import { uploadToBucket, describeUploadError } from './uploadFile';
 import { AdminPageHeader, AdminCard, AdminButton, AdminInput, AdminTextarea, AdminLabel, AdminBanner, AdminFileName } from './AdminUI';
 
 interface Report {
@@ -70,7 +70,7 @@ const AdminReports: React.FC = () => {
       setFile(null);
       await load();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to add report');
+      setError(describeUploadError(err));
     } finally {
       setSaving(false);
     }

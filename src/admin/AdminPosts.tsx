@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Trash2, Pencil, X } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
-import { uploadToBucket } from './uploadFile';
+import { uploadToBucket, describeUploadError } from './uploadFile';
 import { AdminPageHeader, AdminCard, AdminButton, AdminInput, AdminTextarea, AdminLabel, AdminBanner, AdminFileName } from './AdminUI';
 
 interface MediaItem {
@@ -131,7 +131,7 @@ const AdminPosts: React.FC = () => {
       cancelEdit();
       await load();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to save post');
+      setError(describeUploadError(err));
     } finally {
       setSaving(false);
     }
