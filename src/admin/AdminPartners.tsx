@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Trash2, Upload, GripVertical } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
-import { uploadToBucket } from './uploadFile';
+import { uploadToBucket, describeUploadError } from './uploadFile';
 import { AdminPageHeader, AdminCard, AdminButton, AdminInput, AdminLabel, AdminBanner, AdminFileName } from './AdminUI';
 
 interface Partner {
@@ -59,7 +59,7 @@ const AdminPartners: React.FC = () => {
       setFile(null);
       await load();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to add partner');
+      setError(describeUploadError(err));
     } finally {
       setSaving(false);
     }
@@ -80,7 +80,7 @@ const AdminPartners: React.FC = () => {
       if (err) throw err;
       await load();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to replace logo');
+      setError(describeUploadError(err));
     }
   };
 
