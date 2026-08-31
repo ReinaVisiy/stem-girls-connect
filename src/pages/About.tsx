@@ -93,7 +93,7 @@ const About: React.FC = () => {
               Dr. Visiy Edna Buhnyuy is the CEO and Chairperson of STEM Girls Connect. She is an environmentalist, agricultural engineer, and educator who has led projects improving water, sanitation, and environmental solutions across communities, designing sustainable systems, training young engineers, and applying STEM to solve real-world challenges.
             </p>
             <p className="text-brandSlate text-lg leading-relaxed font-semibold text-justify">
-              She holds a PhD in Environmental Management from the Pan African University Life and Earth Sciences Institute (PAULESI) in Ibadan, Nigeria, and currently serves as an Assistant Lecturer at the National Advanced School of Public Works (ENSTP) in Cameroon, where she mentors and trains the next generation of engineers. Through STEM Girls Connect, she is intentional about mentoring girls in science and creating opportunities that support their growth and participation in STEM.
+              She holds a PhD in Environmental Management from the Pan African University Life and Earth Sciences Institute (PAULESI) in Ibadan, Nigeria, and currently serves as a Senior Lecturer at the National Advanced School of Public Works (ENSTP) in Cameroon, where she mentors and trains the next generation of engineers. Through STEM Girls Connect, she is intentional about mentoring girls in science and creating opportunities that support their growth and participation in STEM.
             </p>
           </div>
         </ScrollReveal>
@@ -116,17 +116,17 @@ const About: React.FC = () => {
           </ScrollReveal>
         </div>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-10 mb-24 text-center">
-          <ScrollReveal delay={300} className="flex items-center gap-3">
-            <Flag color="#82246d" size={22} />
+        <div className="max-w-3xl mx-auto mb-24 space-y-6">
+          <ScrollReveal delay={300} className="flex items-start gap-3">
+            <Flag color="#82246d" size={22} className="mt-1 shrink-0" />
             <p className="text-brandSlate text-sm font-semibold italic text-justify">
               <span className="font-extrabold uppercase tracking-widest text-xs text-brandGreen not-italic mr-2">Motto</span>
               Exploring the Future of STEM for the Benefit of All.
             </p>
           </ScrollReveal>
 
-          <ScrollReveal delay={400} className="flex items-center gap-3">
-            <Sparkles color="#82246d" size={22} />
+          <ScrollReveal delay={400} className="flex items-start gap-3">
+            <Sparkles color="#82246d" size={22} className="mt-1 shrink-0" />
             <p className="text-brandSlate text-sm font-semibold italic text-justify">
               <span className="font-extrabold uppercase tracking-widest text-xs text-brandGreen not-italic mr-2">Slogan</span>
               Nurturing Women in STEM.

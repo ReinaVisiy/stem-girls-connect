@@ -23,6 +23,9 @@ const AdminPartners = lazy(() => import('./admin/AdminPartners'));
 const AdminPhotos = lazy(() => import('./admin/AdminPhotos'));
 const AdminReports = lazy(() => import('./admin/AdminReports'));
 const AdminPosts = lazy(() => import('./admin/AdminPosts'));
+const AdminBureau = lazy(() => import('./admin/AdminBureau'));
+const AdminStats = lazy(() => import('./admin/AdminStats'));
+const AdminSubscribers = lazy(() => import('./admin/AdminSubscribers'));
 
 const PublicLayout: React.FC = () => (
   <div className="flex flex-col min-h-screen">
@@ -75,6 +78,9 @@ const App: React.FC = () => {
                   <Route path="photos" element={<AdminPhotos />} />
                   <Route path="reports" element={<AdminReports />} />
                   <Route path="posts" element={<AdminPosts />} />
+                  <Route path="bureau" element={<AdminBureau />} />
+                  <Route path="stats" element={<AdminStats />} />
+                  <Route path="subscribers" element={<AdminSubscribers />} />
                 </Route>
               </Routes>
             </AdminAuthProvider>
