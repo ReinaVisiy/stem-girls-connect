@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.4",
+    "@tailwindcss/typography": "^0.5.20",
     "lucide-react": "^0.562.0",
     "qrcode.react": "^4.2.0",
     "react": "^19.2.3",

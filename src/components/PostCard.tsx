@@ -26,7 +26,7 @@ function excerpt(body: string, maxLen = 160) {
 const PostCard: React.FC<{ post: Post }> = ({ post }) => (
   <Link
     to={`/blog/${post.slug}`}
-    className="block bg-white rounded-[40px] border border-gray-100 shadow-xl hover:shadow-2xl transition-all overflow-hidden group"
+    className="block bg-white dark:bg-slate-800 rounded-[40px] border border-gray-100 dark:border-slate-700 shadow-xl hover:shadow-2xl transition-all overflow-hidden group"
   >
     {post.image_url && (
       <div className="w-full overflow-hidden">

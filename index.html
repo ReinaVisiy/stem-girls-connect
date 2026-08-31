@@ -3,6 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem('theme');
+          var theme = stored === 'light' || stored === 'dark'
+            ? stored
+            : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+          if (theme === 'dark') document.documentElement.classList.add('dark');
+        } catch (e) {}
+      })();
+    </script>
     <title>STEM Girls Connect | Nurturing Women in STEM</title>
     <meta name="description" content="STEM Girls Connect is a nonprofit empowering girls and young women in science, technology, engineering, and mathematics through mentorship, training, and advocacy." />
     <meta name="robots" content="index, follow" />
@@ -55,7 +66,7 @@
     }
     </script>
 </head>
-  <body class="bg-neutralWhite text-gray-900">
+  <body class="bg-neutralWhite text-gray-900 dark:bg-slate-900 dark:text-slate-100">
     <div id="root"></div>
   <script type="module" src="src/main.tsx"></script>
 </body>

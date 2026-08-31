@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { Menu, X, ChevronDown, Sun, Moon } from 'lucide-react';
 import { navigation, isNavGroup, NavGroupItem } from '../config/navigation';
+import { useTheme } from '../context/ThemeContext';
 
 /** Desktop dropdown for a nav group. Click to toggle, closes on outside click or route change. */
 const NavDropdown: React.FC<{ item: NavGroupItem; isActive: (path: string) => boolean }> = ({ item, isActive }) => {
@@ -35,13 +36,13 @@ const NavDropdown: React.FC<{ item: NavGroupItem; isActive: (path: string) => bo
       </button>
 
       {open && (
-        <div className="absolute top-full left-0 mt-3 w-52 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden py-2 z-50">
+        <div className="absolute top-full left-0 mt-3 w-52 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-slate-700 overflow-hidden py-2 z-50">
           {item.children.map((child) => (
             <Link
               key={child.path}
               to={child.path}
               onClick={() => setOpen(false)}
-              className={`block px-5 py-3 text-sm font-semibold hover:bg-gray-50 transition-colors ${
+              className={`block px-5 py-3 text-sm font-semibold hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors ${
                 isActive(child.path) ? 'text-brandPink' : 'text-brandSlate'
               }`}
             >
@@ -58,6 +59,7 @@ const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [mobileOpenGroups, setMobileOpenGroups] = useState<Record<string, boolean>>({});
   const location = useLocation();
+  const { theme, toggleTheme } = useTheme();
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -66,10 +68,10 @@ const Navbar: React.FC = () => {
   }, [location.pathname]);
 
   return (
-    <nav className="fixed top-0 w-full bg-neutralWhite/95 backdrop-blur-md z-50 border-b border-gray-100 h-20 flex items-center shadow-sm">
+    <nav className="fixed top-0 w-full bg-neutralWhite/95 dark:bg-slate-900/95 backdrop-blur-md z-50 border-b border-gray-100 dark:border-slate-700 h-20 flex items-center shadow-sm">
       <div className="container mx-auto px-6 flex justify-between items-center">
         <Link to="/" className="flex items-center group">
-          <div className="h-16 w-18 border-gray-100 bg-white p-1">
+          <div className="h-16 w-18 border-gray-100 dark:border-slate-700 bg-white dark:bg-slate-800 p-1">
             <img
               src="/logo.png"
               alt="STEM Girls Connect Logo"
@@ -98,6 +100,13 @@ const Navbar: React.FC = () => {
               </Link>
             )
           )}
+          <button
+            onClick={toggleTheme}
+            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            className="p-2.5 rounded-full text-brandSlate hover:text-brandPink hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
+          >
+            {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
           <Link
             to="/donate"
             className="bg-brandPink text-white px-6 py-2.5 rounded-full text-sm font-bold shadow-lg shadow-brandPink/20 hover:scale-105 transition-transform"
@@ -107,17 +116,26 @@ const Navbar: React.FC = () => {
         </div>
 
         {/* Mobile Hamburger */}
-        <button
-          className="lg:hidden p-2 text-brandGreen"
-          onClick={() => setIsOpen(!isOpen)}
-          aria-label={isOpen ? 'Close menu' : 'Open menu'}
-        >
-          {isOpen ? <X size={28} /> : <Menu size={28} />}
-        </button>
+        <div className="lg:hidden flex items-center gap-1">
+          <button
+            onClick={toggleTheme}
+            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            className="p-2 text-brandSlate"
+          >
+            {theme === 'dark' ? <Sun size={24} /> : <Moon size={24} />}
+          </button>
+          <button
+            className="p-2 text-brandGreen"
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label={isOpen ? 'Close menu' : 'Open menu'}
+          >
+            {isOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
+        </div>
 
         {/* Mobile Menu Card */}
         {isOpen && (
-          <div className="absolute top-14 right-0 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 lg:hidden transform fade-in-up z-[100] overflow-hidden transition-all duration-1000">
+          <div className="absolute top-14 right-0 w-64 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-slate-700 lg:hidden transform fade-in-up z-[100] overflow-hidden transition-all duration-1000">
             <div className="flex flex-col p-4">
               {navigation.map((item) =>
                 isNavGroup(item) ? (

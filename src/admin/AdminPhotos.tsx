@@ -25,6 +25,7 @@ interface SlideRow {
 const PLACEMENTS: { key: string; label: string }[] = [
   { key: 'home_support', label: 'Home — Support Our Mission photo' },
   { key: 'about_team', label: 'About — Team photo' },
+  { key: 'about_ceo', label: 'About — CEO photo' },
   { key: 'activities_hero', label: 'Activities — Hero photo' },
   { key: 'activities_gallery_1', label: 'Activities — Gallery photo 1' },
   { key: 'activities_gallery_2', label: 'Activities — Gallery photo 2' },

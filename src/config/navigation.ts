@@ -29,10 +29,10 @@ export const navigation: NavItem[] = [
     label: 'What We Do',
     children: [
       { label: 'Programs', path: '/activities' },
+      { label: 'Impact', path: '/impact' },
       { label: 'Blog / News', path: '/blog' },
     ],
   },
-  { label: 'Impact', path: '/impact' },
   {
     label: 'Get Involved',
     children: [

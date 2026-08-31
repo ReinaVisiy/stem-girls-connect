@@ -24,7 +24,7 @@ const Blog: React.FC = () => {
         {loading && (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-6xl mx-auto">
             {[0, 1, 2].map((i) => (
-              <div key={i} className="h-96 bg-gray-100 rounded-[40px] animate-pulse" />
+              <div key={i} className="h-96 bg-gray-100 dark:bg-slate-700 rounded-[40px] animate-pulse" />
             ))}
           </div>
         )}

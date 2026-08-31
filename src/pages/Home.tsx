@@ -38,7 +38,7 @@ const Home: React.FC = () => {
         title="Find Your Place in STEM"
       />
 
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-white dark:bg-slate-800">
         <div className="container mx-auto px-6 text-center">
           <ScrollReveal>
             <h2 className="text-3xl md:text-5xl font-extrabold text-brandGreen mb-8 uppercase tracking-tighter">
@@ -69,7 +69,7 @@ const Home: React.FC = () => {
       </section>
 
       {!statsLoading && stats && stats.length > 0 && (
-        <section className="py-24 bg-white">
+        <section className="py-24 bg-white dark:bg-slate-800">
           <div className="container mx-auto px-6">
             <ScrollReveal className="text-center mb-16">
               <h2 className="text-2xl font-extrabold text-brandGreen uppercase tracking-widest">Our Impact So Far</h2>
@@ -94,7 +94,7 @@ const Home: React.FC = () => {
       )}
 
       {!postsLoading && latestPost && (
-        <section className="py-20 bg-[#486e7c]/5 border-y border-gray-100">
+        <section className="py-20 bg-[#486e7c]/5 dark:bg-white/5 border-y border-gray-100 dark:border-slate-700">
           <div className="container mx-auto px-6">
             <ScrollReveal className="text-center mb-12">
               <h2 className="text-2xl font-extrabold text-brandGreen uppercase tracking-widest">What's New</h2>
@@ -111,7 +111,7 @@ const Home: React.FC = () => {
         </section>
       )}
 
-      <section className="py-14 bg-white border-t border-gray-100">
+      <section className="py-14 bg-white dark:bg-slate-800 border-t border-gray-100 dark:border-slate-700">
         <div className="container mx-auto px-6">
           <ScrollReveal className="text-center mb-8">
             <h2 className="text-2xl font-extrabold text-brandGreen uppercase tracking-widest mb-2">Our Partners</h2>

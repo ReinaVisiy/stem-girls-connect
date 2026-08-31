@@ -16,8 +16,8 @@ const BlogPost: React.FC = () => {
   if (loading) {
     return (
       <div className="container mx-auto px-6 py-24 max-w-3xl">
-        <div className="h-8 w-2/3 bg-gray-100 rounded-full animate-pulse mb-6" />
-        <div className="h-64 bg-gray-100 rounded-[40px] animate-pulse" />
+        <div className="h-8 w-2/3 bg-gray-100 dark:bg-slate-700 rounded-full animate-pulse mb-6" />
+        <div className="h-64 bg-gray-100 dark:bg-slate-700 rounded-[40px] animate-pulse" />
       </div>
     );
   }
@@ -71,7 +71,7 @@ const BlogPost: React.FC = () => {
                   </ScrollReveal>
                 )}
 
-                <ScrollReveal className="prose prose-lg max-w-none text-brandSlate font-medium leading-relaxed prose-headings:text-brandGreen prose-headings:font-extrabold prose-a:text-brandPink">
+                <ScrollReveal className="prose prose-lg dark:prose-invert max-w-none text-brandSlate font-medium leading-relaxed prose-headings:text-brandGreen prose-headings:font-extrabold prose-a:text-brandPink">
                   <ReactMarkdown>{post.body}</ReactMarkdown>
                 </ScrollReveal>
 

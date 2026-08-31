@@ -34,7 +34,7 @@ const Donate: React.FC = () => {
       </section>
 
       <section className="container mx-auto px-6 pb-24">
-        <ScrollReveal className="max-w-xl mx-auto bg-white p-12 rounded-[50px] shadow-2xl border-2 border-brandPink/10 flex flex-col items-center text-center hover:border-brandPink transition-all duration-300">
+        <ScrollReveal className="max-w-xl mx-auto bg-white dark:bg-slate-800 p-12 rounded-[50px] shadow-2xl border-2 border-brandPink/10 flex flex-col items-center text-center hover:border-brandPink transition-all duration-300">
           <h3 className="text-2xl font-extrabold text-brandGreen mb-6 uppercase tracking-tight">Donate via Mobile Money or Orange Money</h3>
           <p className="text-brandSlate text-sm font-bold mb-10 leading-relaxed">
             Your donation is processed securely through Fapshi. Pay by MTN Mobile Money or Orange Money.
@@ -49,7 +49,7 @@ const Donate: React.FC = () => {
             Donate Now
           </a>
 
-          <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
+          <div className="p-4 bg-gray-50 dark:bg-slate-700 rounded-2xl border border-gray-100 dark:border-slate-700">
             <QRCodeSVG value={FAPSHI_DONATE_URL} size={180} fgColor="#82246d" />
           </div>
           <p className="text-brandSlate text-xs font-bold mt-4 uppercase tracking-widest">Or scan to donate from your phone.</p>

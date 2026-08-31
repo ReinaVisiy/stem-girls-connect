@@ -54,7 +54,7 @@ const Impact: React.FC = () => {
         {statsLoading && (
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {[0, 1, 2].map((i) => (
-              <div key={i} className="h-40 bg-gray-100 rounded-[40px] animate-pulse" />
+              <div key={i} className="h-40 bg-gray-100 dark:bg-slate-700 rounded-[40px] animate-pulse" />
             ))}
           </div>
         )}
@@ -65,7 +65,7 @@ const Impact: React.FC = () => {
               <ScrollReveal
                 key={stat.id}
                 delay={i * 100}
-                className="bg-[#486e7c]/5 p-10 rounded-[40px] border border-gray-100 text-center hover:shadow-2xl transition-all"
+                className="bg-[#486e7c]/5 dark:bg-white/5 p-10 rounded-[40px] border border-gray-100 dark:border-slate-700 text-center hover:shadow-2xl transition-all"
               >
                 <p className="text-5xl font-extrabold text-brandPink mb-3 tabular-nums">
                   <CountUp value={stat.value} />
@@ -80,7 +80,7 @@ const Impact: React.FC = () => {
         )}
       </section>
 
-      <section className="bg-white border-t border-gray-100 py-20">
+      <section className="bg-white dark:bg-slate-800 border-t border-gray-100 dark:border-slate-700 py-20">
         <div className="container mx-auto px-6">
           <ScrollReveal className="text-center mb-16">
             <FileText color="#82246d" size={40} className="mx-auto mb-4" />
@@ -91,7 +91,7 @@ const Impact: React.FC = () => {
           {reportsLoading && (
             <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
               {[0, 1].map((i) => (
-                <div key={i} className="h-48 bg-gray-100 rounded-[40px] animate-pulse" />
+                <div key={i} className="h-48 bg-gray-100 dark:bg-slate-700 rounded-[40px] animate-pulse" />
               ))}
             </div>
           )}
@@ -106,7 +106,7 @@ const Impact: React.FC = () => {
                 <ScrollReveal
                   key={report.id}
                   delay={i * 100}
-                  className="bg-[#486e7c]/5 p-8 rounded-[40px] border border-gray-100 flex flex-col hover:shadow-xl transition-all"
+                  className="bg-[#486e7c]/5 dark:bg-white/5 p-8 rounded-[40px] border border-gray-100 dark:border-slate-700 flex flex-col hover:shadow-xl transition-all"
                 >
                   <h3 className="text-lg font-extrabold text-brandGreen mb-2 uppercase tracking-tight">{report.title}</h3>
                   {(report.start_date || report.end_date) && (

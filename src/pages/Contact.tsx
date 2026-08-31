@@ -51,7 +51,7 @@ const Contact: React.FC = () => {
 
       <section className="container mx-auto px-6 py-12">
         <div className="grid lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          <ScrollReveal className="bg-white p-12 rounded-[40px] shadow-xl border border-gray-100 flex flex-col items-center text-center hover:shadow-2xl transition-all">
+          <ScrollReveal className="bg-white dark:bg-slate-800 p-12 rounded-[40px] shadow-xl border border-gray-100 dark:border-slate-700 flex flex-col items-center text-center hover:shadow-2xl transition-all">
             <div className="bg-brandPink/10 w-16 h-16 rounded-2xl flex items-center justify-center mb-8">
               <MapPin color="#82246d" size={32} />
             </div>
@@ -61,7 +61,7 @@ const Contact: React.FC = () => {
             </p>
           </ScrollReveal>
 
-          <ScrollReveal delay={100} className="bg-white p-12 rounded-[40px] shadow-xl border border-gray-100 flex flex-col items-center text-center hover:shadow-2xl transition-all">
+          <ScrollReveal delay={100} className="bg-white dark:bg-slate-800 p-12 rounded-[40px] shadow-xl border border-gray-100 dark:border-slate-700 flex flex-col items-center text-center hover:shadow-2xl transition-all">
             <div className="bg-brandPink/10 w-16 h-16 rounded-2xl flex items-center justify-center mb-8">
               <Mail color="#82246d" size={32} />
             </div>
@@ -69,27 +69,27 @@ const Contact: React.FC = () => {
             <p className="text-brandSlate font-extrabold">{organization.contact.email}</p>
           </ScrollReveal>
 
-          <ScrollReveal delay={200} className="bg-white p-12 rounded-[40px] shadow-xl border border-gray-100 flex flex-col items-center text-center hover:shadow-2xl transition-all">
+          <ScrollReveal delay={200} className="bg-white dark:bg-slate-800 p-12 rounded-[40px] shadow-xl border border-gray-100 dark:border-slate-700 flex flex-col items-center text-center hover:shadow-2xl transition-all">
             <div className="bg-brandPink/10 w-16 h-16 rounded-2xl flex items-center justify-center mb-8">
               <MessageSquare color="#82246d" size={32} />
             </div>
             <h3 className="text-2xl font-extrabold text-brandGreen mb-4 uppercase tracking-tight">Socials</h3>
             <p className="text-brandSlate mb-8 text-sm font-bold">Follow along for updates, photos, and opportunities.</p>
             <div className="flex flex-wrap justify-center gap-4 mt-auto">
-              <a href={organization.social.facebook} target="_blank" rel="noopener noreferrer" className="p-4 bg-gray-50 rounded-2xl hover:bg-brandPink hover:text-white transition-all text-brandPink shadow-sm">
+              <a href={organization.social.facebook} target="_blank" rel="noopener noreferrer" className="p-4 bg-gray-50 dark:bg-slate-700 rounded-2xl hover:bg-brandPink hover:text-white transition-all text-brandPink shadow-sm">
                 <Facebook size={24} />
               </a>
-              <a href={organization.social.linkedin} target="_blank" rel="noopener noreferrer" className="p-4 bg-gray-50 rounded-2xl hover:bg-brandPink hover:text-white transition-all text-brandPink shadow-sm">
+              <a href={organization.social.linkedin} target="_blank" rel="noopener noreferrer" className="p-4 bg-gray-50 dark:bg-slate-700 rounded-2xl hover:bg-brandPink hover:text-white transition-all text-brandPink shadow-sm">
                 <Linkedin size={24} />
               </a>
-              <a href={organization.social.instagram} target="_blank" rel="noopener noreferrer" className="p-4 bg-gray-50 rounded-2xl hover:bg-brandPink hover:text-white transition-all text-brandPink shadow-sm">
+              <a href={organization.social.instagram} target="_blank" rel="noopener noreferrer" className="p-4 bg-gray-50 dark:bg-slate-700 rounded-2xl hover:bg-brandPink hover:text-white transition-all text-brandPink shadow-sm">
                 <Instagram size={24} />
               </a>
-              <a href={organization.social.youtube} target="_blank" rel="noopener noreferrer" className="p-4 bg-gray-50 rounded-2xl hover:bg-brandPink hover:text-white transition-all text-brandPink shadow-sm">
+              <a href={organization.social.youtube} target="_blank" rel="noopener noreferrer" className="p-4 bg-gray-50 dark:bg-slate-700 rounded-2xl hover:bg-brandPink hover:text-white transition-all text-brandPink shadow-sm">
                 <Youtube size={24} />
               </a>
               {/* Custom SVG glyph: lucide-react has no TikTok brand icon */}
-              <a href={organization.social.tiktok} target="_blank" rel="noopener noreferrer" className="p-4 bg-gray-50 rounded-2xl hover:bg-brandPink hover:text-white transition-all text-brandPink shadow-sm flex items-center">
+              <a href={organization.social.tiktok} target="_blank" rel="noopener noreferrer" className="p-4 bg-gray-50 dark:bg-slate-700 rounded-2xl hover:bg-brandPink hover:text-white transition-all text-brandPink shadow-sm flex items-center">
                 <TikTokIcon size={24} color="currentColor" />
               </a>
             </div>
@@ -98,7 +98,7 @@ const Contact: React.FC = () => {
       </section>
 
       <section className="container mx-auto px-6 mb-20">
-        <ScrollReveal className="max-w-2xl mx-auto bg-white p-10 md:p-14 rounded-[50px] shadow-2xl border border-gray-100">
+        <ScrollReveal className="max-w-2xl mx-auto bg-white dark:bg-slate-800 p-10 md:p-14 rounded-[50px] shadow-2xl border border-gray-100 dark:border-slate-700">
           <h2 className="text-2xl font-extrabold text-brandGreen mb-8 uppercase tracking-tight text-center">Send Us a Message</h2>
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
@@ -111,7 +111,7 @@ const Contact: React.FC = () => {
                 value={form.name}
                 onChange={handleChange}
                 placeholder="Your name"
-                className="w-full px-5 py-4 rounded-2xl border border-gray-200 text-sm font-medium text-brandSlate focus:outline-none focus:ring-2 focus:ring-brandPink/40"
+                className="w-full px-5 py-4 rounded-2xl border border-gray-200 dark:border-slate-700 text-sm font-medium text-brandSlate focus:outline-none focus:ring-2 focus:ring-brandPink/40"
               />
             </div>
             <div>
@@ -124,7 +124,7 @@ const Contact: React.FC = () => {
                 value={form.email}
                 onChange={handleChange}
                 placeholder="your@email.com"
-                className="w-full px-5 py-4 rounded-2xl border border-gray-200 text-sm font-medium text-brandSlate focus:outline-none focus:ring-2 focus:ring-brandPink/40"
+                className="w-full px-5 py-4 rounded-2xl border border-gray-200 dark:border-slate-700 text-sm font-medium text-brandSlate focus:outline-none focus:ring-2 focus:ring-brandPink/40"
               />
             </div>
             <div>
@@ -137,7 +137,7 @@ const Contact: React.FC = () => {
                 value={form.message}
                 onChange={handleChange}
                 placeholder="How can we help?"
-                className="w-full px-5 py-4 rounded-2xl border border-gray-200 text-sm font-medium text-brandSlate focus:outline-none focus:ring-2 focus:ring-brandPink/40 resize-none"
+                className="w-full px-5 py-4 rounded-2xl border border-gray-200 dark:border-slate-700 text-sm font-medium text-brandSlate focus:outline-none focus:ring-2 focus:ring-brandPink/40 resize-none"
               />
             </div>
             <button

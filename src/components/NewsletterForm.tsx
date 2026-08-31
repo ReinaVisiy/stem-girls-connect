@@ -34,7 +34,7 @@ const NewsletterForm: React.FC = () => {
   };
 
   return (
-    <div className="bg-white rounded-[40px] border border-gray-100 shadow-xl p-10 md:p-12 max-w-2xl mx-auto text-center">
+    <div className="bg-white dark:bg-slate-800 rounded-[40px] border border-gray-100 dark:border-slate-700 shadow-xl p-10 md:p-12 max-w-2xl mx-auto text-center">
       <div className="inline-flex p-4 bg-brandPink/10 rounded-2xl mb-6">
         <Mail color="#82246d" size={28} />
       </div>
@@ -50,7 +50,7 @@ const NewsletterForm: React.FC = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="you@example.com"
-          className="flex-grow px-5 py-4 rounded-2xl border border-gray-200 text-sm font-medium text-brandSlate focus:outline-none focus:ring-2 focus:ring-brandPink/40"
+          className="flex-grow px-5 py-4 rounded-2xl border border-gray-200 dark:border-slate-700 text-sm font-medium text-brandSlate focus:outline-none focus:ring-2 focus:ring-brandPink/40"
         />
         <button
           type="submit"

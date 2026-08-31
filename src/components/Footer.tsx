@@ -7,7 +7,7 @@ import NewsletterForm from './NewsletterForm';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-footerGray pt-16 pb-8 border-t border-gray-200">
+    <footer className="bg-footerGray dark:bg-slate-900 pt-16 pb-8 border-t border-gray-200 dark:border-slate-700">
       <div className="container mx-auto px-6">
         <div className="flex flex-col items-center text-center mb-12 space-y-2">
           <h3 className="text-brandGreen font-extrabold text-3xl tracking-tighter uppercase">{organization.name}</h3>
@@ -18,11 +18,11 @@ const Footer: React.FC = () => {
           <NewsletterForm />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12 border-t border-gray-300 pt-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12 border-t border-gray-300 dark:border-slate-700 pt-12">
           
           {/* Navigation Column */}
           <div className="space-y-4">
-            <h4 className="font-bold text-gray-800 uppercase text-xs tracking-widest">Navigation</h4>
+            <h4 className="font-bold text-gray-800 dark:text-slate-200 uppercase text-xs tracking-widest">Navigation</h4>
             <ul className="space-y-2 text-sm text-brandSlate font-bold">
               <li><Link to="/" className="hover:text-brandPink transition-colors">Home</Link></li>
               <li><Link to="/about" className="hover:text-brandPink transition-colors">About Us</Link></li>
@@ -36,7 +36,7 @@ const Footer: React.FC = () => {
 
           {/* About Column */}
           <div className="space-y-4">
-            <h4 className="font-bold text-gray-800 uppercase text-xs tracking-widest">About</h4>
+            <h4 className="font-bold text-gray-800 dark:text-slate-200 uppercase text-xs tracking-widest">About</h4>
             <p className="text-brandSlate text-sm leading-relaxed text-justify font-medium">
               Helping girls and young women explore STEM, build practical skills, access opportunities, and grow through mentorship and community.
             </p>
@@ -62,7 +62,7 @@ const Footer: React.FC = () => {
 
           {/* Connect Column */}
           <div className="space-y-4">
-            <h4 className="font-bold text-gray-800 uppercase text-xs tracking-widest">Connect</h4>
+            <h4 className="font-bold text-gray-800 dark:text-slate-200 uppercase text-xs tracking-widest">Connect</h4>
             <ul className="space-y-4 text-sm text-brandSlate font-medium">
               <li className="flex items-center space-x-3">
                 <Mail color="#82246d" size={18} className="flex-shrink-0" />
@@ -77,14 +77,14 @@ const Footer: React.FC = () => {
 
           {/* Legal Column */}
           <div className="space-y-4">
-            <h4 className="font-bold text-gray-800 uppercase text-xs tracking-widest">Legal Status</h4>
+            <h4 className="font-bold text-gray-800 dark:text-slate-200 uppercase text-xs tracking-widest">Legal Status</h4>
             <p className="text-[11px] text-brandSlate text-justify leading-relaxed font-semibold">
               Registered Association (No. 023/RDA/F.32/SASC) since April 23, 2024. Established under Law No. 90/053 of Dec 19, 1990, a nonprofit association supporting girls and young women in STEM through education, mentorship, opportunities, and community.
             </p>
           </div>
         </div>
 
-        <div className="border-t border-gray-300 pt-8 text-center text-[10px] text-brandSlate font-extrabold uppercase tracking-[0.3em]">
+        <div className="border-t border-gray-300 dark:border-slate-700 pt-8 text-center text-[10px] text-brandSlate font-extrabold uppercase tracking-[0.3em]">
           <p>© {new Date().getFullYear()} {organization.name}</p>
         </div>
       </div>

@@ -120,7 +120,7 @@ const Activities: React.FC = () => {
           {pillars.map((pillar, i) => {
             const Icon = pillar.icon;
             return (
-              <ScrollReveal key={pillar.title} delay={i * 100} className="flex flex-col bg-white p-10 rounded-[50px] border border-gray-100 shadow-xl hover:shadow-2xl transition-all">
+              <ScrollReveal key={pillar.title} delay={i * 100} className="flex flex-col bg-white dark:bg-slate-800 p-10 rounded-[50px] border border-gray-100 dark:border-slate-700 shadow-xl hover:shadow-2xl transition-all">
                 <div className="bg-brandPink/10 w-16 h-16 rounded-2xl flex items-center justify-center mb-8">
                   <Icon color="#82246d" size={32} />
                 </div>

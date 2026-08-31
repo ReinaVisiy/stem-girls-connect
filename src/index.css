@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+@plugin "@tailwindcss/typography";
 
 @theme {
   --color-brandGreen: #269464;
@@ -11,6 +13,7 @@
 body {
   font-family: 'Inter', sans-serif;
   scroll-behavior: smooth;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 .fade-in-up {
   animation: fadeInUp 0.8s ease-out forwards;
