@@ -3,8 +3,7 @@ import { Layers, Users2, Award, Briefcase, Network, Megaphone, CheckCircle2 } fr
 import ScrollReveal from '../components/ScrollReveal';
 import PageHeader from '../components/PageHeader';
 import Seo from '../components/Seo';
-import PhotoGallery from '../components/PhotoGallery';
-import { useSiteImage } from '../hooks/useSiteImage';
+import HomeSlideshow from '../components/HomeSlideshow';
 
 const pillars = [
   {
@@ -52,10 +51,6 @@ const pillars = [
 ];
 
 const Activities: React.FC = () => {
-  const heroPhoto = useSiteImage('activities_hero', '/Little STEM Girls.jpg', 'Nurturing the next generation of STEM girls');
-  const galleryPhoto1 = useSiteImage('activities_gallery_1', '/SGC outreach Foumban.jpg', 'STEM Girls Connect outreach event');
-  const galleryPhoto2 = useSiteImage('activities_gallery_2', '/SGC Outreach class.jpg', 'STEM Girls Connect outreach classroom session');
-
   return (
     <div className="pb-24">
       <Seo
@@ -76,47 +71,11 @@ const Activities: React.FC = () => {
           <div className="h-1.5 w-24 bg-brandPink mx-auto mt-10 rounded-full"></div>
         </ScrollReveal>
 
-        <PhotoGallery
-          images={[
-            { src: heroPhoto.src, alt: heroPhoto.alt },
-            { src: galleryPhoto1.src, alt: galleryPhoto1.alt },
-            { src: galleryPhoto2.src, alt: galleryPhoto2.alt },
-          ]}
-        >
-          {(open) => (
-            <>
-              <ScrollReveal delay={100} className="max-w-5xl mx-auto mb-24 rounded-[60px] overflow-hidden shadow-2xl border-8 border-white">
-                <img 
-                  src={heroPhoto.src} 
-                  alt={heroPhoto.alt} 
-                  onClick={() => open(0)}
-                  className="w-full h-[400px] object-cover hover:scale-105 transition-transform duration-700 cursor-zoom-in"
-                />
-              </ScrollReveal>
+        <ScrollReveal delay={100}>
+          <HomeSlideshow />
+        </ScrollReveal>
 
-              <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-24">
-                <ScrollReveal className="rounded-[40px] overflow-hidden shadow-xl border-4 border-white aspect-[4/3]">
-                  <img
-                    src={galleryPhoto1.src}
-                    alt={galleryPhoto1.alt}
-                    onClick={() => open(1)}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-700 cursor-zoom-in"
-                  />
-                </ScrollReveal>
-                <ScrollReveal delay={100} className="rounded-[40px] overflow-hidden shadow-xl border-4 border-white aspect-[4/3]">
-                  <img
-                    src={galleryPhoto2.src}
-                    alt={galleryPhoto2.alt}
-                    onClick={() => open(2)}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-700 cursor-zoom-in"
-                  />
-                </ScrollReveal>
-              </div>
-            </>
-          )}
-        </PhotoGallery>
-
-        <div className="grid md:grid-cols-3 gap-12 mb-24">
+        <div className="grid md:[grid-template-columns:repeat(auto-fit,minmax(300px,380px))] md:justify-center gap-12 mb-24">
           {pillars.map((pillar, i) => {
             const Icon = pillar.icon;
             return (

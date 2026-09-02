@@ -2,6 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 
+export interface MediaItem {
+  type: 'image' | 'video' | 'youtube' | 'embed';
+  url: string;
+  caption?: string;
+  /** Stable reference key for {{media:ID}} placeholders in the post body — survives reordering/deletion of other items, unlike array position. */
+  id?: string;
+}
+
 export interface Post {
   id: number;
   title: string;
@@ -11,7 +19,7 @@ export interface Post {
   published: boolean;
   published_at: string;
   created_at: string;
-  media: { type: 'image' | 'video'; url: string; caption?: string }[];
+  media: MediaItem[];
 }
 
 function formatDate(iso: string) {

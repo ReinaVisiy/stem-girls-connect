@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Trash2, Upload, GripVertical } from 'lucide-react';
+import { Trash2, Upload, GripVertical, Pencil, X } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 import { uploadToBucket, describeUploadError } from './uploadFile';
 import { AdminPageHeader, AdminCard, AdminButton, AdminInput, AdminLabel, AdminBanner, AdminFileName } from './AdminUI';
@@ -17,6 +17,7 @@ const AdminPartners: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const [editingId, setEditingId] = useState<number | null>(null);
   const [name, setName] = useState('');
   const [websiteUrl, setWebsiteUrl] = useState('');
   const [file, setFile] = useState<File | null>(null);
@@ -35,7 +36,21 @@ const AdminPartners: React.FC = () => {
     load();
   }, []);
 
-  const handleAdd = async (e: React.FormEvent) => {
+  const startEdit = (p: Partner) => {
+    setEditingId(p.id);
+    setName(p.name);
+    setWebsiteUrl(p.website_url ?? '');
+    setFile(null);
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setName('');
+    setWebsiteUrl('');
+    setFile(null);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) return;
     setSaving(true);
@@ -45,18 +60,27 @@ const AdminPartners: React.FC = () => {
       let logoUrl: string | null = null;
       if (file) logoUrl = await uploadToBucket('site-assets', file, 'partners');
 
-      const nextOrder = partners.length > 0 ? Math.max(...partners.map((p) => p.display_order)) + 1 : 1;
-      const { error: err } = await supabase.from('partners').insert({
-        name: name.trim(),
-        website_url: websiteUrl.trim() || null,
-        logo_url: logoUrl,
-        display_order: nextOrder,
-      });
-      if (err) throw err;
+      if (editingId) {
+        const updatePayload: Record<string, unknown> = {
+          name: name.trim(),
+          website_url: websiteUrl.trim() || null,
+        };
+        if (logoUrl) updatePayload.logo_url = logoUrl;
 
-      setName('');
-      setWebsiteUrl('');
-      setFile(null);
+        const { error: err } = await supabase.from('partners').update(updatePayload).eq('id', editingId);
+        if (err) throw err;
+      } else {
+        const nextOrder = partners.length > 0 ? Math.max(...partners.map((p) => p.display_order)) + 1 : 1;
+        const { error: err } = await supabase.from('partners').insert({
+          name: name.trim(),
+          website_url: websiteUrl.trim() || null,
+          logo_url: logoUrl,
+          display_order: nextOrder,
+        });
+        if (err) throw err;
+      }
+
+      cancelEdit();
       await load();
     } catch (err) {
       setError(describeUploadError(err));
@@ -105,8 +129,17 @@ const AdminPartners: React.FC = () => {
       {error && <AdminBanner type="error">{error}</AdminBanner>}
 
       <AdminCard className="mb-8">
-        <h2 className="text-sm font-extrabold text-brandGreen uppercase tracking-widest mb-6">Add a Partner</h2>
-        <form onSubmit={handleAdd} className="grid md:grid-cols-2 gap-6">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-sm font-extrabold text-brandGreen uppercase tracking-widest">
+            {editingId ? 'Edit Partner' : 'Add a Partner'}
+          </h2>
+          {editingId && (
+            <button onClick={cancelEdit} className="text-xs font-bold text-brandSlate hover:text-brandPink flex items-center gap-1">
+              <X size={14} /> Cancel edit
+            </button>
+          )}
+        </div>
+        <form onSubmit={handleSubmit} className="grid md:grid-cols-2 gap-6">
           <div>
             <AdminLabel>Name</AdminLabel>
             <AdminInput value={name} onChange={(e) => setName(e.target.value)} placeholder="Organization name" required />
@@ -116,7 +149,7 @@ const AdminPartners: React.FC = () => {
             <AdminInput value={websiteUrl} onChange={(e) => setWebsiteUrl(e.target.value)} placeholder="https://..." type="url" />
           </div>
           <div className="md:col-span-2">
-            <AdminLabel>Logo</AdminLabel>
+            <AdminLabel>Logo {editingId && '(leave empty to keep current)'}</AdminLabel>
             <input
               type="file"
               accept="image/*"
@@ -127,7 +160,9 @@ const AdminPartners: React.FC = () => {
           </div>
           <div className="md:col-span-2">
             <AdminButton type="submit" disabled={saving}>
-              <span className="inline-flex items-center gap-2"><Upload size={14} /> {saving ? 'Adding...' : 'Add Partner'}</span>
+              <span className="inline-flex items-center gap-2">
+                <Upload size={14} /> {saving ? 'Saving...' : editingId ? 'Save Changes' : 'Add Partner'}
+              </span>
             </AdminButton>
           </div>
         </form>
@@ -172,6 +207,9 @@ const AdminPartners: React.FC = () => {
                 </label>
               </div>
 
+              <AdminButton variant="ghost" onClick={() => startEdit(p)}>
+                <Pencil size={14} />
+              </AdminButton>
               <AdminButton variant="danger" onClick={() => handleDelete(p.id)}>
                 <Trash2 size={14} />
               </AdminButton>

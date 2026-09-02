@@ -5,6 +5,7 @@ import PageHeader from '../components/PageHeader';
 import Seo from '../components/Seo';
 import { useApiData } from '../hooks/useApiData';
 import { useSiteImage } from '../hooks/useSiteImage';
+import { useSiteContent } from '../hooks/useSiteContent';
 import PhotoGallery from '../components/PhotoGallery';
 
 interface BureauMember {
@@ -34,6 +35,11 @@ const About: React.FC = () => {
     '/Visiy Edna CEO Graduation.jpg',
     'Dr. Visiy Edna Buhnyuy, CEO of STEM Girls Connect'
   );
+  const ceoBio = useSiteContent(
+    'about_ceo_bio',
+    'Dr. Visiy Edna Buhnyuy is the CEO and Chairperson of STEM Girls Connect. She is an environmentalist, agricultural engineer, and educator who has led projects improving water, sanitation, and environmental solutions across communities, designing sustainable systems, training young engineers, and applying STEM to solve real-world challenges.\n\nShe holds a PhD in Environmental Management from the Pan African University Life and Earth Sciences Institute (PAULESI) in Ibadan, Nigeria, and currently serves as an Assistant Lecturer at the National Advanced School of Public Works (ENSTP) in Cameroon, where she mentors and trains the next generation of engineers. Through STEM Girls Connect, she is intentional about mentoring girls in science and creating opportunities that support their growth and participation in STEM.'
+  );
+  const ceoBioParagraphs = ceoBio.split(/\n\s*\n/).filter((p) => p.trim().length > 0);
 
   const objectives = [
     "Share ideas and gain inspiration for STEM careers.",
@@ -76,8 +82,8 @@ const About: React.FC = () => {
           </p>
         </ScrollReveal>
 
-        <ScrollReveal className="max-w-3xl mx-auto mb-24 bg-[#486e7c]/5 dark:bg-white/5 rounded-[50px] border border-gray-100 dark:border-slate-700 p-8 md:p-12">
-          <h2 className="text-2xl font-extrabold text-brandGreen mb-6 uppercase tracking-widest">About our CEO</h2>
+        <ScrollReveal className="max-w-5xl mx-auto mb-24 bg-[#486e7c]/5 dark:bg-white/5 rounded-[50px] border border-gray-100 dark:border-slate-700 p-8 md:p-12">
+          <h2 className="text-2xl font-extrabold text-brandGreen mb-6 uppercase tracking-widest">About the CEO</h2>
           <div className="clear-both">
             <PhotoGallery images={[{ src: ceoPhoto.src, alt: ceoPhoto.alt }]}>
               {(open) => (
@@ -89,12 +95,16 @@ const About: React.FC = () => {
                 />
               )}
             </PhotoGallery>
-            <p className="text-brandSlate text-lg leading-relaxed font-semibold text-justify mb-4">
-              Dr. Visiy Edna Buhnyuy is the CEO and Chairperson of STEM Girls Connect. She is an environmentalist, agricultural engineer, and educator who has led projects improving water, sanitation, and environmental solutions across communities, designing sustainable systems, training young engineers, and applying STEM to solve real-world challenges.
-            </p>
-            <p className="text-brandSlate text-lg leading-relaxed font-semibold text-justify">
-              She holds a PhD in Environmental Management from the Pan African University Life and Earth Sciences Institute (PAULESI) in Ibadan, Nigeria, and currently serves as a Senior Lecturer at the National Advanced School of Public Works (ENSTP) in Cameroon, where she mentors and trains the next generation of engineers. Through STEM Girls Connect, she is intentional about mentoring girls in science and creating opportunities that support their growth and participation in STEM.
-            </p>
+            {ceoBioParagraphs.map((para, i) => (
+              <p
+                key={i}
+                className={`text-brandSlate text-lg leading-relaxed font-semibold text-justify ${
+                  i < ceoBioParagraphs.length - 1 ? 'mb-4' : ''
+                }`}
+              >
+                {para}
+              </p>
+            ))}
           </div>
         </ScrollReveal>
 
@@ -149,7 +159,7 @@ const About: React.FC = () => {
 
         <ScrollReveal className="bg-white dark:bg-slate-800 p-5 rounded-[60px] border-2 border-brandPink/10 shadow-xl max-w-5xl mx-auto">
           <h2 className="text-3xl font-extrabold text-brandGreen mb-10 uppercase tracking-tighter text-center">Our Objectives</h2>
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid md:[grid-template-columns:repeat(auto-fit,minmax(360px,500px))] md:justify-center gap-6">
             {objectives.map((obj, i) => (
               <div key={i} className="flex items-start space-x-4 bg-gray-50 dark:bg-slate-700 p-6 rounded-3xl border border-gray-100 dark:border-slate-700">
                 <CheckCircle2 color="#82246d" size={24} className="mt-1 flex-shrink-0" />
@@ -176,7 +186,7 @@ const About: React.FC = () => {
             {(open) => {
               let photoIndex = -1;
               return (
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-12 max-w-6xl mx-auto">
+                <div className="grid grid-cols-2 md:[grid-template-columns:repeat(auto-fit,minmax(280px,360px))] md:justify-center gap-12 max-w-6xl mx-auto">
                   {bureauLoading && [0, 1, 2].map((i) => (
                     <div key={i} className="text-center">
                       <div className="w-32 h-32 md:w-44 md:h-44 bg-gray-100 dark:bg-slate-700 rounded-full mx-auto mb-6 animate-pulse" />

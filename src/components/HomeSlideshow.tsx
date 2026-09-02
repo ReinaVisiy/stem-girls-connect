@@ -12,12 +12,12 @@ interface SlideshowItem {
 const ROTATE_MS = 5000;
 
 /**
- * Full-bleed, auto-rotating slideshow for the Home hero slot, backed by
- * the home_slideshow table via /api/slideshow. Breaks out of the parent
- * container to span the full viewport width. Includes manual prev/next
- * arrows in addition to autoplay. Falls back to a single static image
- * if the fetch fails or hasn't resolved yet, so the hero slot is never
- * empty.
+ * Auto-rotating slideshow backed by the home_slideshow table via
+ * /api/slideshow. Renders full-bleed, breaking out of its parent's
+ * container to fill the width of the page (currently used on the
+ * Programs/Activities page). Includes manual prev/next arrows in
+ * addition to autoplay. Falls back to a single static image if the
+ * fetch fails or hasn't resolved yet, so the slot is never empty.
  */
 const HomeSlideshow: React.FC = () => {
   const { data, loading, error } = useApiData<SlideshowItem[]>('/api/slideshow');
@@ -42,10 +42,11 @@ const HomeSlideshow: React.FC = () => {
     setIndex((i) => (i + 1) % slides.length);
   };
 
-  // Full-bleed breakout: spans the full viewport width regardless of
-  // the parent's max-width container.
+  // Full-bleed panel: breaks out of the parent container so the photo
+  // fills the entire width of the page, edge to edge, with no rounded
+  // corners or border.
   const containerClass =
-    'w-screen relative left-1/2 right-1/2 -mx-[50vw] mb-12 overflow-hidden shadow-2xl h-[45vh] md:h-[70vh] bg-brandSlate/10';
+    'relative w-screen left-1/2 right-1/2 -mx-[50vw] mb-24 overflow-hidden h-[45vh] md:h-[60vh] bg-brandSlate/10';
 
   if ((loading && !slides) || (error && !slides)) {
     return (
@@ -53,7 +54,7 @@ const HomeSlideshow: React.FC = () => {
         <img
           src="/Group SGC pic Bamenda.jpg"
           alt="STEM Girls Connect in Action"
-          className="w-full h-full object-cover object-top"
+          className="w-full h-full object-contain"
         />
       </div>
     );
@@ -68,7 +69,7 @@ const HomeSlideshow: React.FC = () => {
           key={slide.id}
           src={slide.image_url}
           alt={slide.caption || 'STEM Girls Connect'}
-          className={`absolute inset-0 w-full h-full object-cover object-top transition-opacity duration-1000 ease-in-out ${
+          className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-1000 ease-in-out ${
             i === index ? 'opacity-100' : 'opacity-0'
           }`}
         />

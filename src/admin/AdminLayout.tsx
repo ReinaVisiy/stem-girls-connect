@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { NavLink, Navigate, Outlet, Link } from 'react-router-dom';
-import { LayoutDashboard, Users, Image as ImageIcon, FileText, Newspaper, LogOut, ExternalLink, Menu, X, UsersRound, BarChart3, Mail } from 'lucide-react';
+import { LayoutDashboard, Users, Image as ImageIcon, FileText, Newspaper, LogOut, ExternalLink, Menu, X, Award, Type, BarChart3, Mail } from 'lucide-react';
 import { useAdminAuth } from './AdminAuthProvider';
 
 const navItems: { to: string; label: string; icon: typeof LayoutDashboard; end?: boolean }[] = [
   { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true },
+  { to: '/admin/bureau', label: 'Bureau', icon: Award },
   { to: '/admin/partners', label: 'Partners', icon: Users },
   { to: '/admin/photos', label: 'Photos', icon: ImageIcon },
+  { to: '/admin/content', label: 'Content', icon: Type },
   { to: '/admin/reports', label: 'Reports', icon: FileText },
   { to: '/admin/posts', label: 'Posts', icon: Newspaper },
-  { to: '/admin/bureau', label: 'Bureau', icon: UsersRound },
   { to: '/admin/stats', label: 'Stats', icon: BarChart3 },
   { to: '/admin/subscribers', label: 'Subscribers', icon: Mail },
 ];

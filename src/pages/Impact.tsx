@@ -60,7 +60,7 @@ const Impact: React.FC = () => {
         )}
 
         {!statsLoading && stats && stats.length > 0 && (
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <div className="grid md:[grid-template-columns:repeat(auto-fit,minmax(260px,320px))] md:justify-center gap-8 max-w-5xl mx-auto">
             {stats.map((stat, i) => (
               <ScrollReveal
                 key={stat.id}
@@ -101,7 +101,7 @@ const Impact: React.FC = () => {
           )}
 
           {!reportsLoading && reports && reports.length > 0 && (
-            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <div className="grid md:[grid-template-columns:repeat(auto-fit,minmax(320px,460px))] md:justify-center gap-8 max-w-4xl mx-auto">
               {reports.map((report, i) => (
                 <ScrollReveal
                   key={report.id}

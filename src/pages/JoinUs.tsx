@@ -79,7 +79,7 @@ const JoinUs: React.FC = () => {
           <div className="h-1.5 w-24 bg-brandPink mx-auto mt-4 rounded-full"></div>
         </ScrollReveal>
 
-        <div className="grid justify-items-center sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid justify-items-center sm:grid-cols-2 lg:[grid-template-columns:repeat(auto-fit,minmax(300px,370px))] lg:justify-center gap-8 max-w-6xl mx-auto">
           {paths.map((path, i) => (
             <ScrollReveal key={path.title} delay={i * 100} className="w-full bg-[#486e7c]/5 dark:bg-white/5 p-8 rounded-[50px] border border-gray-100 dark:border-slate-700 flex flex-col h-full hover:bg-white dark:hover:bg-slate-800 hover:shadow-2xl transition-all group">
               <div className="mb-8 p-6 bg-white dark:bg-slate-800 rounded-3xl shadow-sm w-fit group-hover:scale-110 transition-transform duration-500">
@@ -116,7 +116,7 @@ const JoinUs: React.FC = () => {
             <p className="text-brandSlate font-bold mt-2 uppercase tracking-widest text-xs italic">Benefits of Joining STEM Girls Connect</p>
           </ScrollReveal>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-2 lg:[grid-template-columns:repeat(auto-fit,minmax(260px,300px))] lg:justify-center gap-8 max-w-7xl mx-auto">
             {perks.map((perk, i) => (
               <ScrollReveal key={i} delay={i * 100} className="bg-[#486e7c]/5 dark:bg-white/5 p-10 rounded-[40px] border border-gray-100 dark:border-slate-700 hover:shadow-lg transition-all text-center flex flex-col items-center">
                 <div className="mb-6">{perk.icon}</div>

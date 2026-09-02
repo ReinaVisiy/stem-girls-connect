@@ -6,12 +6,12 @@ import { AdminPageHeader, AdminCard, AdminButton, AdminBanner } from './AdminUI'
 interface Subscriber {
   id: number;
   email: string;
-  created_at: string | null;
+  subscribed_at: string | null;
 }
 
 function downloadCsv(rows: Subscriber[]) {
   const header = 'email,subscribed_at';
-  const lines = rows.map((r) => `${r.email},${r.created_at ?? ''}`);
+  const lines = rows.map((r) => `${r.email},${r.subscribed_at ?? ''}`);
   const csv = [header, ...lines].join('\n');
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
   const url = URL.createObjectURL(blob);
@@ -33,7 +33,7 @@ const AdminSubscribers: React.FC = () => {
     const { data, error: err } = await supabase
       .from('subscribers')
       .select('*')
-      .order('created_at', { ascending: false });
+      .order('subscribed_at', { ascending: false });
     if (err) setError(err.message);
     else setSubscribers(data ?? []);
     setLoading(false);
@@ -82,9 +82,9 @@ const AdminSubscribers: React.FC = () => {
               <div key={s.id} className="flex items-center justify-between gap-4 px-6 py-4">
                 <div className="min-w-0">
                   <p className="font-bold text-brandGreen truncate">{s.email}</p>
-                  {s.created_at && (
+                  {s.subscribed_at && (
                     <p className="text-brandSlate text-xs font-medium">
-                      {new Date(s.created_at).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
+                      {new Date(s.subscribed_at).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
                     </p>
                   )}
                 </div>

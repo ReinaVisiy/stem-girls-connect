@@ -3,11 +3,13 @@ import { Trash2, Pencil, X } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 import { uploadToBucket, describeUploadError } from './uploadFile';
 import { AdminPageHeader, AdminCard, AdminButton, AdminInput, AdminTextarea, AdminLabel, AdminBanner, AdminFileName } from './AdminUI';
+import { detectEmbed } from '../components/MediaEmbed';
 
 interface MediaItem {
-  type: 'image' | 'video';
+  type: 'image' | 'video' | 'youtube' | 'embed';
   url: string;
   caption?: string;
+  id?: string;
 }
 
 interface PostRow {
@@ -46,6 +48,7 @@ const AdminPosts: React.FC = () => {
   const [form, setForm] = useState(emptyForm);
   const [coverFile, setCoverFile] = useState<File | null>(null);
   const [mediaFiles, setMediaFiles] = useState<File[]>([]);
+  const [videoLinkUrl, setVideoLinkUrl] = useState('');
   const [existingMedia, setExistingMedia] = useState<MediaItem[]>([]);
   const [saving, setSaving] = useState(false);
 
@@ -73,6 +76,7 @@ const AdminPosts: React.FC = () => {
     setExistingMedia(post.media ?? []);
     setCoverFile(null);
     setMediaFiles([]);
+    setVideoLinkUrl('');
   };
 
   const cancelEdit = () => {
@@ -80,6 +84,7 @@ const AdminPosts: React.FC = () => {
     setForm(emptyForm);
     setCoverFile(null);
     setMediaFiles([]);
+    setVideoLinkUrl('');
     setExistingMedia([]);
   };
 
@@ -99,7 +104,11 @@ const AdminPosts: React.FC = () => {
 
       for (const f of mediaFiles) {
         const url = await uploadToBucket('post-media', f, 'media');
-        newMedia.push({ type: f.type.startsWith('video') ? 'video' : 'image', url });
+        newMedia.push({ type: f.type.startsWith('video') ? 'video' : 'image', url, id: crypto.randomUUID().slice(0, 8) });
+      }
+
+      if (videoLinkUrl.trim()) {
+        newMedia.push({ type: 'embed', url: videoLinkUrl.trim(), id: crypto.randomUUID().slice(0, 8) });
       }
 
       if (editingId) {
@@ -180,6 +189,9 @@ const AdminPosts: React.FC = () => {
               placeholder="Write the post..."
               required
             />
+            <p className="text-brandSlate text-xs font-medium mt-2">
+              To place a specific photo or video at an exact spot in the write-up, paste its reference tag (shown under each item below) on its own line. Anything not referenced this way still shows in a gallery at the end of the post.
+            </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
@@ -215,22 +227,52 @@ const AdminPosts: React.FC = () => {
             <AdminLabel>Additional Media (photos & videos)</AdminLabel>
             {existingMedia.length > 0 && (
               <div className="flex flex-wrap gap-3 mb-4">
-                {existingMedia.map((m, i) => (
-                  <div key={i} className="relative w-20 h-20 rounded-xl overflow-hidden bg-gray-50">
-                    {m.type === 'video' ? (
-                      <video src={m.url} className="w-full h-full object-cover" />
-                    ) : (
-                      <img src={m.url} alt="" className="w-full h-full object-cover" />
-                    )}
-                    <button
-                      type="button"
-                      onClick={() => removeExistingMedia(i)}
-                      className="absolute top-1 right-1 bg-black/60 text-white rounded-full p-1"
-                    >
-                      <X size={12} />
-                    </button>
-                  </div>
-                ))}
+                {existingMedia.map((m, i) => {
+                  const tag = `{{media:${m.id ?? i}}}`;
+                  return (
+                    <div key={i} className="flex flex-col items-center gap-1.5">
+                      <div className="relative w-20 h-20 rounded-xl overflow-hidden bg-gray-50 flex items-center justify-center">
+                        {m.type === 'video' ? (
+                          <video src={m.url} className="w-full h-full object-cover" />
+                        ) : m.type === 'youtube' || m.type === 'embed' ? (
+                          <span className="text-[10px] font-extrabold text-brandPink text-center px-1 uppercase tracking-wide">
+                            {(() => {
+                              const kind = detectEmbed(m.url).kind;
+                              return kind === 'youtube'
+                                ? 'YouTube'
+                                : kind === 'vimeo'
+                                ? 'Vimeo'
+                                : kind === 'drive'
+                                ? 'Drive'
+                                : kind === 'audio'
+                                ? 'Audio'
+                                : kind === 'videofile'
+                                ? 'Video'
+                                : 'Link';
+                            })()}
+                          </span>
+                        ) : (
+                          <img src={m.url} alt="" className="w-full h-full object-cover" />
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => removeExistingMedia(i)}
+                          className="absolute top-1 right-1 bg-black/60 text-white rounded-full p-1"
+                        >
+                          <X size={12} />
+                        </button>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => navigator.clipboard?.writeText(tag)}
+                        title="Click to copy"
+                        className="text-[10px] font-mono bg-gray-100 hover:bg-gray-200 text-brandSlate px-2 py-1 rounded-md"
+                      >
+                        {tag}
+                      </button>
+                    </div>
+                  );
+                })}
               </div>
             )}
             <input
@@ -241,6 +283,20 @@ const AdminPosts: React.FC = () => {
               className="block w-full text-sm text-brandSlate file:mr-4 file:py-2.5 file:px-5 file:rounded-xl file:border-0 file:text-xs file:font-extrabold file:uppercase file:tracking-widest file:bg-brandPink/10 file:text-brandPink hover:file:bg-brandPink/20"
             />
             <AdminFileName file={mediaFiles} />
+          </div>
+
+          <div>
+            <AdminLabel>Video / Audio Link (optional)</AdminLabel>
+            <AdminInput
+              value={videoLinkUrl}
+              onChange={(e) => setVideoLinkUrl(e.target.value)}
+              placeholder="https://youtube.com/..., vimeo.com/..., drive.google.com/..., or a direct file link"
+              type="url"
+            />
+            <p className="text-brandSlate text-xs font-medium mt-2">
+              YouTube, Vimeo, and Google Drive links play directly on the site. A direct link to an audio or video
+              file (.mp4, .mp3, etc.) also plays inline. Any other link shows as a "watch/listen" button instead.
+            </p>
           </div>
 
           <AdminButton type="submit" disabled={saving}>

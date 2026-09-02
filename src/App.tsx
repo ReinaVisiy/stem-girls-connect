@@ -19,11 +19,12 @@ const AdminAuthProvider = lazy(() => import('./admin/AdminAuthProvider').then((m
 const AdminLogin = lazy(() => import('./admin/AdminLogin'));
 const AdminLayout = lazy(() => import('./admin/AdminLayout'));
 const AdminDashboard = lazy(() => import('./admin/AdminDashboard'));
+const AdminBureau = lazy(() => import('./admin/AdminBureau'));
 const AdminPartners = lazy(() => import('./admin/AdminPartners'));
 const AdminPhotos = lazy(() => import('./admin/AdminPhotos'));
+const AdminContent = lazy(() => import('./admin/AdminContent'));
 const AdminReports = lazy(() => import('./admin/AdminReports'));
 const AdminPosts = lazy(() => import('./admin/AdminPosts'));
-const AdminBureau = lazy(() => import('./admin/AdminBureau'));
 const AdminStats = lazy(() => import('./admin/AdminStats'));
 const AdminSubscribers = lazy(() => import('./admin/AdminSubscribers'));
 
@@ -74,11 +75,12 @@ const App: React.FC = () => {
                 <Route path="login" element={<AdminLogin />} />
                 <Route element={<AdminLayout />}>
                   <Route index element={<AdminDashboard />} />
+                  <Route path="bureau" element={<AdminBureau />} />
                   <Route path="partners" element={<AdminPartners />} />
                   <Route path="photos" element={<AdminPhotos />} />
+                  <Route path="content" element={<AdminContent />} />
                   <Route path="reports" element={<AdminReports />} />
                   <Route path="posts" element={<AdminPosts />} />
-                  <Route path="bureau" element={<AdminBureau />} />
                   <Route path="stats" element={<AdminStats />} />
                   <Route path="subscribers" element={<AdminSubscribers />} />
                 </Route>

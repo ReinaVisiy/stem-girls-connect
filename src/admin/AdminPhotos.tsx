@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Trash2, GripVertical } from 'lucide-react';
+import { Trash2, GripVertical, Pencil, Check, X } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 import { uploadToBucket, describeUploadError } from './uploadFile';
 import { AdminPageHeader, AdminCard, AdminButton, AdminInput, AdminLabel, AdminBanner, AdminFileName } from './AdminUI';
@@ -23,13 +23,12 @@ interface SlideRow {
  * useSiteImage('the_key', fallbackSrc, fallbackAlt).
  */
 const PLACEMENTS: { key: string; label: string }[] = [
+  { key: 'home_hero', label: 'Home — Hero background photo' },
   { key: 'home_support', label: 'Home — Support Our Mission photo' },
   { key: 'about_team', label: 'About — Team photo' },
   { key: 'about_ceo', label: 'About — CEO photo' },
-  { key: 'activities_hero', label: 'Activities — Hero photo' },
-  { key: 'activities_gallery_1', label: 'Activities — Gallery photo 1' },
-  { key: 'activities_gallery_2', label: 'Activities — Gallery photo 2' },
   { key: 'joinus_hero', label: 'Join Us — Hero photo' },
+  { key: 'donate_hero', label: 'Donate — Hero background photo' },
 ];
 
 const AdminPhotos: React.FC = () => {
@@ -39,8 +38,10 @@ const AdminPhotos: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [newCaption, setNewCaption] = useState('');
-  const [newFile, setNewFile] = useState<File | null>(null);
+  const [newFiles, setNewFiles] = useState<File[]>([]);
   const [saving, setSaving] = useState(false);
+  const [editingSlideId, setEditingSlideId] = useState<number | null>(null);
+  const [editCaption, setEditCaption] = useState('');
 
   const load = async () => {
     setLoading(true);
@@ -77,20 +78,26 @@ const AdminPhotos: React.FC = () => {
     }
   };
 
-  const handleAddSlide = async (e: React.FormEvent) => {
+  const handleAddSlides = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newFile) return;
+    if (newFiles.length === 0) return;
     setSaving(true);
     setError(null);
     try {
-      const url = await uploadToBucket('site-assets', newFile, 'slideshow');
-      const nextOrder = slides.length > 0 ? Math.max(...slides.map((s) => s.display_order)) + 1 : 1;
-      const { error: err } = await supabase
-        .from('home_slideshow')
-        .insert({ image_url: url, caption: newCaption.trim() || null, display_order: nextOrder });
-      if (err) throw err;
+      let nextOrder = slides.length > 0 ? Math.max(...slides.map((s) => s.display_order)) + 1 : 1;
+      // Upload sequentially so a slow/failed upload doesn't race with the
+      // display_order calculation for the next one, and so the error
+      // message can say exactly which file failed.
+      for (const file of newFiles) {
+        const url = await uploadToBucket('site-assets', file, 'slideshow');
+        const { error: err } = await supabase
+          .from('home_slideshow')
+          .insert({ image_url: url, caption: newCaption.trim() || null, display_order: nextOrder });
+        if (err) throw err;
+        nextOrder += 1;
+      }
       setNewCaption('');
-      setNewFile(null);
+      setNewFiles([]);
       await load();
     } catch (err) {
       setError(describeUploadError(err));
@@ -106,6 +113,19 @@ const AdminPhotos: React.FC = () => {
     else setSlides((s) => s.filter((x) => x.id !== id));
   };
 
+  const startEditCaption = (s: SlideRow) => {
+    setEditingSlideId(s.id);
+    setEditCaption(s.caption ?? '');
+  };
+
+  const saveCaption = async (id: number) => {
+    const { error: err } = await supabase.from('home_slideshow').update({ caption: editCaption.trim() || null }).eq('id', id);
+    if (err) setError(err.message);
+    else {
+      setEditingSlideId(null);
+      await load();
+    }
+  };
   const moveSlide = async (id: number, direction: -1 | 1) => {
     const idx = slides.findIndex((s) => s.id === id);
     const swapIdx = idx + direction;
@@ -181,25 +201,34 @@ const AdminPhotos: React.FC = () => {
       ) : (
         <>
           <AdminCard className="mb-8">
-            <h2 className="text-sm font-extrabold text-brandGreen uppercase tracking-widest mb-6">Add a Slide</h2>
-            <form onSubmit={handleAddSlide} className="grid md:grid-cols-2 gap-6">
+            <h2 className="text-sm font-extrabold text-brandGreen uppercase tracking-widest mb-6">Add Slides</h2>
+            <form onSubmit={handleAddSlides} className="grid md:grid-cols-2 gap-6">
               <div>
                 <AdminLabel>Caption (optional)</AdminLabel>
                 <AdminInput value={newCaption} onChange={(e) => setNewCaption(e.target.value)} placeholder="e.g. Community Outreach" />
+                <p className="mt-2 text-xs text-brandSlate font-medium">Applied to every photo added in this batch, if set.</p>
               </div>
               <div>
-                <AdminLabel>Photo</AdminLabel>
+                <AdminLabel>Photos</AdminLabel>
                 <input
                   type="file"
                   accept="image/*"
+                  multiple
                   required
-                  onChange={(e) => setNewFile(e.target.files?.[0] ?? null)}
+                  onChange={(e) => setNewFiles(Array.from(e.target.files ?? []))}
                   className="block w-full text-sm text-brandSlate file:mr-4 file:py-2.5 file:px-5 file:rounded-xl file:border-0 file:text-xs file:font-extrabold file:uppercase file:tracking-widest file:bg-brandPink/10 file:text-brandPink hover:file:bg-brandPink/20"
                 />
-                <AdminFileName file={newFile} />
+                <p className="mt-1 text-xs text-brandSlate font-medium">Select or drag multiple photos to add them all at once.</p>
+                <AdminFileName file={newFiles} />
               </div>
               <div className="md:col-span-2">
-                <AdminButton type="submit" disabled={saving}>{saving ? 'Adding...' : 'Add Slide'}</AdminButton>
+                <AdminButton type="submit" disabled={saving || newFiles.length === 0}>
+                  {saving
+                    ? `Adding${newFiles.length > 1 ? ` ${newFiles.length} photos` : ''}...`
+                    : newFiles.length > 1
+                    ? `Add ${newFiles.length} Slides`
+                    : 'Add Slide'}
+                </AdminButton>
               </div>
             </form>
           </AdminCard>
@@ -216,7 +245,32 @@ const AdminPhotos: React.FC = () => {
                   <img src={s.image_url} alt={s.caption ?? ''} className="w-full h-full object-cover" />
                 </div>
                 <div className="flex-grow min-w-0">
-                  <p className="font-extrabold text-brandGreen">{s.caption || <span className="text-gray-400 italic">No caption</span>}</p>
+                  {editingSlideId === s.id ? (
+                    <div className="flex items-center gap-2">
+                      <AdminInput
+                        value={editCaption}
+                        onChange={(e) => setEditCaption(e.target.value)}
+                        placeholder="Caption"
+                        className="flex-grow"
+                      />
+                      <button onClick={() => saveCaption(s.id)} className="text-brandGreen hover:opacity-70">
+                        <Check size={18} />
+                      </button>
+                      <button onClick={() => setEditingSlideId(null)} className="text-brandSlate hover:opacity-70">
+                        <X size={18} />
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => startEditCaption(s)}
+                      className="flex items-center gap-2 text-left group"
+                    >
+                      <p className="font-extrabold text-brandGreen">
+                        {s.caption || <span className="text-gray-400 italic">No caption</span>}
+                      </p>
+                      <Pencil size={12} className="text-gray-300 group-hover:text-brandPink shrink-0" />
+                    </button>
+                  )}
                 </div>
                 <AdminButton variant="danger" onClick={() => handleDeleteSlide(s.id)}>
                   <Trash2 size={14} />

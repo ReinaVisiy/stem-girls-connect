@@ -2,9 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, ArrowRight } from 'lucide-react';
 import ScrollReveal from '../components/ScrollReveal';
-import PageHeader from '../components/PageHeader';
 import Seo from '../components/Seo';
-import HomeSlideshow from '../components/HomeSlideshow';
 import Partners from '../components/Partners';
 import PostCard, { Post } from '../components/PostCard';
 import PhotoGallery from '../components/PhotoGallery';
@@ -26,6 +24,11 @@ const Home: React.FC = () => {
   const { data: stats, loading: statsLoading } = useApiData<Stat[]>('/api/stats');
   const latestPost = latestPosts?.[0];
   const supportPhoto = useSiteImage('home_support', '/STEMgirl.jpg', 'STEM Girls Connect Member');
+  const heroPhoto = useSiteImage(
+    'home_hero',
+    '/SGC Hero Team.jpg',
+    'Three STEM Girls Connect team members smiling together'
+  );
 
   return (
     <div className="overflow-hidden">
@@ -34,35 +37,41 @@ const Home: React.FC = () => {
         description="STEM Girls Connect is a nonprofit training and mentoring girls and young women in science, technology, engineering, and mathematics through workshops, mentorship, and advocacy."
         path="/"
       />
-      <PageHeader 
-        title="Find Your Place in STEM"
-      />
+      <section className="relative overflow-hidden min-h-[640px] sm:min-h-[600px] md:min-h-[720px] flex items-center">
+        {/* Background photograph */}
+        <img
+          src={heroPhoto.src}
+          alt={heroPhoto.alt}
+          className="absolute inset-0 w-full h-full object-cover object-[50%_18%]"
+        />
+        {/* Brand-colored overlay: deep purple wash + dark gradient for text contrast, in both light and dark mode */}
+        <div className="absolute inset-0 bg-gradient-to-b from-brandPink/85 via-brandPink/75 to-slate-900/85" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
 
-      <section className="py-24 bg-white dark:bg-slate-800">
-        <div className="container mx-auto px-6 text-center">
+        <div className="relative z-10 container mx-auto px-6 py-24">
           <ScrollReveal>
-            <h2 className="text-3xl md:text-5xl font-extrabold text-brandGreen mb-8 uppercase tracking-tighter">
-              Learn. Connect. Grow.
-            </h2>
-            <p className="text-brandSlate text-xl mb-12 text-justify leading-relaxed font-semibold max-w-4xl mx-auto">
-              Build practical skills, connect with mentors, discover scholarships and opportunities, and grow alongside a community of girls and young women building their futures in STEM.
-            </p>
+            <div className="max-w-2xl">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white mb-6 uppercase tracking-tighter drop-shadow-lg">
+                Find Your Place in STEM
+              </h1>
+              <p className="text-white/90 text-lg md:text-xl mb-10 leading-relaxed font-semibold max-w-xl">
+                Build practical skills, connect with mentors, discover scholarships and opportunities, and grow alongside a community of girls and young women building their futures in STEM.
+              </p>
 
-            <HomeSlideshow />
-
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 max-w-2xl mx-auto">
-              <Link 
-                to="/activities" 
-                className="w-full sm:w-auto bg-brandPink text-white px-10 py-5 rounded-2xl font-extrabold shadow-xl shadow-brandPink/30 hover:scale-[1.02] transition-all text-center uppercase tracking-widest text-sm"
-              >
-                Explore Our Programs
-              </Link>
-              <Link 
-                to="/join" 
-                className="w-full sm:w-auto border-2 border-brandPink text-brandPink px-10 py-5 rounded-2xl font-extrabold hover:bg-brandPink hover:text-white transition-all text-center uppercase tracking-widest text-sm"
-              >
-                Join STEM Girls Connect
-              </Link>
+              <div className="flex flex-col sm:flex-row items-start gap-4">
+                <Link
+                  to="/activities"
+                  className="w-full sm:w-auto bg-brandPink text-white px-10 py-5 rounded-2xl font-extrabold shadow-xl shadow-black/30 hover:scale-[1.02] hover:bg-brandPink/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white transition-all text-center uppercase tracking-widest text-sm"
+                >
+                  Explore Our Programs
+                </Link>
+                <Link
+                  to="/join"
+                  className="w-full sm:w-auto bg-brandPink border-2 border-white/70 text-white px-10 py-5 rounded-2xl font-extrabold shadow-xl shadow-black/30 hover:scale-[1.02] hover:bg-brandPink/90 hover:border-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white transition-all text-center uppercase tracking-widest text-sm"
+                >
+                  Join STEM Girls Connect
+                </Link>
+              </div>
             </div>
           </ScrollReveal>
         </div>
@@ -74,7 +83,7 @@ const Home: React.FC = () => {
             <ScrollReveal className="text-center mb-16">
               <h2 className="text-2xl font-extrabold text-brandGreen uppercase tracking-widest">Our Impact So Far</h2>
             </ScrollReveal>
-            <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto text-center mb-12">
+            <div className="grid md:[grid-template-columns:repeat(auto-fit,minmax(220px,260px))] md:justify-center gap-8 max-w-4xl mx-auto text-center mb-12">
               {stats.map((stat, i) => (
                 <ScrollReveal key={stat.id} delay={i * 100}>
                   <p className="text-5xl font-extrabold text-brandPink mb-2 tabular-nums">

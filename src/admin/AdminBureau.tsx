@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Trash2, Upload, GripVertical } from 'lucide-react';
+import { Trash2, Pencil, X, GripVertical } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 import { uploadToBucket, describeUploadError } from './uploadFile';
 import { AdminPageHeader, AdminCard, AdminButton, AdminInput, AdminLabel, AdminBanner, AdminFileName } from './AdminUI';
 
-interface BureauMember {
+interface BureauRow {
   id: number;
   name: string;
   position: string;
@@ -13,14 +13,15 @@ interface BureauMember {
   display_order: number;
 }
 
+const emptyForm = { name: '', position: '', linkedinUrl: '' };
+
 const AdminBureau: React.FC = () => {
-  const [members, setMembers] = useState<BureauMember[]>([]);
+  const [members, setMembers] = useState<BureauRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const [name, setName] = useState('');
-  const [position, setPosition] = useState('');
-  const [linkedinUrl, setLinkedinUrl] = useState('');
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [form, setForm] = useState(emptyForm);
   const [file, setFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
 
@@ -37,9 +38,21 @@ const AdminBureau: React.FC = () => {
     load();
   }, []);
 
-  const handleAdd = async (e: React.FormEvent) => {
+  const startEdit = (m: BureauRow) => {
+    setEditingId(m.id);
+    setForm({ name: m.name, position: m.position, linkedinUrl: m.linkedin_url ?? '' });
+    setFile(null);
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setForm(emptyForm);
+    setFile(null);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !position.trim()) return;
+    if (!form.name.trim() || !form.position.trim()) return;
     setSaving(true);
     setError(null);
 
@@ -47,20 +60,29 @@ const AdminBureau: React.FC = () => {
       let photoUrl: string | null = null;
       if (file) photoUrl = await uploadToBucket('site-assets', file, 'bureau');
 
-      const nextOrder = members.length > 0 ? Math.max(...members.map((m) => m.display_order)) + 1 : 1;
-      const { error: err } = await supabase.from('bureau').insert({
-        name: name.trim(),
-        position: position.trim(),
-        linkedin_url: linkedinUrl.trim() || null,
-        photo_url: photoUrl,
-        display_order: nextOrder,
-      });
-      if (err) throw err;
+      if (editingId) {
+        const updatePayload: Record<string, unknown> = {
+          name: form.name.trim(),
+          position: form.position.trim(),
+          linkedin_url: form.linkedinUrl.trim() || null,
+        };
+        if (photoUrl) updatePayload.photo_url = photoUrl;
 
-      setName('');
-      setPosition('');
-      setLinkedinUrl('');
-      setFile(null);
+        const { error: err } = await supabase.from('bureau').update(updatePayload).eq('id', editingId);
+        if (err) throw err;
+      } else {
+        const nextOrder = members.length > 0 ? Math.max(...members.map((m) => m.display_order)) + 1 : 1;
+        const { error: err } = await supabase.from('bureau').insert({
+          name: form.name.trim(),
+          position: form.position.trim(),
+          linkedin_url: form.linkedinUrl.trim() || null,
+          photo_url: photoUrl,
+          display_order: nextOrder,
+        });
+        if (err) throw err;
+      }
+
+      cancelEdit();
       await load();
     } catch (err) {
       setError(describeUploadError(err));
@@ -74,18 +96,6 @@ const AdminBureau: React.FC = () => {
     const { error: err } = await supabase.from('bureau').delete().eq('id', id);
     if (err) setError(err.message);
     else setMembers((m) => m.filter((x) => x.id !== id));
-  };
-
-  const handleReplacePhoto = async (id: number, newFile: File) => {
-    setError(null);
-    try {
-      const photoUrl = await uploadToBucket('site-assets', newFile, 'bureau');
-      const { error: err } = await supabase.from('bureau').update({ photo_url: photoUrl }).eq('id', id);
-      if (err) throw err;
-      await load();
-    } catch (err) {
-      setError(describeUploadError(err));
-    }
   };
 
   const moveOrder = async (id: number, direction: -1 | 1) => {
@@ -105,26 +115,46 @@ const AdminBureau: React.FC = () => {
 
   return (
     <div>
-      <AdminPageHeader title="Bureau" description="Executive committee members shown on the About page." />
+      <AdminPageHeader title="Bureau" description="Leadership team shown on the About page." />
       {error && <AdminBanner type="error">{error}</AdminBanner>}
 
       <AdminCard className="mb-8">
-        <h2 className="text-sm font-extrabold text-brandGreen uppercase tracking-widest mb-6">Add a Bureau Member</h2>
-        <form onSubmit={handleAdd} className="grid md:grid-cols-2 gap-6">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-sm font-extrabold text-brandGreen uppercase tracking-widest">
+            {editingId ? 'Edit Bureau Member' : 'Add a Bureau Member'}
+          </h2>
+          {editingId && (
+            <button onClick={cancelEdit} className="text-xs font-bold text-brandSlate hover:text-brandPink flex items-center gap-1">
+              <X size={14} /> Cancel edit
+            </button>
+          )}
+        </div>
+
+        <form onSubmit={handleSubmit} className="grid md:grid-cols-2 gap-6">
           <div>
             <AdminLabel>Name</AdminLabel>
-            <AdminInput value={name} onChange={(e) => setName(e.target.value)} placeholder="Full name" required />
+            <AdminInput value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} placeholder="Full name" required />
           </div>
           <div>
             <AdminLabel>Position</AdminLabel>
-            <AdminInput value={position} onChange={(e) => setPosition(e.target.value)} placeholder="e.g. CEO & Chairperson" required />
+            <AdminInput
+              value={form.position}
+              onChange={(e) => setForm((f) => ({ ...f, position: e.target.value }))}
+              placeholder="e.g. Administrative Secretary"
+              required
+            />
           </div>
           <div className="md:col-span-2">
-            <AdminLabel>LinkedIn (optional)</AdminLabel>
-            <AdminInput value={linkedinUrl} onChange={(e) => setLinkedinUrl(e.target.value)} placeholder="https://linkedin.com/in/..." type="url" />
+            <AdminLabel>LinkedIn URL (optional — leave blank for a non-clickable name)</AdminLabel>
+            <AdminInput
+              type="url"
+              value={form.linkedinUrl}
+              onChange={(e) => setForm((f) => ({ ...f, linkedinUrl: e.target.value }))}
+              placeholder="https://www.linkedin.com/in/..."
+            />
           </div>
           <div className="md:col-span-2">
-            <AdminLabel>Photo (optional — shows initials if left blank)</AdminLabel>
+            <AdminLabel>Photo {editingId && '(leave empty to keep current)'}</AdminLabel>
             <input
               type="file"
               accept="image/*"
@@ -135,7 +165,7 @@ const AdminBureau: React.FC = () => {
           </div>
           <div className="md:col-span-2">
             <AdminButton type="submit" disabled={saving}>
-              <span className="inline-flex items-center gap-2"><Upload size={14} /> {saving ? 'Adding...' : 'Add Member'}</span>
+              {saving ? 'Saving...' : editingId ? 'Save Changes' : 'Add Member'}
             </AdminButton>
           </div>
         </form>
@@ -155,32 +185,33 @@ const AdminBureau: React.FC = () => {
                 <button onClick={() => moveOrder(m.id, 1)} disabled={i === members.length - 1} className="disabled:opacity-20">▼</button>
               </div>
 
-              <div className="w-20 h-20 rounded-full bg-gray-50 flex items-center justify-center overflow-hidden shrink-0">
+              <div className="w-16 h-16 rounded-full bg-gray-50 overflow-hidden shrink-0">
                 {m.photo_url ? (
                   <img src={m.photo_url} alt={m.name} className="w-full h-full object-cover" />
                 ) : (
-                  <span className="text-[10px] text-gray-400 font-bold text-center px-1">No photo</span>
+                  <div className="w-full h-full flex items-center justify-center text-brandSlate font-extrabold text-sm">
+                    {m.name
+                      .split(' ')
+                      .map((p) => p[0])
+                      .slice(0, 2)
+                      .join('')}
+                  </div>
                 )}
               </div>
 
               <div className="flex-grow min-w-0">
                 <p className="font-extrabold text-brandGreen truncate">{m.name}</p>
                 <p className="text-brandSlate text-xs font-medium truncate">{m.position}</p>
-                {m.linkedin_url && <p className="text-brandSlate text-xs font-medium truncate">{m.linkedin_url}</p>}
-                <label className="inline-block mt-2 text-xs font-extrabold text-brandPink uppercase tracking-widest cursor-pointer hover:underline">
-                  {m.photo_url ? 'Replace Photo' : 'Add Photo'}
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={(e) => {
-                      const f = e.target.files?.[0];
-                      if (f) handleReplacePhoto(m.id, f);
-                    }}
-                  />
-                </label>
+                {m.linkedin_url ? (
+                  <p className="text-brandSlate text-xs font-medium truncate">{m.linkedin_url}</p>
+                ) : (
+                  <p className="text-gray-400 text-xs font-medium italic">No LinkedIn — name not clickable</p>
+                )}
               </div>
 
+              <AdminButton variant="ghost" onClick={() => startEdit(m)}>
+                <Pencil size={14} />
+              </AdminButton>
               <AdminButton variant="danger" onClick={() => handleDelete(m.id)}>
                 <Trash2 size={14} />
               </AdminButton>
