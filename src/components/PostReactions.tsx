@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Share2, Check } from 'lucide-react';
+import { Share2, Check, ThumbsUp, ThumbsDown } from 'lucide-react';
 import { getClientId } from '../lib/clientId';
 
 interface Props {
@@ -93,18 +93,19 @@ const PostReactions: React.FC<Props> = ({ postId, title }) => {
   };
 
   return (
-    <div className="flex items-center justify-center gap-3 py-8 border-y border-gray-100">
+    <div className="flex items-center justify-center gap-3 py-8 border-y border-gray-100 dark:border-slate-700">
       <button
         onClick={() => react('like')}
         disabled={loading}
         aria-pressed={userReaction === 'like'}
+        aria-label="Like this post"
         className={`flex items-center gap-2 px-5 py-3 rounded-2xl font-extrabold text-sm transition-all ${
           userReaction === 'like'
-            ? 'bg-brandPink text-white shadow-md shadow-brandPink/20'
-            : 'bg-gray-50 text-brandSlate hover:bg-gray-100'
+            ? 'bg-brandGreen/10 text-brandGreen dark:bg-brandGreen/20'
+            : 'bg-gray-50 dark:bg-slate-700 text-brandSlate hover:bg-gray-100 dark:hover:bg-slate-600'
         }`}
       >
-        <span>👍🏾</span>
+        <ThumbsUp size={18} fill={userReaction === 'like' ? '#269464' : 'none'} strokeWidth={2} />
         <span>{likes}</span>
       </button>
 
@@ -112,19 +113,20 @@ const PostReactions: React.FC<Props> = ({ postId, title }) => {
         onClick={() => react('dislike')}
         disabled={loading}
         aria-pressed={userReaction === 'dislike'}
+        aria-label="Dislike this post"
         className={`flex items-center gap-2 px-5 py-3 rounded-2xl font-extrabold text-sm transition-all ${
           userReaction === 'dislike'
-            ? 'bg-brandSlate text-white shadow-md shadow-brandSlate/20'
-            : 'bg-gray-50 text-brandSlate hover:bg-gray-100'
+            ? 'bg-brandPink/10 text-brandPink dark:bg-brandPink/20'
+            : 'bg-gray-50 dark:bg-slate-700 text-brandSlate hover:bg-gray-100 dark:hover:bg-slate-600'
         }`}
       >
-        <span>👎🏾</span>
+        <ThumbsDown size={18} fill={userReaction === 'dislike' ? '#82246d' : 'none'} strokeWidth={2} />
         <span>{dislikes}</span>
       </button>
 
       <button
         onClick={share}
-        className="flex items-center gap-2 px-5 py-3 rounded-2xl font-extrabold text-sm bg-gray-50 text-brandSlate hover:bg-gray-100 transition-all"
+        className="flex items-center gap-2 px-5 py-3 rounded-2xl font-extrabold text-sm bg-gray-50 dark:bg-slate-700 text-brandSlate hover:bg-gray-100 dark:hover:bg-slate-600 transition-all"
       >
         {copied ? <Check size={16} /> : <Share2 size={16} />}
         <span>{copied ? 'Link Copied' : 'Share'}</span>
