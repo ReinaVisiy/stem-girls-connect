@@ -28,8 +28,9 @@ function escapeXml(value: string) {
     .replace(/'/g, '&apos;');
 }
 
-function urlEntry(loc: string, lastmod: string, changefreq: string, priority: string) {
-  return `  <url>\n    <loc>${escapeXml(loc)}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>${changefreq}</changefreq>\n    <priority>${priority}</priority>\n  </url>`;
+function urlEntry(loc: string, changefreq: string, priority: string, lastmod?: string) {
+  const lastmodTag = lastmod ? `\n    <lastmod>${lastmod}</lastmod>` : '';
+  return `  <url>\n    <loc>${escapeXml(loc)}</loc>${lastmodTag}\n    <changefreq>${changefreq}</changefreq>\n    <priority>${priority}</priority>\n  </url>`;
 }
 
 /**
@@ -42,10 +43,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).end('Method not allowed');
   }
 
-  const today = new Date().toISOString().slice(0, 10);
   const siteUrl = organization.website.replace(/\/$/, '');
 
-  const entries = STATIC_PAGES.map((p) => urlEntry(`${siteUrl}${p.path}`, today, p.changefreq, p.priority));
+  // No lastmod for static pages: we don't track real per-page modification
+  // dates, and stamping today's date on every request just tells crawlers
+  // "this changed today" even when it didn't, which erodes trust in the
+  // signal. Blog posts DO have a real date (published_at), so those keep it.
+  const entries = STATIC_PAGES.map((p) => urlEntry(`${siteUrl}${p.path}`, p.changefreq, p.priority));
 
   try {
     const supabase = getSupabaseClient();
@@ -56,8 +60,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     if (!error && posts) {
       for (const post of posts) {
-        const lastmod = (post.published_at || today).slice(0, 10);
-        entries.push(urlEntry(`${siteUrl}/blog/${post.slug}`, lastmod, 'monthly', '0.6'));
+        const lastmod = post.published_at ? post.published_at.slice(0, 10) : undefined;
+        entries.push(urlEntry(`${siteUrl}/blog/${post.slug}`, 'monthly', '0.6', lastmod));
       }
     }
   } catch {

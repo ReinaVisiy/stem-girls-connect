@@ -9,6 +9,7 @@ import { formatDate, excerpt, Post, MediaItem } from '../components/PostCard';
 import PhotoGallery from '../components/PhotoGallery';
 import YouTubeEmbed, { extractYouTubeId } from '../components/YouTubeEmbed';
 import MediaEmbed from '../components/MediaEmbed';
+import PostReactions from '../components/PostReactions';
 import { useApiData } from '../hooks/useApiData';
 
 // Matches {{media:0}}, {{media:a1b2c3d4}}, {{ media : xyz }}, etc. on
@@ -184,6 +185,10 @@ const BlogPost: React.FC = () => {
             );
           }}
         </PhotoGallery>
+
+        <div className="mt-16">
+          <PostReactions postId={post.id} title={post.title} />
+        </div>
       </article>
     </div>
   );

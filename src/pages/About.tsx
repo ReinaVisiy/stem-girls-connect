@@ -66,7 +66,7 @@ const About: React.FC = () => {
         <ScrollReveal className="max-w-3xl mx-auto mb-24">
           <h2 className="text-2xl font-extrabold text-brandGreen mb-6 uppercase tracking-widest text-center">Our Story</h2>
           <p className="text-brandSlate text-lg leading-relaxed font-semibold text-justify mb-6">
-            STEM Girls Connect began with a simple but uncomfortable observation. Walk into most engineering lecture halls, tech offices, or science labs across Cameroon, and women are still rare. Look closer, and the reason isn't ability. It's awareness.
+            STEM Girls Connect began with a simple but uncomfortable observation. Walk into most engineering lecture halls, tech offices, or science labs across Cameroon, and women are still rare. It isn't a question of ability. One major barrier is awareness and exposure.
           </p>
           <p className="text-brandSlate text-lg leading-relaxed font-semibold text-justify mb-6">
             Most girls simply aren't exposed to these fields early enough to ever consider them. Even when they are, they rarely see mentors or role models who look like them already working there, thriving there, leading there. Many grow up believing that the one STEM path realistically open to them as women is something in health. Not because that's true, but because it's the only version of "women in STEM" they've ever been shown. Nobody sat them down and said: you could design bridges, you could build software, you could run a laboratory, you could lead a tech company. So they never let themselves imagine it.
@@ -83,7 +83,7 @@ const About: React.FC = () => {
         </ScrollReveal>
 
         <ScrollReveal className="max-w-5xl mx-auto mb-24 bg-[#486e7c]/5 dark:bg-white/5 rounded-[50px] border border-gray-100 dark:border-slate-700 p-8 md:p-12">
-          <h2 className="text-2xl font-extrabold text-brandGreen mb-6 uppercase tracking-widest">About the CEO</h2>
+          <h2 className="text-2xl font-extrabold text-brandGreen mb-6 uppercase tracking-widest">About our CEO</h2>
           <div className="clear-both">
             <PhotoGallery images={[{ src: ceoPhoto.src, alt: ceoPhoto.alt }]}>
               {(open) => (

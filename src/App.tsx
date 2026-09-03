@@ -12,6 +12,7 @@ import Donate from './pages/Donate';
 import Impact from './pages/Impact';
 import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
+import NotFound from './pages/NotFound';
 
 // Code-split: admin panel (and its supabase-js browser client) is only
 // downloaded by visitors who actually navigate to /admin/*.
@@ -64,6 +65,7 @@ const App: React.FC = () => {
         <Route path="/join" element={<JoinUs />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/donate" element={<Donate />} />
+        <Route path="*" element={<NotFound />} />
       </Route>
 
       <Route

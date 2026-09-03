@@ -10,7 +10,7 @@ const FAPSHI_DONATE_URL = 'https://donate.fapshi.com/13722678';
 const Donate: React.FC = () => {
   const heroPhoto = useSiteImage(
     'donate_hero',
-    '/STEM Girls Classroom.jpg',
+    '/Little STEM Girls.jpg',
     'STEM Girls Connect students in class holding STEM signs'
   );
 
