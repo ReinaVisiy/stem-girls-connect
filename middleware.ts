@@ -68,7 +68,7 @@ const STATIC_ROUTES: Record<string, RouteMeta> = {
         p(
           'Build practical skills, connect with mentors, discover scholarships and opportunities, and grow alongside a community of girls and young women building their futures in STEM.'
         ) +
-        `<p class="mb-4"><a class="text-brandPink font-extrabold" href="/activities">Explore Our Programs</a> &nbsp;&middot;&nbsp; <a class="text-brandPink font-extrabold" href="/join">Join STEM Girls Connect</a></p>`
+        `<p class="mb-4"><a class="text-brandPink font-extrabold" href="/programs">Explore Our Programs</a> &nbsp;&middot;&nbsp; <a class="text-brandPink font-extrabold" href="/join">Join STEM Girls Connect</a></p>`
     ),
   },
   '/about': {
@@ -93,12 +93,12 @@ const STATIC_ROUTES: Record<string, RouteMeta> = {
       // Bureau list appended dynamically below.
     ),
   },
-  '/activities': {
-    title: 'Our Activities | STEM Girls Connect',
+  '/programs': {
+    title: 'Our Programs | STEM Girls Connect',
     description:
       "Explore STEM Girls Connect's programs, mentorship, and outreach activities supporting girls and young women in STEM.",
     body: page(
-      h1('Our Activities') +
+      h1('Our Programs') +
         p(
           'We create opportunities for girls and young women to learn, grow, connect, and build their futures in STEM through training, mentorship, career support, outreach, and access to opportunities.'
         ) +
@@ -306,6 +306,56 @@ export default async function middleware(request: Request): Promise<Response> {
               )
             ),
         };
+      }
+    } else if (meta && path === '/programs') {
+      const programs = await fetchSupabase(
+        'programs?published=eq.true&select=title,slug,short_description&order=display_order',
+        supabaseUrl,
+        anonKey
+      );
+      if (programs && programs.length > 0) {
+        meta = {
+          ...meta,
+          body:
+            meta.body +
+            page(
+              h2('Our Programs') +
+                ul(
+                  programs.map(
+                    (pr) =>
+                      `<a class="text-brandPink font-extrabold" href="/programs/${escapeHtml(String(pr.slug))}">${escapeHtml(
+                        String(pr.title)
+                      )}</a>${pr.short_description ? `<br/><span class="text-brandSlate text-sm">${escapeHtml(String(pr.short_description))}</span>` : ''}`
+                  )
+                )
+            ),
+        };
+      }
+    } else if (path.startsWith('/programs/')) {
+      // Only the program's base URL is a real page here; any deeper path
+      // belongs to a special template and is resolved client-side.
+      const slug = decodeURIComponent(path.slice('/programs/'.length).split('/')[0]);
+      if (slug) {
+        const rows = await fetchSupabase(
+          `programs?slug=eq.${encodeURIComponent(slug)}&published=eq.true&select=title,short_description,cover_image_url&limit=1`,
+          supabaseUrl,
+          anonKey
+        );
+        const program = rows?.[0];
+
+        if (program) {
+          const title = String(program.title);
+          const description = program.short_description
+            ? String(program.short_description)
+            : `Learn about ${title}, a STEM Girls Connect program.`;
+          meta = {
+            title: `${title} | STEM Girls Connect`,
+            description,
+            image: program.cover_image_url ? String(program.cover_image_url) : undefined,
+            imageAlt: title,
+            body: page(h1(title) + p(description)),
+          };
+        }
       }
     } else if (path.startsWith('/blog/')) {
       const slug = decodeURIComponent(path.slice('/blog/'.length));

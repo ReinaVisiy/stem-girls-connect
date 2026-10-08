@@ -4,6 +4,7 @@ import ScrollReveal from '../components/ScrollReveal';
 import PageHeader from '../components/PageHeader';
 import Seo from '../components/Seo';
 import HomeSlideshow from '../components/HomeSlideshow';
+import ProgramsList from '../components/programs/ProgramsList';
 
 const pillars = [
   {
@@ -50,16 +51,16 @@ const pillars = [
   },
 ];
 
-const Activities: React.FC = () => {
+const Programs: React.FC = () => {
   return (
     <div className="pb-24">
       <Seo
-        title="Our Activities | STEM Girls Connect"
+        title="Our Programs | STEM Girls Connect"
         description="Explore STEM Girls Connect's programs, mentorship, and outreach activities supporting girls and young women in STEM."
-        path="/activities"
+        path="/programs"
       />
       <PageHeader 
-        title="Our Activities" 
+        title="Our Programs" 
         subtitle="Turning Passion Into Profession Through STEM Training and Mentorship" 
       />
 
@@ -97,8 +98,10 @@ const Activities: React.FC = () => {
           })}
         </div>
       </section>
+
+      <ProgramsList />
     </div>
   );
 };
 
-export default Activities;
+export default Programs;
