@@ -34,6 +34,8 @@ const AdminReports = lazy(() => import('./admin/AdminReports'));
 const AdminPosts = lazy(() => import('./admin/AdminPosts'));
 const AdminStats = lazy(() => import('./admin/AdminStats'));
 const AdminSubscribers = lazy(() => import('./admin/AdminSubscribers'));
+const AdminGirlhood = lazy(() => import('./admin/AdminGirlhood'));
+const GirlhoodLegacyRedirect = lazy(() => import('./features/girlhood/GirlhoodLegacyRedirect'));
 
 const PublicLayout: React.FC = () => (
   <div className="flex flex-col min-h-screen">
@@ -73,6 +75,7 @@ const App: React.FC = () => {
             </Suspense>
           }
         />
+        <Route path="/girlhood/*" element={<Suspense fallback={null}><GirlhoodLegacyRedirect /></Suspense>} />
         <Route path="/activities" element={<Navigate to="/programs" replace />} />
         <Route path="/impact" element={<Impact />} />
         <Route path="/blog" element={<Blog />} />
@@ -102,6 +105,7 @@ const App: React.FC = () => {
                   <Route path="reports" element={<AdminReports />} />
                   <Route path="posts" element={<AdminPosts />} />
                   <Route path="stats" element={<AdminStats />} />
+                  <Route path="girlhood" element={<AdminGirlhood />} />
                   <Route path="subscribers" element={<AdminSubscribers />} />
                 </Route>
               </Routes>

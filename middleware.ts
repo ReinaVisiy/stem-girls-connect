@@ -1,3 +1,4 @@
+import { isGirlhoodSubPath } from './shared/girlhoodRoutes.js';
 import { SUPPORTED_PAGE_TEMPLATES, STANDARD_TEMPLATE } from './src/lib/programTemplates.js';
 
 export const config = {
@@ -359,7 +360,7 @@ export default async function middleware(request: Request): Promise<Response> {
         );
         const program = rows?.[0];
 
-        if (program && (rest.length === 0 || program.page_template !== STANDARD_TEMPLATE)) {
+        if (program && (rest.length === 0 || (program.page_template === 'girlhood' && isGirlhoodSubPath(rest.join('/'))))) {
           const title = String(program.title);
           const description = program.short_description
             ? String(program.short_description)

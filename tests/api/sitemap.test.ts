@@ -39,6 +39,6 @@ describe('sitemap', () => {
     expect(res.body).toMatch(/<loc>[^<]*\/programs<\/loc>/);
     const pq = queries.find((q) => q.table === 'programs')!;
     expect(pq.filters).toContainEqual(['eq', 'published', true]);
-    expect(pq.filters).toContainEqual(['in', 'page_template', ['standard']]);
+    expect(pq.filters).toContainEqual(['in', 'page_template', ['standard', 'girlhood']]);
   });
 });

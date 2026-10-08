@@ -58,7 +58,7 @@ describe('middleware: /programs/:slug', () => {
     await get('/programs/girls-in-code');
     const q = restCalls.find((c) => c.startsWith('programs?'))!;
     expect(q).toContain('published=eq.true');
-    expect(q).toContain('page_template=in.(standard)');
+    expect(q).toContain('page_template=in.(standard,girlhood)');
   });
 
   it('unpublished / unsupported / nonexistent (no row returned) -> real 404, no private data', async () => {
@@ -74,6 +74,18 @@ describe('middleware: /programs/:slug', () => {
   it('deeper path under a standard program -> 404', async () => {
     programs = [live];
     expect((await get('/programs/girls-in-code/extra')).status).toBe(404);
+  });
+
+  it('Girlhood supports only known subpages and still requires a published program', async () => {
+    programs = [{ ...live, page_template: 'girlhood' }];
+    for (const sub of ['', '/share-your-voice', '/wall', '/withdraw', '/privacy', '/wall/']) {
+      expect((await get('/programs/girlhood' + sub)).status).toBe(200);
+    }
+    for (const sub of ['/nope', '/wall/extra']) {
+      expect((await get('/programs/girlhood' + sub)).status).toBe(404);
+    }
+    programs = [];
+    expect((await get('/programs/girlhood/wall')).status).toBe(404);
   });
 
   it('malformed percent-escape -> 404 instead of crashing', async () => {
@@ -102,7 +114,7 @@ describe('middleware: /programs list', () => {
     expect(html).toContain('/programs/a');
     const q = restCalls.find((c) => c.startsWith('programs?'))!;
     expect(q).toContain('published=eq.true');
-    expect(q).toContain('page_template=in.(standard)');
+    expect(q).toContain('page_template=in.(standard,girlhood)');
   });
 });
 
