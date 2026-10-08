@@ -15,7 +15,7 @@
  */
 export const STANDARD_TEMPLATE = 'standard';
 
-export const SUPPORTED_PAGE_TEMPLATES: readonly string[] = [STANDARD_TEMPLATE];
+export const SUPPORTED_PAGE_TEMPLATES: readonly string[] = [STANDARD_TEMPLATE, 'girlhood'];
 
 export function isSupportedTemplate(template: unknown): boolean {
   return typeof template === 'string' && SUPPORTED_PAGE_TEMPLATES.includes(template);

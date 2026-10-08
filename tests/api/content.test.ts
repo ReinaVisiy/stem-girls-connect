@@ -133,7 +133,7 @@ describe('vercel.json rewrites', () => {
     // None of the explicit API rewrites can shadow other routes.
     const apiRw = rw.filter((r) => r.source.startsWith('/api/'));
     expect(apiRw.map((r) => r.source).sort()).toEqual(
-      ['/api/bureau', '/api/partners', '/api/site-content', '/api/site-images', '/api/slideshow', '/api/stats'],
+      ['/api/bureau', '/api/girlhood/:action', '/api/partners', '/api/site-content', '/api/site-images', '/api/slideshow', '/api/stats'],
     );
   });
 });

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Trash2, Download } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
+import { csvCell } from '../../shared/csv';
 import { AdminPageHeader, AdminCard, AdminButton, AdminBanner } from './AdminUI';
 
 interface Subscriber {
@@ -11,7 +12,7 @@ interface Subscriber {
 
 function downloadCsv(rows: Subscriber[]) {
   const header = 'email,subscribed_at';
-  const lines = rows.map((r) => `${r.email},${r.subscribed_at ?? ''}`);
+  const lines = rows.map((r) => `${csvCell(r.email)},${csvCell(r.subscribed_at)}`);
   const csv = [header, ...lines].join('\n');
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
   const url = URL.createObjectURL(blob);

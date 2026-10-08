@@ -10,6 +10,7 @@ const navItems: { to: string; label: string; icon: typeof LayoutDashboard; end?:
   { to: '/admin/photos', label: 'Photos', icon: ImageIcon },
   { to: '/admin/content', label: 'Content', icon: Type },
   { to: '/admin/programs', label: 'Programs', icon: Layers },
+  { to: '/admin/girlhood', label: 'Girlhood moderation', icon: Users },
   { to: '/admin/reports', label: 'Reports', icon: FileText },
   { to: '/admin/posts', label: 'Posts', icon: Newspaper },
   { to: '/admin/stats', label: 'Stats', icon: BarChart3 },

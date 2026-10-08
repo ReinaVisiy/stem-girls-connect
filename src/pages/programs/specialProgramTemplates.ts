@@ -1,3 +1,4 @@
+import { lazy } from 'react';
 import type { ComponentType, LazyExoticComponent } from 'react';
 import type { ProgramDetail } from '../../lib/programs';
 
@@ -22,4 +23,6 @@ type SpecialProgramPage = LazyExoticComponent<ComponentType<SpecialProgramPagePr
  * Any `page_template` that is neither "standard" nor listed here is
  * handled gracefully by ProgramPageResolver.
  */
-export const specialProgramTemplates: Record<string, SpecialProgramPage> = {};
+export const specialProgramTemplates: Record<string, SpecialProgramPage> = {
+  girlhood: lazy(() => import('../../features/girlhood/GirlhoodProgram')),
+};

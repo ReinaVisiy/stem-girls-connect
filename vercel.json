@@ -4,9 +4,18 @@
       "source": "/activities",
       "destination": "/programs",
       "permanent": true
+    },
+    {
+      "source": "/girlhood/:path*",
+      "destination": "/programs/girlhood/:path*",
+      "permanent": false
     }
   ],
   "rewrites": [
+    {
+      "source": "/api/girlhood/:action",
+      "destination": "/api/girlhood?action=:action"
+    },
     {
       "source": "/api/stats",
       "destination": "/api/content?resource=stats"
@@ -38,6 +47,12 @@
     {
       "source": "/((?!api/).*)",
       "destination": "/index.html"
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/girlhood?action=maintenance",
+      "schedule": "0 3 * * *"
     }
   ]
 }

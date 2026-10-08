@@ -1,4 +1,6 @@
 import React, { useEffect, useId, useMemo, useRef, useState } from 'react';
+import GirlhoodPreview from './GirlhoodPreview';
+import { validateGirlhoodProgram } from '../lib/girlhoodProgram';
 import { Link, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, Download, Eye, FileJson, Pencil, Plus, Trash2 } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
@@ -313,7 +315,7 @@ const AdminProgramEditor: React.FC = () => {
   }, [coverFile]);
 
   const onTitleChange = (title: string) => {
-    setForm((f) => ({ ...f, title, slug: slugTouched ? f.slug : slugify(title) }));
+    setForm((f) => ({ ...f, title, slug: f.pageTemplate === 'girlhood' ? 'girlhood' : slugTouched ? f.slug : slugify(title) }));
   };
 
   const isStandard = form.pageTemplate === 'standard';
@@ -398,6 +400,8 @@ const AdminProgramEditor: React.FC = () => {
   });
 
   const validate = (): string | null => {
+    const canonicalError = validateGirlhoodProgram(form.pageTemplate, form.slug);
+    if (canonicalError) return canonicalError;
     if (!form.title.trim()) return 'Program name is required.';
     if (!form.slug.trim()) return 'A slug is required.';
     if (!SLUG_RE.test(form.slug)) return 'The slug can only contain lowercase letters, numbers and single hyphens (e.g. hvi-stem-2026).';
@@ -422,6 +426,13 @@ const AdminProgramEditor: React.FC = () => {
     setSaving(true);
     try {
       const slug = form.slug.trim();
+      if (form.pageTemplate === 'girlhood') {
+        let canonicalQuery = supabase.from('programs').select('id').eq('page_template', 'girlhood');
+        if (!isNew) canonicalQuery = canonicalQuery.neq('id', id);
+        const { data: existingCampaign, error: canonicalError } = await canonicalQuery.limit(1);
+        if (canonicalError) throw canonicalError;
+        if (existingCampaign?.length) throw new Error('The Girlhood campaign already exists. Edit that program instead of creating another.');
+      }
 
       // Friendly pre-check; the UNIQUE constraint below is the real guarantee.
       let dupQuery = supabase.from('programs').select('id').eq('slug', slug);
@@ -573,7 +584,7 @@ const AdminProgramEditor: React.FC = () => {
           <div className="rounded-[32px] overflow-hidden border border-gray-100 bg-white">
             <StandardProgramPage program={previewProgram} preview />
           </div>
-        ) : (
+        ) : form.pageTemplate === 'girlhood' ? <GirlhoodPreview program={previewProgram} /> : (
           <AdminCard>
             <p className="text-sm font-medium text-brandSlate">
               This program uses the custom page template “{form.pageTemplate}”, which can't be previewed here.
@@ -662,13 +673,14 @@ const AdminProgramEditor: React.FC = () => {
             <Field
               label="Slug"
               className="md:col-span-2"
-              hint={`Web address: /programs/${form.slug || 'your-slug'}`}
+              hint={form.pageTemplate === 'girlhood' ? 'Canonical campaign address: /programs/girlhood. Changing its title keeps this address.' : `Web address: /programs/${form.slug || 'your-slug'}`}
             >
               {(fid) => (
                 <AdminInput
                   id={fid}
                   required
                   value={form.slug}
+                  readOnly={form.pageTemplate === 'girlhood'}
                   onChange={(e) => {
                     setSlugTouched(true);
                     set('slug', e.target.value.toLowerCase());
@@ -723,7 +735,7 @@ const AdminProgramEditor: React.FC = () => {
             </Field>
             <Field label="Page template" className="md:col-span-2" hint="Standard programs get an information page built from the fields below.">
               {(fid) => (
-                <AdminSelect id={fid} value={form.pageTemplate} onChange={(e) => set('pageTemplate', e.target.value)}>
+                <AdminSelect id={fid} value={form.pageTemplate} onChange={(e) => { const pageTemplate = e.target.value; setForm((f) => ({ ...f, pageTemplate, slug: pageTemplate === 'girlhood' ? 'girlhood' : f.slug })); if (pageTemplate === 'girlhood') setSlugTouched(true); }}>
                   {templateOptions.map((t) => (
                     <option key={t} value={t}>{t === 'standard' ? 'Standard information page' : `${t} (custom)`}</option>
                   ))}
@@ -928,3 +940,4 @@ const AdminProgramEditor: React.FC = () => {
 };
 
 export default AdminProgramEditor;
+

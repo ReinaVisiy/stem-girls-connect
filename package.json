@@ -7,7 +7,14 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "vitest run"
+    "test": "npm run test:programs && npm run test:girlhood",
+    "test:programs": "vitest run",
+    "test:girlhood": "tsx --test tests/girlhood/*.test.ts",
+    "typecheck": "tsc --noEmit",
+    "check": "npm run typecheck && npm test && npm run build",
+    "preview:fixtures": "node tests/girlhood/ui-preview.mjs",
+    "test:browser": "node tests/girlhood/browser-smoke.mjs",
+    "test:browser:release": "node tests/girlhood/browser-release.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.4",
@@ -17,7 +24,7 @@
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-markdown": "^10.1.0",
-    "react-router-dom": "^7.12.0",
+    "react-router-dom": "7.18.4",
     "yet-another-react-lightbox": "^3.32.2"
   },
   "devDependencies": {
@@ -28,6 +35,16 @@
     "tailwindcss": "^4.2.0",
     "typescript": "~5.8.2",
     "vite": "^6.2.0",
-    "vitest": "^5.0.3"
+    "vitest": "^5.0.3",
+    "@electric-sql/pglite": "0.5.8",
+    "tsx": "4.23.15",
+    "playwright": "1.62.1"
+  },
+  "engines": {
+    "node": "24.x"
+  },
+  "overrides": {
+    "postcss-selector-parser": "^7.1.6"
   }
 }
+

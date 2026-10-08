@@ -1,3 +1,4 @@
+import { isSupportedTemplate } from './programTemplates';
 import {
   CATEGORY_LABELS, STATUS_LABELS, safeUrl,
   type ProgramCategory, type ProgramStatus,
@@ -194,15 +195,15 @@ export function parseProgramJson(rawText: string): ProgramImportResult {
     }
   }
 
-  // --- page template: only standard pages are authored through this importer ---
+  // Only templates with a working public renderer may be imported.
   if (has(data, 'page_template')) {
     const raw = str('page_template', data.page_template, 50);
     if (raw) {
       if (!TEMPLATE_RE.test(raw)) errors.push('"page_template" can only contain lowercase letters, numbers and underscores.');
-      else if (raw !== 'standard') {
+      else if (!isSupportedTemplate(raw)) {
         values.pageTemplate = 'standard';
         warnings.push(`"page_template" "${raw}" cannot be imported, so the standard information page was used instead.`);
-      } else values.pageTemplate = 'standard';
+      } else values.pageTemplate = raw;
     }
   }
 

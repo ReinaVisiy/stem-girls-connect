@@ -1,0 +1,390 @@
+.girlhood-shell {
+  color: #32112c;
+}
+.girlhood-button {
+  border-radius: 999px;
+  background: #82246d;
+  color: white;
+  padding: 0.75rem 1.25rem;
+  font-weight: 700;
+}
+.girlhood-shell button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.girlhood-shell :focus-visible {
+  outline: 3px solid #82246d;
+  outline-offset: 4px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .girlhood-shell *,
+  .girlhood-shell *::before,
+  .girlhood-shell *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+.girlhood-input {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 1rem;
+  padding: 0.85rem 1rem;
+  color: #32112c;
+  background: white;
+  outline: none;
+}
+.girlhood-input:focus {
+  border-color: #82246d;
+  box-shadow: 0 0 0 3px rgba(130, 36, 109, 0.15);
+}
+.girlhood-stars {
+  position: absolute;
+  inset: 0;
+  opacity: 0.32;
+  background-image: radial-gradient(circle, white 1px, transparent 1px);
+  background-size: 38px 38px;
+  mask-image: linear-gradient(to bottom, black, transparent);
+  animation: girlhoodDrift 18s linear infinite;
+}
+@keyframes girlhoodDrift {
+  to {
+    transform: translateY(38px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .girlhood-stars,
+  .girlhood-shell .fade-in-up {
+    animation: none !important;
+  }
+  .girlhood-shell * {
+    scroll-behavior: auto !important;
+  }
+}
+/* Campaign interaction layer: original palette, no new theme colours. */
+.girlhood-shell {
+  overflow-x: clip;
+}
+.girlhood-shell button,
+.girlhood-shell a,
+.girlhood-shell summary {
+  -webkit-tap-highlight-color: transparent;
+}
+.girlhood-shell button,
+.girlhood-shell a {
+  touch-action: manipulation;
+}
+.girlhood-shell button {
+  min-height: 44px;
+}
+.girlhood-shell a,
+.girlhood-shell button {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+.girlhood-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 14px rgb(130 36 109 / 0.12);
+}
+.girlhood-button:hover:not(:disabled),
+.girlhood-hero-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgb(130 36 109 / 0.2);
+}
+.girlhood-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+.girlhood-nav {
+  position: relative;
+  z-index: 20;
+  padding-inline: max(1.25rem, calc((100% - 1152px) / 2));
+}
+.girlhood-nav nav > a {
+  padding: 0.65rem 0.3rem;
+  border-bottom: 2px solid transparent;
+}
+.girlhood-nav nav > a[aria-current="page"] {
+  color: #82246d;
+  border-bottom-color: #82246d;
+}
+.girlhood-hero {
+  background-image: radial-gradient(
+    ellipse at 80% 25%,
+    rgb(130 36 109 / 0.45),
+    transparent 60%
+  );
+}
+.girlhood-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  border: 1px solid rgb(238 223 240 / 0.35);
+  border-radius: 999px;
+  padding: 0.6rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.girlhood-possibilities {
+  position: relative;
+  padding: 2.5rem 2rem;
+  text-align: center;
+  border: 1px solid rgb(238 223 240 / 0.35);
+  border-radius: 48% 48% 2rem 2rem / 18% 18% 2rem 2rem;
+  background: #eedff0;
+  color: #32112c;
+  box-shadow: 0 24px 80px rgb(0 0 0 / 0.12);
+  isolation: isolate;
+}
+.girlhood-orbit {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  z-index: 0;
+  pointer-events: none;
+}
+.girlhood-orbit::before,
+.girlhood-orbit::after {
+  content: "";
+  position: absolute;
+  width: 80%;
+  aspect-ratio: 1;
+  border: 1px solid rgb(130 36 109 / 0.13);
+  border-radius: 50%;
+  left: 10%;
+  top: 5%;
+}
+.girlhood-orbit::after {
+  width: 110%;
+  left: -5%;
+  top: -10%;
+}
+.girlhood-orbit span {
+  position: absolute;
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  background: #82246d;
+  opacity: 0.5;
+  animation: girlhoodFloat 6s ease-in-out infinite;
+}
+.girlhood-orbit span:nth-child(1) {
+  top: 18%;
+  left: 13%;
+}
+.girlhood-orbit span:nth-child(2) {
+  top: 45%;
+  right: 6%;
+  animation-delay: -2s;
+  background: #269464;
+}
+.girlhood-orbit span:nth-child(3) {
+  bottom: 14%;
+  left: 8%;
+  animation-delay: -4s;
+}
+.girlhood-possibility-copy {
+  min-height: 230px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1rem 0;
+}
+.girlhood-possibility-word {
+  color: #82246d;
+  font-weight: 900;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  letter-spacing: -0.05em;
+  margin-bottom: 1rem;
+  animation: girlhoodEnter 0.35s ease-out;
+  overflow-wrap: anywhere;
+}
+.girlhood-possibility-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.girlhood-possibility-buttons button {
+  display: inline-flex;
+  gap: 0.4rem;
+  align-items: center;
+  background: #fff9f4;
+  border: 1px solid rgb(130 36 109 / 0.2);
+  border-radius: 999px;
+  padding: 0.65rem 0.8rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.girlhood-possibility-buttons button[aria-pressed="true"] {
+  background: #82246d;
+  color: white;
+  box-shadow: 0 3px 12px rgb(130 36 109 / 0.15);
+}
+.girlhood-stats {
+  border: 1px solid rgb(130 36 109 / 0.12);
+  box-shadow: 0 12px 40px rgb(50 17 44 / 0.04);
+}
+.girlhood-journey-card {
+  border: 1px solid rgb(130 36 109 / 0.1);
+}
+.girlhood-journey-card:nth-child(2) {
+  background: #f9eaf3;
+}
+.girlhood-journey-card:nth-child(3) {
+  background: #eedff0;
+}
+.girlhood-trust {
+  border: 1px solid rgb(38 148 100 / 0.2);
+}
+.girlhood-form-card,
+.girlhood-receipt {
+  border: 1px solid rgb(130 36 109 / 0.12);
+  box-shadow: 0 16px 48px rgb(50 17 44 / 0.04);
+}
+.girlhood-form-card fieldset {
+  min-width: 0;
+}
+.girlhood-form-card label:has(input[type="checkbox"]:checked) {
+  background: #f9eaf3;
+  border-color: #82246d;
+}
+.girlhood-progress {
+  height: 6px;
+  background: #eedff0;
+  border-radius: 99px;
+  overflow: hidden;
+}
+.girlhood-progress span {
+  height: 100%;
+  display: block;
+  background: #82246d;
+  border-radius: inherit;
+  transition: width 0.35s ease;
+}
+.girlhood-recovery {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: #e3f4ec;
+  border-radius: 1.5rem;
+  border: 1px solid rgb(38 148 100 / 0.25);
+}
+.girlhood-recovery > svg {
+  flex-shrink: 0;
+}
+.girlhood-success-mark {
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  color: #269464;
+  background: #e3f4ec;
+  box-shadow: 0 0 0 10px rgb(227 244 236 / 0.5);
+  animation: girlhoodEnter 0.4s ease-out;
+}
+.girlhood-voice-card {
+  position: relative;
+  border-top: 4px solid #eedff0;
+}
+.girlhood-voice-card details[open] summary {
+  margin-bottom: 1.5rem;
+}
+.girlhood-voice-card summary {
+  min-height: 44px;
+  padding-block: 0.75rem;
+  color: #82246d;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.girlhood-skeleton {
+  min-height: 230px;
+  border-radius: 1.5rem;
+  border: 1px solid rgb(130 36 109 / 0.1);
+  background: linear-gradient(100deg, #f9eaf3 25%, #fff9f4 45%, #f9eaf3 65%);
+  background-size: 250% 100%;
+  animation: girlhoodShimmer 2s linear infinite;
+}
+@keyframes girlhoodShimmer {
+  to {
+    background-position: -150% 0;
+  }
+}
+@keyframes girlhoodEnter {
+  from {
+    opacity: 0.4;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes girlhoodFloat {
+  50% {
+    transform: translateY(-10px);
+  }
+}
+@media (max-width: 420px) {
+  .girlhood-possibilities {
+    padding: 3.25rem 1rem 2rem;
+  }
+  .girlhood-possibilities > .relative > p:first-child {
+    max-width: 15rem;
+    margin-inline: auto;
+    font-size: 0.75rem;
+  }
+  .girlhood-nav {
+    gap: 0.5rem;
+  }
+  .girlhood-nav nav {
+    gap: 0.7rem;
+    font-size: 0.75rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .girlhood-shell *,
+  .girlhood-shell *::before,
+  .girlhood-shell *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+/* Campaign surfaces follow the site's theme without changing its global palette. */
+.girlhood-shell { background:#fff9f4; color:#32112c; transition:background-color .2s,color .2s; }
+.girlhood-shell .girlhood-nav { position:static; background:#fff9f4; }
+.girlhood-shell a,.girlhood-shell button { overflow-wrap:anywhere; }
+.girlhood-shell .girlhood-availability { max-width:48rem; color:inherit; background:transparent; }
+.girlhood-shell .girlhood-possibilities { color:#32112c; }
+.dark .girlhood-shell { background:#191621; color:#f7eaf4; }
+.dark .girlhood-shell .girlhood-nav { background:#211c2b; }
+.dark .girlhood-shell .bg-white, .dark .girlhood-shell .girlhood-journey-card, .dark .girlhood-shell .girlhood-voice-card, .dark .girlhood-shell .girlhood-receipt, .dark .girlhood-shell .girlhood-recovery { background:#292333; color:#f7eaf4; }
+.dark .girlhood-shell .girlhood-trust { background:#16392e; color:#e3f4ec; }
+.dark .girlhood-shell .girlhood-input { background:#211c2b; color:#f7eaf4; border-color:#8e7a91; }
+.dark .girlhood-shell .border, .dark .girlhood-shell .border-t, .dark .girlhood-shell .border-b { border-color:#79647d; }
+.dark .girlhood-shell .text-brandPink { color:#f3b6df; }
+.dark .girlhood-shell .text-brandSlate { color:#cbd5e1; }
+.dark .girlhood-shell .text-brandGreen { color:#8cd9b1; }
+.dark .girlhood-shell .girlhood-hero-cta { background:#f9eaf3; color:#82246d; }
+.dark .girlhood-shell .girlhood-possibilities { background:#3b2940; color:#f7eaf4; }
+.dark .girlhood-shell .girlhood-possibility-word, .dark .girlhood-shell .girlhood-nav nav > a[aria-current="page"] { color:#f3b6df; }
+.dark .girlhood-shell .girlhood-possibility-buttons button { background:#292333; color:#f7eaf4; }
+.dark .girlhood-shell .girlhood-possibility-buttons button[aria-pressed="true"] { background:#82246d; color:white; }
+.dark .girlhood-shell .girlhood-form-card label:has(input[type="checkbox"]:checked) { background:#42263c; color:#fff; }
+.dark .girlhood-shell [class*="bg-[#fff9f4]"] { background:#211c2b; color:#f7eaf4; }
+.girlhood-shell .girlhood-button { color:white; background:#82246d; }
+@media (prefers-reduced-motion: reduce) { .girlhood-shell { transition:none; } }
+.dark .girlhood-shell [class*="bg-[#e3f4ec]"] { background:#16392e; color:#e3f4ec; }
+.dark .girlhood-shell [class*="bg-[#f9eaf3]"] { background:#42263c; color:#f7eaf4; }
+.dark .girlhood-shell .girlhood-voice-card summary { color:#f3b6df; }
+.dark .girlhood-shell :focus-visible { outline-color:#f3b6df; }
