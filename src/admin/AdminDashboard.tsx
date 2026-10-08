@@ -1,21 +1,34 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Users, Image as ImageIcon, FileText, Newspaper, UsersRound, BarChart3, Mail, Layers } from 'lucide-react';
 import { useApiData } from '../hooks/useApiData';
+import { supabase } from '../lib/supabaseClient';
 import { AdminPageHeader, AdminCard } from './AdminUI';
+import { fetchTotalProgramCount } from './programCount';
 
 const AdminDashboard: React.FC = () => {
   const { data: partners } = useApiData<unknown[]>('/api/partners');
-  const { data: programs } = useApiData<unknown[]>('/api/programs');
   const { data: reports } = useApiData<unknown[]>('/api/reports');
   const { data: posts } = useApiData<unknown[]>('/api/posts');
   const { data: bureau } = useApiData<unknown[]>('/api/bureau');
   const { data: stats } = useApiData<unknown[]>('/api/stats');
 
+  // Total including drafts: read via the admin session (RLS-protected), not the public API.
+  const [programCount, setProgramCount] = useState<number | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    fetchTotalProgramCount(supabase).then((n) => {
+      if (!cancelled) setProgramCount(n);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const cards = [
     { to: '/admin/partners', label: 'Partners', icon: Users, count: partners?.length },
     { to: '/admin/photos', label: 'Photos', icon: ImageIcon, count: undefined },
-    { to: '/admin/programs', label: 'Programs', icon: Layers, count: programs?.length },
+    { to: '/admin/programs', label: 'Programs', icon: Layers, count: programCount ?? undefined },
     { to: '/admin/reports', label: 'Reports', icon: FileText, count: reports?.length },
     { to: '/admin/posts', label: 'Posts', icon: Newspaper, count: posts?.length },
     { to: '/admin/bureau', label: 'Bureau', icon: UsersRound, count: bureau?.length },
