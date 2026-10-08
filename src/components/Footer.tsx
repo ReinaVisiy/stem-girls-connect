@@ -41,20 +41,20 @@ const Footer: React.FC = () => {
               Helping girls and young women explore STEM, build practical skills, access opportunities, and grow through mentorship and community.
             </p>
             <div className="flex flex-wrap items-center gap-3 pt-2">
-              <a href={organization.social.facebook} target="_blank" rel="noopener noreferrer" className="bg-brandPink text-white p-2.5 rounded-xl hover:scale-110 transition-transform shadow-lg shadow-brandPink/20">
-                <Facebook size={18} />
+              <a href={organization.social.facebook} target="_blank" rel="noopener noreferrer" aria-label="STEM Girls Connect on Facebook (opens in a new tab)" className="bg-brandPink text-white p-2.5 rounded-xl hover:scale-110 transition-transform shadow-lg shadow-brandPink/20">
+                <Facebook size={18} aria-hidden="true" />
               </a>
-              <a href={organization.social.linkedin} target="_blank" rel="noopener noreferrer" className="bg-brandPink text-white p-2.5 rounded-xl hover:scale-110 transition-transform shadow-lg shadow-brandPink/20">
-                <Linkedin size={18} />
+              <a href={organization.social.linkedin} target="_blank" rel="noopener noreferrer" aria-label="STEM Girls Connect on LinkedIn (opens in a new tab)" className="bg-brandPink text-white p-2.5 rounded-xl hover:scale-110 transition-transform shadow-lg shadow-brandPink/20">
+                <Linkedin size={18} aria-hidden="true" />
               </a>
-              <a href={organization.social.instagram} target="_blank" rel="noopener noreferrer" className="bg-brandPink text-white p-2.5 rounded-xl hover:scale-110 transition-transform shadow-lg shadow-brandPink/20">
-                <Instagram size={18} />
+              <a href={organization.social.instagram} target="_blank" rel="noopener noreferrer" aria-label="STEM Girls Connect on Instagram (opens in a new tab)" className="bg-brandPink text-white p-2.5 rounded-xl hover:scale-110 transition-transform shadow-lg shadow-brandPink/20">
+                <Instagram size={18} aria-hidden="true" />
               </a>
-              <a href={organization.social.youtube} target="_blank" rel="noopener noreferrer" className="bg-brandPink text-white p-2.5 rounded-xl hover:scale-110 transition-transform shadow-lg shadow-brandPink/20">
-                <Youtube size={18} />
+              <a href={organization.social.youtube} target="_blank" rel="noopener noreferrer" aria-label="STEM Girls Connect on YouTube (opens in a new tab)" className="bg-brandPink text-white p-2.5 rounded-xl hover:scale-110 transition-transform shadow-lg shadow-brandPink/20">
+                <Youtube size={18} aria-hidden="true" />
               </a>
               {/* Custom SVG glyph: lucide-react has no TikTok brand icon */}
-              <a href={organization.social.tiktok} target="_blank" rel="noopener noreferrer" className="bg-brandPink text-white p-2.5 rounded-xl hover:scale-110 transition-transform shadow-lg shadow-brandPink/20">
+              <a href={organization.social.tiktok} target="_blank" rel="noopener noreferrer" aria-label="STEM Girls Connect on TikTok (opens in a new tab)" className="bg-brandPink text-white p-2.5 rounded-xl hover:scale-110 transition-transform shadow-lg shadow-brandPink/20">
                 <TikTokIcon size={18} color="white" />
               </a>
             </div>

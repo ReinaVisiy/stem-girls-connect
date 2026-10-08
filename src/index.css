@@ -3,12 +3,28 @@
 @plugin "@tailwindcss/typography";
 
 @theme {
-  --color-brandGreen: #269464;
+  --color-brandGreen: #1d7448;
   --color-brandPink: #82246d;
-  --color-brandSlate: #486e7c;
+  --color-brandSlate: #3b5d6b;
   --color-neutralWhite: #FFFFFF;
   --color-footerGray: #E2E8F0;
 }
+
+/*
+ * Accessibility: the brand palette is tuned for white backgrounds.
+ * Light mode: brandGreen and brandSlate were darkened slightly so small
+ * text and white-on-colour labels reach WCAG AA (4.5:1).
+ * Dark mode: brand colours used as TEXT need lighter tints on the dark
+ * surfaces. Only text colour is overridden, so backgrounds (e.g. pink
+ * buttons with white text) are untouched.
+ */
+.dark .text-brandSlate { color: #cbd5e1; }
+.dark .text-brandPink { color: #f9a8d4; }
+.dark .text-brandGreen { color: #34d399; }
+.dark .hover\:text-brandPink:hover { color: #f9a8d4; }
+.dark .hover\:text-brandGreen:hover { color: #34d399; }
+/* keep "turns white on hover" intent on elements that also use the dark text tints above */
+.dark .hover\:text-white:hover { color: #ffffff; }
 
 body {
   font-family: 'Inter', sans-serif;
