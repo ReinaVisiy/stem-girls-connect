@@ -2,7 +2,7 @@ import React from 'react';
 import { statusLabel } from '../../lib/programs';
 
 const STYLES: Record<string, string> = {
-  applications_open: 'bg-brandGreen text-white',
+  applications_open: 'bg-[#1d7448] text-white',
   upcoming: 'bg-brandSlate text-white',
   applications_closed: 'bg-gray-700 text-white',
   ongoing: 'bg-brandPink text-white',

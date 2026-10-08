@@ -18,9 +18,9 @@ const Loading: React.FC = () => (
 const TemplateUnavailable: React.FC<{ title: string; slug: string }> = ({ title, slug }) => (
   <div className="container mx-auto px-6 py-24 text-center max-w-2xl">
     <Seo title={`${title} | STEM Girls Connect`} description="This program page is not available right now." path={`/programs/${slug}`} />
-    <h1 className="text-3xl font-extrabold text-brandGreen uppercase mb-4">{title}</h1>
-    <p className="text-brandSlate font-medium mb-8">This program page isn't available right now. Please check back soon.</p>
-    <Link to="/programs" className="inline-flex items-center gap-2 text-brandPink font-extrabold uppercase tracking-widest text-sm hover:underline">
+    <h1 className="text-3xl font-extrabold text-[#1d7448] dark:text-emerald-400 uppercase mb-4">{title}</h1>
+    <p className="text-brandSlate dark:text-slate-300 font-medium mb-8">This program page isn't available right now. Please check back soon.</p>
+    <Link to="/programs" className="inline-flex items-center gap-2 text-brandPink dark:text-pink-300 font-extrabold uppercase tracking-widest text-sm hover:underline">
       <ArrowLeft size={16} aria-hidden="true" /> Back to Programs
     </Link>
   </div>

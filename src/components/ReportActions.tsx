@@ -28,7 +28,7 @@ const ReportActions: React.FC<ReportActionsProps> = ({ viewUrl, downloadUrl, tit
       href={downloadUrl}
       download
       aria-label={`Download PDF: ${title}`}
-      className="inline-flex items-center justify-center gap-2 border-2 border-brandPink text-brandPink px-6 py-3 min-h-11 rounded-xl font-extrabold text-xs uppercase tracking-widest hover:bg-brandPink/10 transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brandPink"
+      className="inline-flex items-center justify-center gap-2 border-2 border-brandPink dark:border-pink-300 text-brandPink dark:text-pink-300 px-6 py-3 min-h-11 rounded-xl font-extrabold text-xs uppercase tracking-widest hover:bg-brandPink/10 transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brandPink"
     >
       Download PDF <Download size={16} aria-hidden="true" />
     </a>

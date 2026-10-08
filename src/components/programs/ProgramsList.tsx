@@ -7,7 +7,7 @@ import { CURRENT_STATUSES, type ProgramSummary } from '../../lib/programs';
 const Group: React.FC<{ heading: string; programs: ProgramSummary[] }> = ({ heading, programs }) => (
   <div className="mb-20 last:mb-0">
     <ScrollReveal className="text-center mb-12">
-      <h2 className="text-3xl font-extrabold text-brandGreen uppercase tracking-tighter">{heading}</h2>
+      <h2 className="text-3xl font-extrabold text-[#1d7448] dark:text-emerald-400 uppercase tracking-tighter">{heading}</h2>
     </ScrollReveal>
     <div className="grid md:[grid-template-columns:repeat(auto-fit,minmax(300px,380px))] md:justify-center gap-8">
       {programs.map((program, i) => (

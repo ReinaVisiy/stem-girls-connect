@@ -24,21 +24,21 @@ const ProgramCard: React.FC<{ program: ProgramSummary }> = ({ program }) => {
       )}
       <div className="flex flex-col flex-grow p-8">
         <div className="flex flex-wrap gap-2 mb-4">
-          <span className="inline-block px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-widest bg-brandPink/10 text-brandPink">
+          <span className="inline-block px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-widest bg-brandPink/10 dark:bg-pink-300/10 text-brandPink dark:text-pink-300">
             {categoryLabel(program.category)}
           </span>
           <ProgramStatusBadge status={program.status} />
         </div>
-        <h3 className="text-xl font-extrabold text-brandGreen mb-3 uppercase tracking-tight">{program.title}</h3>
+        <h3 className="text-xl font-extrabold text-[#1d7448] dark:text-emerald-400 mb-3 uppercase tracking-tight">{program.title}</h3>
         {program.short_description && (
-          <p className="text-sm font-semibold text-brandSlate leading-relaxed mb-4">{program.short_description}</p>
+          <p className="text-sm font-semibold text-brandSlate dark:text-slate-300 leading-relaxed mb-4">{program.short_description}</p>
         )}
         {timeframe && (
-          <p className="flex items-center gap-2 text-xs font-bold text-brandSlate uppercase tracking-widest mb-4">
+          <p className="flex items-center gap-2 text-xs font-bold text-brandSlate dark:text-slate-300 uppercase tracking-widest mb-4">
             <CalendarDays size={14} aria-hidden="true" /> {timeframe}
           </p>
         )}
-        <span className="mt-auto inline-flex items-center gap-2 text-brandPink font-extrabold text-xs uppercase tracking-widest group-hover:gap-3 transition-all">
+        <span className="mt-auto inline-flex items-center gap-2 text-brandPink dark:text-pink-300 font-extrabold text-xs uppercase tracking-widest group-hover:gap-3 transition-all">
           Explore Program <ArrowRight size={16} aria-hidden="true" />
         </span>
       </div>

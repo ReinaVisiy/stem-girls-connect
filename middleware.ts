@@ -332,18 +332,19 @@ export default async function middleware(request: Request): Promise<Response> {
         };
       }
     } else if (path.startsWith('/programs/')) {
-      // Only the program's base URL is a real page here; any deeper path
-      // belongs to a special template and is resolved client-side.
-      const slug = decodeURIComponent(path.slice('/programs/'.length).split('/')[0]);
+      // /programs/<slug> is a real page. Anything deeper only exists for
+      // programs with a custom page template, which own their sub-routes;
+      // for standard programs a deeper path stays a real 404.
+      const [slug, ...rest] = decodeURIComponent(path.slice('/programs/'.length)).split('/').filter(Boolean);
       if (slug) {
         const rows = await fetchSupabase(
-          `programs?slug=eq.${encodeURIComponent(slug)}&published=eq.true&select=title,short_description,cover_image_url&limit=1`,
+          `programs?slug=eq.${encodeURIComponent(slug)}&published=eq.true&select=title,short_description,cover_image_url,page_template&limit=1`,
           supabaseUrl,
           anonKey
         );
         const program = rows?.[0];
 
-        if (program) {
+        if (program && (rest.length === 0 || program.page_template !== 'standard')) {
           const title = String(program.title);
           const description = program.short_description
             ? String(program.short_description)

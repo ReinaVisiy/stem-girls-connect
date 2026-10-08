@@ -11,7 +11,7 @@ const buttonClass =
   'inline-flex items-center justify-center gap-2 bg-brandPink text-white px-8 py-4 min-h-11 rounded-xl font-extrabold text-sm uppercase tracking-widest hover:scale-[1.02] transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white';
 
 const SectionHeading: React.FC<{ id: string; children: React.ReactNode }> = ({ id, children }) => (
-  <h2 id={id} className="text-3xl font-extrabold text-brandGreen uppercase tracking-tighter mb-8">
+  <h2 id={id} className="text-3xl font-extrabold text-[#1d7448] dark:text-emerald-400 uppercase tracking-tighter mb-8">
     {children}
   </h2>
 );
@@ -20,7 +20,7 @@ const ProgramCta: React.FC<{ program: ProgramDetail; onDark?: boolean }> = ({ pr
   const applyUrl = safeUrl(program.application_url);
   const openDate = formatProgramDate(program.application_open_date);
   const noteClass = `inline-block px-6 py-3 rounded-xl font-extrabold text-sm uppercase tracking-widest ${
-    onDark ? 'bg-white/15 text-white' : 'bg-brandSlate/10 text-brandSlate'
+    onDark ? 'bg-white/15 text-white' : 'bg-brandSlate/10 text-brandSlate dark:text-slate-300'
   }`;
 
   switch (program.status) {
@@ -121,8 +121,8 @@ const StandardProgramPage: React.FC<{ program: ProgramDetail; preview?: boolean 
           <dl className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto bg-white dark:bg-slate-800 rounded-[32px] border border-gray-100 dark:border-slate-700 shadow-xl p-6 md:p-8">
             {quickFacts.map((fact) => (
               <div key={fact.label}>
-                <dt className="text-[11px] font-extrabold text-brandPink uppercase tracking-widest mb-1">{fact.label}</dt>
-                <dd className="text-sm font-bold text-brandSlate">{fact.value}</dd>
+                <dt className="text-[11px] font-extrabold text-brandPink dark:text-pink-300 uppercase tracking-widest mb-1">{fact.label}</dt>
+                <dd className="text-sm font-bold text-brandSlate dark:text-slate-300">{fact.value}</dd>
               </div>
             ))}
           </dl>
@@ -137,7 +137,7 @@ const StandardProgramPage: React.FC<{ program: ProgramDetail; preview?: boolean 
               <SectionHeading id="about-heading">About the Program</SectionHeading>
               <div className="space-y-4">
                 {overviewParagraphs.map((para, i) => (
-                  <p key={i} className="text-lg font-semibold text-brandSlate leading-relaxed">
+                  <p key={i} className="text-lg font-semibold text-brandSlate dark:text-slate-300 leading-relaxed">
                     {para}
                   </p>
                 ))}
@@ -158,11 +158,11 @@ const StandardProgramPage: React.FC<{ program: ProgramDetail; preview?: boolean 
                       {i + 1}
                     </span>
                     <div>
-                      <h3 className="text-lg font-extrabold text-brandGreen uppercase tracking-tight mb-1">
+                      <h3 className="text-lg font-extrabold text-[#1d7448] dark:text-emerald-400 uppercase tracking-tight mb-1">
                         <span className="sr-only">Step {i + 1}: </span>
                         {phase.title}
                       </h3>
-                      {phase.description && <p className="text-sm font-semibold text-brandSlate leading-relaxed">{phase.description}</p>}
+                      {phase.description && <p className="text-sm font-semibold text-brandSlate dark:text-slate-300 leading-relaxed">{phase.description}</p>}
                     </div>
                   </li>
                 ))}
@@ -179,8 +179,8 @@ const StandardProgramPage: React.FC<{ program: ProgramDetail; preview?: boolean 
               <ul className="space-y-3">
                 {eligibility.map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
-                    <CheckCircle2 color="#82246d" size={20} className="mt-0.5 flex-shrink-0" aria-hidden="true" />
-                    <span className="text-base font-semibold text-brandSlate">{item}</span>
+                    <CheckCircle2 size={20} className="mt-0.5 flex-shrink-0 text-brandPink dark:text-pink-300" aria-hidden="true" />
+                    <span className="text-base font-semibold text-brandSlate dark:text-slate-300">{item}</span>
                   </li>
                 ))}
               </ul>
@@ -196,8 +196,8 @@ const StandardProgramPage: React.FC<{ program: ProgramDetail; preview?: boolean 
               <ul className="space-y-3">
                 {benefits.map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
-                    <CheckCircle2 color="#269464" size={20} className="mt-0.5 flex-shrink-0" aria-hidden="true" />
-                    <span className="text-base font-semibold text-brandSlate">{item}</span>
+                    <CheckCircle2 size={20} className="mt-0.5 flex-shrink-0 text-[#1d7448] dark:text-emerald-400" aria-hidden="true" />
+                    <span className="text-base font-semibold text-brandSlate dark:text-slate-300">{item}</span>
                   </li>
                 ))}
               </ul>
@@ -213,8 +213,8 @@ const StandardProgramPage: React.FC<{ program: ProgramDetail; preview?: boolean 
               <dl className="bg-[#486e7c]/5 dark:bg-white/5 rounded-[32px] border border-gray-100 dark:border-slate-700 divide-y divide-gray-100 dark:divide-slate-700">
                 {importantDates.map((d) => (
                   <div key={d.label} className="flex flex-col sm:flex-row sm:justify-between gap-1 px-6 py-4">
-                    <dt className="text-xs font-extrabold text-brandPink uppercase tracking-widest">{d.label}</dt>
-                    <dd className="text-sm font-bold text-brandSlate">{d.value}</dd>
+                    <dt className="text-xs font-extrabold text-brandPink dark:text-pink-300 uppercase tracking-widest">{d.label}</dt>
+                    <dd className="text-sm font-bold text-brandSlate dark:text-slate-300">{d.value}</dd>
                   </div>
                 ))}
               </dl>
@@ -230,11 +230,11 @@ const StandardProgramPage: React.FC<{ program: ProgramDetail; preview?: boolean 
               <div className="space-y-3">
                 {faq.map((item, i) => (
                   <details key={i} className="group bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 shadow-sm">
-                    <summary className="flex items-center justify-between gap-4 cursor-pointer list-none px-6 py-4 min-h-11 font-extrabold text-brandGreen focus-visible:outline-2 focus-visible:outline-brandPink rounded-2xl">
+                    <summary className="flex items-center justify-between gap-4 cursor-pointer list-none px-6 py-4 min-h-11 font-extrabold text-[#1d7448] dark:text-emerald-400 focus-visible:outline-2 focus-visible:outline-brandPink rounded-2xl">
                       {item.question}
                       <ChevronDown size={18} className="flex-shrink-0 transition-transform group-open:rotate-180" aria-hidden="true" />
                     </summary>
-                    <p className="px-6 pb-5 text-sm font-semibold text-brandSlate leading-relaxed">{item.answer}</p>
+                    <p className="px-6 pb-5 text-sm font-semibold text-brandSlate dark:text-slate-300 leading-relaxed">{item.answer}</p>
                   </details>
                 ))}
               </div>
@@ -251,9 +251,9 @@ const StandardProgramPage: React.FC<{ program: ProgramDetail; preview?: boolean 
                 {program.reports.map((report) => (
                   <article key={report.id} className="bg-[#486e7c]/5 dark:bg-white/5 rounded-[32px] border border-gray-100 dark:border-slate-700 p-6 md:p-8">
                     {report.edition_label && (
-                      <p className="text-brandPink text-xs font-extrabold uppercase tracking-widest mb-2">{report.edition_label}</p>
+                      <p className="text-brandPink dark:text-pink-300 text-xs font-extrabold uppercase tracking-widest mb-2">{report.edition_label}</p>
                     )}
-                    <h3 className="text-lg font-extrabold text-brandGreen mb-4">{report.title}</h3>
+                    <h3 className="text-lg font-extrabold text-[#1d7448] dark:text-emerald-400 mb-4">{report.title}</h3>
                     <ReportActions viewUrl={report.view_url} downloadUrl={report.download_url} title={report.title} />
                   </article>
                 ))}
