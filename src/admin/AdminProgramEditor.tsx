@@ -9,6 +9,7 @@ import {
 import { parseProgramJson, readProgramJsonFile, downloadExampleProgramJson } from '../lib/programImport';
 import StandardProgramPage from '../pages/programs/StandardProgramPage';
 import { buildReportUrls, type PublicReport } from '../lib/reportUrls';
+import { syncProgramReportLinks, describeLinkError } from './programReportLinks';
 import {
   CATEGORY_LABELS, STATUS_LABELS, safeUrl,
   type ProgramCategory, type ProgramContent, type ProgramDetail, type ProgramStatus,
@@ -188,6 +189,10 @@ const StringListEditor: React.FC<{
   </div>
 );
 
+function linkWarning(message: string): string {
+  return `The program details were saved, but its linked reports could not be updated: ${message}. Your report changes are NOT saved — fix the problem and press Save again.`;
+}
+
 const AdminProgramEditor: React.FC = () => {
   const { id } = useParams();
   const isNew = !id;
@@ -354,6 +359,17 @@ const AdminProgramEditor: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isNew, loading, location.state]);
 
+  // A report-link failure from creating a new program arrives via router state
+  // (the program row was saved, so we are now on its edit page).
+  useEffect(() => {
+    const state = location.state as { linkError?: string } | null;
+    if (!state?.linkError) return;
+    setError(linkWarning(state.linkError));
+    setSuccess(null);
+    navigate('.', { replace: true, state: null });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.state]);
+
   const templateOptions = useMemo(
     () => (SELECTABLE_TEMPLATES.includes(form.pageTemplate) ? SELECTABLE_TEMPLATES : [...SELECTABLE_TEMPLATES, form.pageTemplate]),
     [form.pageTemplate]
@@ -446,35 +462,31 @@ const AdminProgramEditor: React.FC = () => {
         programId = Number(id);
       }
 
-      // Sync report links: remove dropped ones, upsert the rest (keeps order + labels).
-      if (isStandard || originalLinkIds.length > 0 || links.length > 0) {
-        const keepIds = links.map((l) => l.reportId);
-        const toRemove = originalLinkIds.filter((rid) => !keepIds.includes(rid));
-        if (toRemove.length > 0) {
-          const { error: err } = await supabase.from('program_reports').delete().eq('program_id', programId).in('report_id', toRemove);
-          if (err) throw err;
-        }
-        if (links.length > 0) {
-          const { error: err } = await supabase.from('program_reports').upsert(
-            links.map((l, i) => ({
-              program_id: programId,
-              report_id: l.reportId,
-              edition_label: l.editionLabel.trim() || null,
-              display_order: i + 1,
-            })),
-            { onConflict: 'program_id,report_id' }
-          );
-          if (err) throw err;
-        }
-        setOriginalLinkIds(keepIds);
-      }
-
+      // The program row is now safely stored. Reflect that in local state
+      // straight away so a later failure (report links) can never make it look
+      // unsaved, and so a retry does not upload the cover image a second time.
       setForm((f) => ({ ...f, coverImageUrl: coverUrl ?? '' }));
       setCoverFile(null);
       setOriginalContent(isStandard ? buildContent() : originalContent);
 
+      // Sync report links. A failure here must NOT look like a successful
+      // save, and must not be reported as if the whole save had failed.
+      let linkFailure: string | null = null;
+      if (isStandard || originalLinkIds.length > 0 || links.length > 0) {
+        try {
+          await syncProgramReportLinks(supabase, programId, links, originalLinkIds);
+          setOriginalLinkIds(links.map((l) => l.reportId));
+        } catch (linkErr) {
+          linkFailure = describeLinkError(linkErr);
+        }
+      }
+
       if (isNew) {
-        navigate(`/admin/programs/${programId}`, { replace: true });
+        // Hand any link failure to the edit page: the program now exists, so
+        // saving again from /new would create a duplicate.
+        navigate(`/admin/programs/${programId}`, { replace: true, state: linkFailure ? { linkError: linkFailure } : null });
+      } else if (linkFailure) {
+        setError(linkWarning(linkFailure));
       } else {
         setSuccess('Program saved.');
       }
