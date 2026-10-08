@@ -8,6 +8,30 @@
   ],
   "rewrites": [
     {
+      "source": "/api/stats",
+      "destination": "/api/content?resource=stats"
+    },
+    {
+      "source": "/api/bureau",
+      "destination": "/api/content?resource=bureau"
+    },
+    {
+      "source": "/api/partners",
+      "destination": "/api/content?resource=partners"
+    },
+    {
+      "source": "/api/slideshow",
+      "destination": "/api/content?resource=slideshow"
+    },
+    {
+      "source": "/api/site-content",
+      "destination": "/api/content?resource=site-content"
+    },
+    {
+      "source": "/api/site-images",
+      "destination": "/api/content?resource=site-images"
+    },
+    {
       "source": "/sitemap.xml",
       "destination": "/api/sitemap.xml"
     },
