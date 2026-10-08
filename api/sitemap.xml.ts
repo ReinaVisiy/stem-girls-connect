@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { getSupabaseClient } from './_lib/supabase.js';
 import { organization } from '../src/config/organization.js';
+import { SUPPORTED_PAGE_TEMPLATES } from '../src/lib/programTemplates.js';
 
 interface StaticPage {
   path: string;
@@ -68,7 +69,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const { data: programs, error: programsError } = await supabase
       .from('programs')
       .select('slug')
-      .eq('published', true);
+      .eq('published', true)
+      .in('page_template', [...SUPPORTED_PAGE_TEMPLATES]);
 
     if (!programsError && programs) {
       for (const program of programs) {

@@ -10,6 +10,7 @@ import { parseProgramJson, readProgramJsonFile, downloadExampleProgramJson } fro
 import StandardProgramPage from '../pages/programs/StandardProgramPage';
 import { buildReportUrls, type PublicReport } from '../lib/reportUrls';
 import { syncProgramReportLinks, describeLinkError } from './programReportLinks';
+import { SUPPORTED_PAGE_TEMPLATES } from '../lib/programTemplates';
 import {
   CATEGORY_LABELS, STATUS_LABELS, safeUrl,
   type ProgramCategory, type ProgramContent, type ProgramDetail, type ProgramStatus,
@@ -20,7 +21,7 @@ const supabaseUrl = (import.meta.env.VITE_SUPABASE_URL ?? '') as string;
 // Page templates the admin can choose. A program already using another
 // template keeps it (see templateOptions below); only "standard" is
 // authored here.
-const SELECTABLE_TEMPLATES = ['standard'];
+const SELECTABLE_TEMPLATES = [...SUPPORTED_PAGE_TEMPLATES];
 
 const SLUG_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 

@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { getSupabaseClient } from './_lib/supabase.js';
 import { toPublicReport, type PublicReport } from '../src/lib/reportUrls.js';
+import { SUPPORTED_PAGE_TEMPLATES } from '../src/lib/programTemplates.js';
 
 const STATUSES = ['upcoming', 'applications_open', 'applications_closed', 'ongoing', 'completed'];
 
@@ -22,7 +23,9 @@ function first(value: string | string[] | undefined): string | undefined {
  * GET /api/programs?slug=hvi-stem        -> one published program + linked reports
  *
  * Uses the anon client, so RLS guarantees only published rows are visible;
- * the explicit published filter is belt and braces.
+ * the explicit published filter is belt and braces. Programs whose page
+ * template has no working public experience are excluded everywhere
+ * (see src/lib/programTemplates.ts).
  */
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'GET') {
@@ -39,6 +42,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         .select(DETAIL_FIELDS)
         .eq('slug', slug)
         .eq('published', true)
+        .in('page_template', [...SUPPORTED_PAGE_TEMPLATES])
         .maybeSingle();
 
       if (error) return res.status(500).json({ error: error.message });
@@ -72,6 +76,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       .from('programs')
       .select(LIST_FIELDS)
       .eq('published', true)
+      .in('page_template', [...SUPPORTED_PAGE_TEMPLATES])
       .order('display_order', { ascending: true })
       .order('start_date', { ascending: false, nullsFirst: false });
 
