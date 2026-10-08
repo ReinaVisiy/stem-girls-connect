@@ -66,7 +66,7 @@ const Donate: React.FC = () => {
           </a>
 
           <div className="p-4 bg-gray-50 dark:bg-slate-700 rounded-2xl border border-gray-100 dark:border-slate-700">
-            <QRCodeSVG value={FAPSHI_DONATE_URL} size={180} fgColor="#82246d" />
+            <QRCodeSVG value={FAPSHI_DONATE_URL} size={180} fgColor="#82246d" title="QR code linking to the STEM Girls Connect donation page" />
           </div>
           <p className="text-brandSlate text-xs font-bold mt-4 uppercase tracking-widest">Or scan to donate from your phone.</p>
         </ScrollReveal>

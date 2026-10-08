@@ -60,7 +60,7 @@ const Home: React.FC = () => {
 
               <div className="flex flex-col sm:flex-row items-start gap-4">
                 <Link
-                  to="/activities"
+                  to="/programs"
                   className="w-full sm:w-auto bg-brandPink text-white px-10 py-5 rounded-2xl font-extrabold shadow-xl shadow-black/30 hover:scale-[1.02] hover:bg-brandPink/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white transition-all text-center uppercase tracking-widest text-sm"
                 >
                   Explore Our Programs

@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { getSupabaseClient } from './_lib/supabase.js';
 import { organization } from '../src/config/organization.js';
+import { SUPPORTED_PAGE_TEMPLATES } from '../src/lib/programTemplates.js';
 
 interface StaticPage {
   path: string;
@@ -11,7 +12,7 @@ interface StaticPage {
 const STATIC_PAGES: StaticPage[] = [
   { path: '/', changefreq: 'weekly', priority: '1.0' },
   { path: '/about', changefreq: 'monthly', priority: '0.8' },
-  { path: '/activities', changefreq: 'monthly', priority: '0.8' },
+  { path: '/programs', changefreq: 'weekly', priority: '0.8' },
   { path: '/impact', changefreq: 'monthly', priority: '0.8' },
   { path: '/blog', changefreq: 'weekly', priority: '0.7' },
   { path: '/join', changefreq: 'monthly', priority: '0.7' },
@@ -62,6 +63,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       for (const post of posts) {
         const lastmod = post.published_at ? post.published_at.slice(0, 10) : undefined;
         entries.push(urlEntry(`${siteUrl}/blog/${post.slug}`, 'monthly', '0.6', lastmod));
+      }
+    }
+
+    const { data: programs, error: programsError } = await supabase
+      .from('programs')
+      .select('slug')
+      .eq('published', true)
+      .in('page_template', [...SUPPORTED_PAGE_TEMPLATES]);
+
+    if (!programsError && programs) {
+      for (const program of programs) {
+        entries.push(urlEntry(`${siteUrl}/programs/${program.slug}`, 'monthly', '0.7'));
       }
     }
   } catch {

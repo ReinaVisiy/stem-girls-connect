@@ -1,11 +1,11 @@
 
 import React, { Suspense, lazy } from 'react';
-import { Routes, Route, Outlet, useLocation } from 'react-router-dom';
+import { Routes, Route, Outlet, useLocation, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
 import About from './pages/About';
-import Activities from './pages/Activities';
+import Programs from './pages/Programs';
 import JoinUs from './pages/JoinUs';
 import Contact from './pages/Contact';
 import Donate from './pages/Donate';
@@ -16,6 +16,10 @@ import NotFound from './pages/NotFound';
 
 // Code-split: admin panel (and its supabase-js browser client) is only
 // downloaded by visitors who actually navigate to /admin/*.
+// Code-split: program detail pages (and any special program experiences
+// they resolve to) only download when someone opens a program.
+const ProgramPageResolver = lazy(() => import('./pages/programs/ProgramPageResolver'));
+
 const AdminAuthProvider = lazy(() => import('./admin/AdminAuthProvider').then((m) => ({ default: m.AdminAuthProvider })));
 const AdminLogin = lazy(() => import('./admin/AdminLogin'));
 const AdminLayout = lazy(() => import('./admin/AdminLayout'));
@@ -24,6 +28,8 @@ const AdminBureau = lazy(() => import('./admin/AdminBureau'));
 const AdminPartners = lazy(() => import('./admin/AdminPartners'));
 const AdminPhotos = lazy(() => import('./admin/AdminPhotos'));
 const AdminContent = lazy(() => import('./admin/AdminContent'));
+const AdminPrograms = lazy(() => import('./admin/AdminPrograms'));
+const AdminProgramEditor = lazy(() => import('./admin/AdminProgramEditor'));
 const AdminReports = lazy(() => import('./admin/AdminReports'));
 const AdminPosts = lazy(() => import('./admin/AdminPosts'));
 const AdminStats = lazy(() => import('./admin/AdminStats'));
@@ -58,7 +64,16 @@ const App: React.FC = () => {
       <Route element={<PublicLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
-        <Route path="/activities" element={<Activities />} />
+        <Route path="/programs" element={<Programs />} />
+        <Route
+          path="/programs/:slug/*"
+          element={
+            <Suspense fallback={<div className="container mx-auto px-6 py-24" aria-busy="true" />}>
+              <ProgramPageResolver />
+            </Suspense>
+          }
+        />
+        <Route path="/activities" element={<Navigate to="/programs" replace />} />
         <Route path="/impact" element={<Impact />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
@@ -81,6 +96,9 @@ const App: React.FC = () => {
                   <Route path="partners" element={<AdminPartners />} />
                   <Route path="photos" element={<AdminPhotos />} />
                   <Route path="content" element={<AdminContent />} />
+                  <Route path="programs" element={<AdminPrograms />} />
+                  <Route path="programs/new" element={<AdminProgramEditor />} />
+                  <Route path="programs/:id" element={<AdminProgramEditor />} />
                   <Route path="reports" element={<AdminReports />} />
                   <Route path="posts" element={<AdminPosts />} />
                   <Route path="stats" element={<AdminStats />} />

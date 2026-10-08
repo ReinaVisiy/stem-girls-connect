@@ -28,7 +28,7 @@ export const navigation: NavItem[] = [
   {
     label: 'What We Do',
     children: [
-      { label: 'Programs', path: '/activities' },
+      { label: 'Programs', path: '/programs' },
       { label: 'Impact', path: '/impact' },
       { label: 'Blog / News', path: '/blog' },
     ],

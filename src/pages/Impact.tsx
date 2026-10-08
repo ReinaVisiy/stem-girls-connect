@@ -1,10 +1,12 @@
 import React from 'react';
-import { FileText, ExternalLink } from 'lucide-react';
+import { FileText } from 'lucide-react';
 import ScrollReveal from '../components/ScrollReveal';
 import PageHeader from '../components/PageHeader';
 import Seo from '../components/Seo';
 import { useApiData } from '../hooks/useApiData';
 import CountUp from '../components/CountUp';
+import ReportActions from '../components/ReportActions';
+import type { PublicReport } from '../lib/reportUrls';
 
 interface Stat {
   id: number;
@@ -15,16 +17,6 @@ interface Stat {
   display_order: number;
 }
 
-interface Report {
-  id: number;
-  title: string;
-  description: string | null;
-  file_url: string;
-  start_date: string | null;
-  end_date: string | null;
-  display_order: number;
-}
-
 function formatReportDate(iso: string | null) {
   if (!iso) return null;
   return new Date(iso).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -32,7 +24,7 @@ function formatReportDate(iso: string | null) {
 
 const Impact: React.FC = () => {
   const { data: stats, loading: statsLoading } = useApiData<Stat[]>('/api/stats');
-  const { data: reports, loading: reportsLoading } = useApiData<Report[]>('/api/reports');
+  const { data: reports, loading: reportsLoading } = useApiData<PublicReport[]>('/api/reports');
 
   return (
     <div className="pb-24">
@@ -118,14 +110,7 @@ const Impact: React.FC = () => {
                   {report.description && (
                     <p className="text-brandSlate text-sm font-medium leading-relaxed mb-6 flex-grow">{report.description}</p>
                   )}
-                  <a
-                    href={report.file_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 bg-brandPink text-white px-6 py-3 rounded-xl font-extrabold text-xs uppercase tracking-widest hover:scale-[1.02] transition-all"
-                  >
-                    View Report <ExternalLink size={16} />
-                  </a>
+                  <ReportActions viewUrl={report.view_url} downloadUrl={report.download_url} title={report.title} />
                 </ScrollReveal>
               ))}
             </div>

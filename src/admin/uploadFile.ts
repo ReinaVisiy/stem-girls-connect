@@ -37,9 +37,16 @@ export function describeUploadError(error: unknown): string {
   return error instanceof Error ? error.message : 'Something went wrong. Please try again.';
 }
 
+export interface UploadResult {
+  /** Bucket-relative path, e.g. "reports/<uuid>.pdf". */
+  path: string;
+  publicUrl: string;
+}
+
 /**
  * Uploads a file to the given public bucket under a random name (so
- * concurrent uploads never collide) and returns its public URL.
+ * concurrent uploads never collide) and returns both its bucket path
+ * and its public URL.
  * RLS on storage.objects requires the caller to be a signed-in admin
  * (see is_admin() policies) — this will throw for anyone else.
  *
@@ -47,7 +54,7 @@ export function describeUploadError(error: unknown): string {
  * 4s) on transient network failures, so a single dropped packet on a
  * weak connection doesn't force the admin to redo the whole form.
  */
-export async function uploadToBucket(bucket: Bucket, file: File, folder?: string): Promise<string> {
+export async function uploadToBucketWithPath(bucket: Bucket, file: File, folder?: string): Promise<UploadResult> {
   const ext = file.name.includes('.') ? file.name.split('.').pop() : 'bin';
   const path = `${folder ? `${folder}/` : ''}${crypto.randomUUID()}.${ext}`;
 
@@ -62,7 +69,7 @@ export async function uploadToBucket(bucket: Bucket, file: File, folder?: string
       if (error) throw error;
 
       const { data } = supabase.storage.from(bucket).getPublicUrl(path);
-      return data.publicUrl;
+      return { path, publicUrl: data.publicUrl };
     } catch (err) {
       lastError = err;
       const isLastAttempt = attempt === MAX_ATTEMPTS;
@@ -73,4 +80,14 @@ export async function uploadToBucket(bucket: Bucket, file: File, folder?: string
 
   // Unreachable (the loop always returns or throws), but keeps TypeScript happy.
   throw lastError;
+}
+
+/**
+ * Original helper, unchanged signature and return type: uploads and
+ * returns just the public URL. Existing callers (blog, partners,
+ * bureau, site images) keep using this.
+ */
+export async function uploadToBucket(bucket: Bucket, file: File, folder?: string): Promise<string> {
+  const { publicUrl } = await uploadToBucketWithPath(bucket, file, folder);
+  return publicUrl;
 }

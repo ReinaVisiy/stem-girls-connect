@@ -1,3 +1,5 @@
+import { SUPPORTED_PAGE_TEMPLATES, STANDARD_TEMPLATE } from './src/lib/programTemplates.js';
+
 export const config = {
   // Only intercept actual page routes. Excludes /api/*, /admin/*, and
   // anything that looks like a static asset (has a file extension), so
@@ -27,6 +29,17 @@ const DEFAULT_IMAGE_ALT = 'STEM Girls Connect volunteers leading a STEM outreach
 
 const CONTACT_EMAIL = 'info@stemgirlsconnect.org';
 const CONTACT_LOCATION = 'Foumban, West Region, Cameroon';
+
+/** decodeURIComponent that returns null instead of throwing on malformed %-escapes (-> 404, not a 500). */
+function safeDecode(value: string): string | null {
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return null;
+  }
+}
+
+const SUPPORTED_TEMPLATES_FILTER = `page_template=in.(${SUPPORTED_PAGE_TEMPLATES.map(encodeURIComponent).join(',')})`;
 
 function escapeHtml(value: string): string {
   return value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -68,7 +81,7 @@ const STATIC_ROUTES: Record<string, RouteMeta> = {
         p(
           'Build practical skills, connect with mentors, discover scholarships and opportunities, and grow alongside a community of girls and young women building their futures in STEM.'
         ) +
-        `<p class="mb-4"><a class="text-brandPink font-extrabold" href="/activities">Explore Our Programs</a> &nbsp;&middot;&nbsp; <a class="text-brandPink font-extrabold" href="/join">Join STEM Girls Connect</a></p>`
+        `<p class="mb-4"><a class="text-brandPink font-extrabold" href="/programs">Explore Our Programs</a> &nbsp;&middot;&nbsp; <a class="text-brandPink font-extrabold" href="/join">Join STEM Girls Connect</a></p>`
     ),
   },
   '/about': {
@@ -93,12 +106,12 @@ const STATIC_ROUTES: Record<string, RouteMeta> = {
       // Bureau list appended dynamically below.
     ),
   },
-  '/activities': {
-    title: 'Our Activities | STEM Girls Connect',
+  '/programs': {
+    title: 'Our Programs | STEM Girls Connect',
     description:
       "Explore STEM Girls Connect's programs, mentorship, and outreach activities supporting girls and young women in STEM.",
     body: page(
-      h1('Our Activities') +
+      h1('Our Programs') +
         p(
           'We create opportunities for girls and young women to learn, grow, connect, and build their futures in STEM through training, mentorship, career support, outreach, and access to opportunities.'
         ) +
@@ -185,19 +198,19 @@ function injectMeta(html: string, meta: RouteMeta, canonicalUrl: string): string
   const imageAlt = escapeHtml(meta.imageAlt ?? DEFAULT_IMAGE_ALT);
 
   return html
-    .replace(/<title>.*?<\/title>/, `<title>${title}</title>`)
-    .replace(/<meta name="description" content=".*?"\s*\/>/, `<meta name="description" content="${description}" />`)
-    .replace(/<link rel="canonical" href=".*?"\s*\/>/, `<link rel="canonical" href="${canonicalUrl}" />`)
-    .replace(/<meta property="og:url" content=".*?"\s*\/>/, `<meta property="og:url" content="${canonicalUrl}" />`)
-    .replace(/<meta property="og:title" content=".*?"\s*\/>/, `<meta property="og:title" content="${title}" />`)
-    .replace(/<meta property="og:description" content=".*?"\s*\/>/, `<meta property="og:description" content="${description}" />`)
-    .replace(/<meta property="og:image" content=".*?"\s*\/>/, `<meta property="og:image" content="${image}" />`)
-    .replace(/<meta property="og:image:alt" content=".*?"\s*\/>/, `<meta property="og:image:alt" content="${imageAlt}" />`)
-    .replace(/<meta name="twitter:title" content=".*?"\s*\/>/, `<meta name="twitter:title" content="${title}" />`)
-    .replace(/<meta name="twitter:description" content=".*?"\s*\/>/, `<meta name="twitter:description" content="${description}" />`)
-    .replace(/<meta name="twitter:image" content=".*?"\s*\/>/, `<meta name="twitter:image" content="${image}" />`)
-    .replace(/<meta name="twitter:image:alt" content=".*?"\s*\/>/, `<meta name="twitter:image:alt" content="${imageAlt}" />`)
-    .replace(/<div id="root"><\/div>/, `<div id="root">${meta.body}</div>`);
+    .replace(/<title>.*?<\/title>/, () => `<title>${title}</title>`)
+    .replace(/<meta name="description" content=".*?"\s*\/>/, () => `<meta name="description" content="${description}" />`)
+    .replace(/<link rel="canonical" href=".*?"\s*\/>/, () => `<link rel="canonical" href="${canonicalUrl}" />`)
+    .replace(/<meta property="og:url" content=".*?"\s*\/>/, () => `<meta property="og:url" content="${canonicalUrl}" />`)
+    .replace(/<meta property="og:title" content=".*?"\s*\/>/, () => `<meta property="og:title" content="${title}" />`)
+    .replace(/<meta property="og:description" content=".*?"\s*\/>/, () => `<meta property="og:description" content="${description}" />`)
+    .replace(/<meta property="og:image" content=".*?"\s*\/>/, () => `<meta property="og:image" content="${image}" />`)
+    .replace(/<meta property="og:image:alt" content=".*?"\s*\/>/, () => `<meta property="og:image:alt" content="${imageAlt}" />`)
+    .replace(/<meta name="twitter:title" content=".*?"\s*\/>/, () => `<meta name="twitter:title" content="${title}" />`)
+    .replace(/<meta name="twitter:description" content=".*?"\s*\/>/, () => `<meta name="twitter:description" content="${description}" />`)
+    .replace(/<meta name="twitter:image" content=".*?"\s*\/>/, () => `<meta name="twitter:image" content="${image}" />`)
+    .replace(/<meta name="twitter:image:alt" content=".*?"\s*\/>/, () => `<meta name="twitter:image:alt" content="${imageAlt}" />`)
+    .replace(/<div id="root"><\/div>/, () => `<div id="root">${meta.body}</div>`);
 }
 
 interface SupabaseRow {
@@ -307,8 +320,61 @@ export default async function middleware(request: Request): Promise<Response> {
             ),
         };
       }
+    } else if (meta && path === '/programs') {
+      const programs = await fetchSupabase(
+        `programs?published=eq.true&${SUPPORTED_TEMPLATES_FILTER}&select=title,slug,short_description&order=display_order`,
+        supabaseUrl,
+        anonKey
+      );
+      if (programs && programs.length > 0) {
+        meta = {
+          ...meta,
+          body:
+            meta.body +
+            page(
+              h2('Our Programs') +
+                ul(
+                  programs.map(
+                    (pr) =>
+                      `<a class="text-brandPink font-extrabold" href="/programs/${escapeHtml(String(pr.slug))}">${escapeHtml(
+                        String(pr.title)
+                      )}</a>${pr.short_description ? `<br/><span class="text-brandSlate text-sm">${escapeHtml(String(pr.short_description))}</span>` : ''}`
+                  )
+                )
+            ),
+        };
+      }
+    } else if (path.startsWith('/programs/')) {
+      // /programs/<slug> is a real page. Anything deeper only exists for
+      // programs with a custom page template, which own their sub-routes;
+      // for standard programs a deeper path stays a real 404.
+      const decodedPath = safeDecode(path.slice('/programs/'.length));
+      const [slug, ...rest] = (decodedPath ?? '').split('/').filter(Boolean);
+      if (slug) {
+        // Only published programs whose template has a working public page.
+        const rows = await fetchSupabase(
+          `programs?slug=eq.${encodeURIComponent(slug)}&published=eq.true&${SUPPORTED_TEMPLATES_FILTER}&select=title,short_description,cover_image_url,page_template&limit=1`,
+          supabaseUrl,
+          anonKey
+        );
+        const program = rows?.[0];
+
+        if (program && (rest.length === 0 || program.page_template !== STANDARD_TEMPLATE)) {
+          const title = String(program.title);
+          const description = program.short_description
+            ? String(program.short_description)
+            : `Learn about ${title}, a STEM Girls Connect program.`;
+          meta = {
+            title: `${title} | STEM Girls Connect`,
+            description,
+            image: program.cover_image_url ? String(program.cover_image_url) : undefined,
+            imageAlt: title,
+            body: page(h1(title) + p(description)),
+          };
+        }
+      }
     } else if (path.startsWith('/blog/')) {
-      const slug = decodeURIComponent(path.slice('/blog/'.length));
+      const slug = safeDecode(path.slice('/blog/'.length));
       if (slug) {
         const rows = await fetchSupabase(
           `posts?slug=eq.${encodeURIComponent(slug)}&published=eq.true&select=title,body,image_url&limit=1`,

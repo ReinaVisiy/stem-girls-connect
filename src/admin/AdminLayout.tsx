@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink, Navigate, Outlet, Link } from 'react-router-dom';
-import { LayoutDashboard, Users, Image as ImageIcon, FileText, Newspaper, LogOut, ExternalLink, Menu, X, Award, Type, BarChart3, Mail } from 'lucide-react';
+import { LayoutDashboard, Users, Image as ImageIcon, FileText, Newspaper, LogOut, ExternalLink, Menu, X, Award, Type, BarChart3, Mail, Layers } from 'lucide-react';
 import { useAdminAuth } from './AdminAuthProvider';
 
 const navItems: { to: string; label: string; icon: typeof LayoutDashboard; end?: boolean }[] = [
@@ -9,6 +9,7 @@ const navItems: { to: string; label: string; icon: typeof LayoutDashboard; end?:
   { to: '/admin/partners', label: 'Partners', icon: Users },
   { to: '/admin/photos', label: 'Photos', icon: ImageIcon },
   { to: '/admin/content', label: 'Content', icon: Type },
+  { to: '/admin/programs', label: 'Programs', icon: Layers },
   { to: '/admin/reports', label: 'Reports', icon: FileText },
   { to: '/admin/posts', label: 'Posts', icon: Newspaper },
   { to: '/admin/stats', label: 'Stats', icon: BarChart3 },

@@ -14,6 +14,7 @@ interface TikTokIconProps {
  */
 const TikTokIcon: React.FC<TikTokIconProps> = ({ size = 18, color = 'currentColor', className }) => (
   <svg
+    aria-hidden="true"
     width={size}
     height={size}
     viewBox="0 0 24 24"
