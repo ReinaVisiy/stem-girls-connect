@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Trash2, FileText, ExternalLink, Pencil, X, GripVertical } from 'lucide-react';
+import { Trash2, FileText, ExternalLink, Download, Pencil, X, GripVertical } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
-import { uploadToBucket, describeUploadError } from './uploadFile';
+import { uploadToBucketWithPath, describeUploadError } from './uploadFile';
+import { buildReportUrls, makeDownloadName } from '../lib/reportUrls';
 import { AdminPageHeader, AdminCard, AdminButton, AdminInput, AdminTextarea, AdminLabel, AdminBanner, AdminFileName } from './AdminUI';
 
 interface Report {
   id: number;
   title: string;
   description: string | null;
-  file_url: string;
+  file_url: string | null;
+  file_path: string | null;
+  download_name: string | null;
   start_date: string | null;
   end_date: string | null;
   display_order: number;
@@ -18,6 +21,8 @@ function formatDate(iso: string | null) {
   if (!iso) return null;
   return new Date(iso).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 }
+
+const supabaseUrl = (import.meta.env.VITE_SUPABASE_URL ?? '') as string;
 
 const emptyForm = { title: '', description: '', startDate: '', endDate: '' };
 
@@ -69,26 +74,35 @@ const AdminReports: React.FC = () => {
     setError(null);
 
     try {
-      let fileUrl: string | null = null;
-      if (file) fileUrl = await uploadToBucket('site-assets', file, 'reports');
+      let uploaded: { path: string; publicUrl: string } | null = null;
+      if (file) uploaded = await uploadToBucketWithPath('site-assets', file, 'reports');
+      const title = form.title.trim();
 
       if (editingId) {
         const updatePayload: Record<string, unknown> = {
-          title: form.title.trim(),
+          title,
           description: form.description.trim() || null,
           start_date: form.startDate || null,
           end_date: form.endDate || null,
         };
-        if (fileUrl) updatePayload.file_url = fileUrl;
+        // Replacing the PDF: point at the new object and keep the legacy
+        // column in sync. The old storage object is intentionally left alone.
+        if (uploaded) {
+          updatePayload.file_path = uploaded.path;
+          updatePayload.file_url = uploaded.publicUrl;
+          updatePayload.download_name = makeDownloadName(title);
+        }
 
         const { error: err } = await supabase.from('reports').update(updatePayload).eq('id', editingId);
         if (err) throw err;
       } else {
         const nextOrder = reports.length > 0 ? Math.max(...reports.map((r) => r.display_order)) + 1 : 1;
         const { error: err } = await supabase.from('reports').insert({
-          title: form.title.trim(),
+          title,
           description: form.description.trim() || null,
-          file_url: fileUrl,
+          file_path: uploaded?.path ?? null,
+          file_url: uploaded?.publicUrl ?? null,
+          download_name: makeDownloadName(title),
           start_date: form.startDate || null,
           end_date: form.endDate || null,
           display_order: nextOrder,
@@ -212,14 +226,29 @@ const AdminReports: React.FC = () => {
                     {formatDate(r.start_date)} {r.end_date && `– ${formatDate(r.end_date)}`}
                   </p>
                 )}
-                <a
-                  href={r.file_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-xs font-extrabold text-brandPink uppercase tracking-widest hover:underline mt-1"
-                >
-                  View PDF <ExternalLink size={12} />
-                </a>
+                {(() => {
+                  const urls = buildReportUrls(supabaseUrl, r);
+                  if (!urls) return null;
+                  return (
+                    <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1">
+                      <a
+                        href={urls.view_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-xs font-extrabold text-brandPink uppercase tracking-widest hover:underline"
+                      >
+                        View PDF <ExternalLink size={12} aria-hidden="true" />
+                      </a>
+                      <a
+                        href={urls.download_url}
+                        download
+                        className="inline-flex items-center gap-1 text-xs font-extrabold text-brandPink uppercase tracking-widest hover:underline"
+                      >
+                        Download PDF <Download size={12} aria-hidden="true" />
+                      </a>
+                    </div>
+                  );
+                })()}
               </div>
               <AdminButton variant="ghost" onClick={() => startEdit(r)}>
                 <Pencil size={14} />
