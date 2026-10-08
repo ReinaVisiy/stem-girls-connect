@@ -40,9 +40,11 @@ export interface ProgramImportValues {
   cost?: string;
   tagline?: string;
   overview?: string;
+  howToApply?: string;
   contactNote?: string;
   quickFacts?: { label: string; value: string }[];
   phases?: { title: string; description: string }[];
+  objectives?: string[];
   eligibility?: string[];
   benefits?: string[];
   faq?: { question: string; answer: string }[];
@@ -72,7 +74,7 @@ const IGNORED_WITH_REASON: Record<string, string> = {
   display_order: 'Display order is managed from the programs list.',
   id: 'Ids are assigned automatically.',
 };
-const KNOWN_CONTENT = new Set(['tagline', 'overview', 'quickFacts', 'phases', 'eligibility', 'benefits', 'faq', 'contactNote']);
+const KNOWN_CONTENT = new Set(['tagline', 'overview', 'objectives', 'howToApply', 'quickFacts', 'phases', 'eligibility', 'benefits', 'faq', 'contactNote']);
 
 const has = (obj: object, key: string): boolean => Object.prototype.hasOwnProperty.call(obj, key);
 
@@ -241,7 +243,7 @@ export function parseProgramJson(rawText: string): ProgramImportResult {
       }
 
       for (const [key, formKey, max] of [
-        ['tagline', 'tagline', MAX_LINE], ['overview', 'overview', MAX_TEXT], ['contactNote', 'contactNote', MAX_LINE],
+        ['tagline', 'tagline', MAX_LINE], ['overview', 'overview', MAX_TEXT], ['howToApply', 'howToApply', MAX_TEXT], ['contactNote', 'contactNote', MAX_LINE],
       ] as const) {
         if (has(content, key)) {
           const t = str(`content.${key}`, content[key], max);
@@ -263,7 +265,7 @@ export function parseProgramJson(rawText: string): ProgramImportResult {
         return v;
       };
 
-      for (const key of ['eligibility', 'benefits'] as const) {
+      for (const key of ['objectives', 'eligibility', 'benefits'] as const) {
         const items = list(key);
         if (items) {
           const out: string[] = [];
@@ -347,6 +349,8 @@ export const EXAMPLE_PROGRAM_JSON = {
   content: {
     tagline: '',
     overview: '',
+    objectives: [],
+    howToApply: '',
     quickFacts: [{ label: 'Participants', value: '30 girls' }],
     phases: [{ title: 'Phase 1', description: 'What happens in this phase.' }],
     eligibility: [],

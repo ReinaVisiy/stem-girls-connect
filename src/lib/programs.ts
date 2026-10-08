@@ -24,6 +24,8 @@ export const CATEGORY_LABELS: Record<ProgramCategory, string> = {
 export interface ProgramContent {
   tagline?: string;
   overview?: string;
+  objectives?: string[];
+  howToApply?: string;
   quickFacts?: { label: string; value: string }[];
   phases?: { title: string; description: string }[];
   eligibility?: string[];

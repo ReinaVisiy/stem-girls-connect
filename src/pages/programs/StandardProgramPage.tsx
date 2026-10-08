@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { CheckCircle2, ChevronDown } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, ChevronDown, Target } from 'lucide-react';
 import Seo from '../../components/Seo';
 import ScrollReveal from '../../components/ScrollReveal';
 import ReportActions from '../../components/ReportActions';
@@ -71,6 +71,8 @@ const StandardProgramPage: React.FC<{ program: ProgramDetail; preview?: boolean 
 
   const overviewParagraphs = (c.overview ?? '').split(/\n{2,}/).map((t) => t.trim()).filter(Boolean);
   const phases = (c.phases ?? []).filter((p) => p.title?.trim());
+  const objectives = (c.objectives ?? []).filter((t) => t?.trim());
+  const howToApplyParagraphs = (c.howToApply ?? '').split(/\n{2,}/).map((t) => t.trim()).filter(Boolean);
   const eligibility = (c.eligibility ?? []).filter((t) => t?.trim());
   const benefits = (c.benefits ?? []).filter((t) => t?.trim());
   const faq = (c.faq ?? []).filter((f) => f.question?.trim() && f.answer?.trim());
@@ -83,7 +85,12 @@ const StandardProgramPage: React.FC<{ program: ProgramDetail; preview?: boolean 
   ].filter(Boolean) as { label: string; value: string }[];
 
   const hasApplyCta = program.status === 'applications_open' && !!safeUrl(program.application_url);
-  const showFinalCta = hasApplyCta || !!c.contactNote?.trim();
+  // Instructions are irrelevant once a program has concluded.
+  const showHowToApply = howToApplyParagraphs.length > 0 && program.status !== 'completed';
+  const applicationBased = !!program.application_url || ['upcoming', 'applications_open', 'applications_closed'].includes(program.status);
+  // Avoid a second Apply button when the How to Apply section already carries one.
+  const showFinalApply = hasApplyCta && !showHowToApply;
+  const showFinalCta = showFinalApply || !!c.contactNote?.trim();
 
   return (
     <div className="pb-24">
@@ -102,6 +109,9 @@ const StandardProgramPage: React.FC<{ program: ProgramDetail; preview?: boolean 
         )}
         <div className="absolute inset-0 bg-gradient-to-br from-[#82246d]/90 to-[#486e7c]/85" aria-hidden="true" />
         <div className="relative container mx-auto px-6 py-20 md:py-28 max-w-4xl">
+          <Link to="/programs" className="inline-flex items-center gap-2 min-h-11 mb-4 text-sm font-extrabold uppercase tracking-widest opacity-90 hover:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+            <ArrowLeft size={16} aria-hidden="true" /> All Programs
+          </Link>
           <div className="flex flex-wrap gap-2 mb-6">
             <span className="inline-block px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-widest bg-white/20">
               {categoryLabel(program.category)}
@@ -131,17 +141,30 @@ const StandardProgramPage: React.FC<{ program: ProgramDetail; preview?: boolean 
 
       <div className="container mx-auto px-6 max-w-4xl">
         {/* 3. About */}
-        {overviewParagraphs.length > 0 && (
+        {(overviewParagraphs.length > 0 || objectives.length > 0) && (
           <ScrollReveal className="pt-20">
             <section aria-labelledby="about-heading">
               <SectionHeading id="about-heading">About the Program</SectionHeading>
-              <div className="space-y-4">
+              {overviewParagraphs.length > 0 && <div className="space-y-4">
                 {overviewParagraphs.map((para, i) => (
                   <p key={i} className="text-lg font-semibold text-brandSlate dark:text-slate-300 leading-relaxed">
                     {para}
                   </p>
                 ))}
-              </div>
+              </div>}
+              {objectives.length > 0 && (
+                <div className={overviewParagraphs.length > 0 ? 'mt-8' : ''}>
+                  <h3 className="text-lg font-extrabold text-brandPink dark:text-pink-300 uppercase tracking-tight mb-4">Program Objectives</h3>
+                  <ul className="space-y-3">
+                    {objectives.map((item, i) => (
+                      <li key={i} className="flex items-start gap-3">
+                        <Target size={20} className="mt-0.5 flex-shrink-0 text-[#1d7448] dark:text-emerald-400" aria-hidden="true" />
+                        <span className="text-base font-semibold text-brandSlate dark:text-slate-300">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </section>
           </ScrollReveal>
         )}
@@ -175,7 +198,7 @@ const StandardProgramPage: React.FC<{ program: ProgramDetail; preview?: boolean 
         {eligibility.length > 0 && (
           <ScrollReveal className="pt-20">
             <section aria-labelledby="eligibility-heading">
-              <SectionHeading id="eligibility-heading">Who Can Apply</SectionHeading>
+              <SectionHeading id="eligibility-heading">Who Can Participate?</SectionHeading>
               <ul className="space-y-3">
                 {eligibility.map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
@@ -192,7 +215,7 @@ const StandardProgramPage: React.FC<{ program: ProgramDetail; preview?: boolean 
         {benefits.length > 0 && (
           <ScrollReveal className="pt-20">
             <section aria-labelledby="benefits-heading">
-              <SectionHeading id="benefits-heading">What Participants Receive</SectionHeading>
+              <SectionHeading id="benefits-heading">What Participants Gain</SectionHeading>
               <ul className="space-y-3">
                 {benefits.map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
@@ -222,7 +245,22 @@ const StandardProgramPage: React.FC<{ program: ProgramDetail; preview?: boolean 
           </ScrollReveal>
         )}
 
-        {/* 8. FAQ */}
+        {/* 8. How to apply / participate */}
+        {showHowToApply && (
+          <ScrollReveal className="pt-20">
+            <section aria-labelledby="apply-heading">
+              <SectionHeading id="apply-heading">{applicationBased ? 'How to Apply' : 'How to Participate'}</SectionHeading>
+              <div className="space-y-4 mb-8">
+                {howToApplyParagraphs.map((para, i) => (
+                  <p key={i} className="text-lg font-semibold text-brandSlate dark:text-slate-300 leading-relaxed">{para}</p>
+                ))}
+              </div>
+              {hasApplyCta && <ProgramCta program={program} />}
+            </section>
+          </ScrollReveal>
+        )}
+
+        {/* 9. FAQ */}
         {faq.length > 0 && (
           <ScrollReveal className="pt-20">
             <section aria-labelledby="faq-heading">
@@ -267,14 +305,14 @@ const StandardProgramPage: React.FC<{ program: ProgramDetail; preview?: boolean 
       {showFinalCta && (
         <section className="container mx-auto px-6 pt-20" aria-label="Get involved">
           <div className="max-w-4xl mx-auto bg-gradient-to-br from-[#82246d] to-[#486e7c] text-white rounded-[40px] p-10 md:p-14 text-center">
-            {hasApplyCta && (
+            {showFinalApply && (
               <>
                 <h2 className="text-2xl md:text-3xl font-extrabold uppercase tracking-tighter mb-6">Ready to take part?</h2>
                 <ProgramCta program={program} onDark />
               </>
             )}
             {c.contactNote?.trim() && (
-              <p className={`text-base font-semibold ${hasApplyCta ? 'mt-8' : ''}`}>
+              <p className={`text-base font-semibold ${showFinalApply ? 'mt-8' : ''}`}>
                 {c.contactNote}{' '}
                 <Link to="/contact" className="underline font-extrabold">
                   Contact us

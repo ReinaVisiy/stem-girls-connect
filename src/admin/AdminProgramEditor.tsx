@@ -80,6 +80,8 @@ interface FormState {
   featured: boolean;
   tagline: string;
   overview: string;
+  objectives: string[];
+  howToApply: string;
   quickFacts: { label: string; value: string }[];
   phases: { title: string; description: string }[];
   eligibility: string[];
@@ -94,7 +96,7 @@ const emptyForm: FormState = {
   startDate: '', endDate: '', applicationOpenDate: '', applicationCloseDate: '',
   applicationUrl: '', applicationButtonText: '', location: '', format: '', cost: '',
   published: false, featured: false,
-  tagline: '', overview: '', quickFacts: [], phases: [], eligibility: [], benefits: [], faq: [], contactNote: '',
+  tagline: '', overview: '', objectives: [], howToApply: '', quickFacts: [], phases: [], eligibility: [], benefits: [], faq: [], contactNote: '',
 };
 
 /** Label + control with a real for/id association. */
@@ -273,6 +275,8 @@ const AdminProgramEditor: React.FC = () => {
         featured: data.featured,
         tagline: c.tagline ?? '',
         overview: c.overview ?? '',
+        objectives: c.objectives ?? [],
+        howToApply: c.howToApply ?? '',
         quickFacts: c.quickFacts ?? [],
         phases: c.phases ?? [],
         eligibility: c.eligibility ?? [],
@@ -383,6 +387,8 @@ const AdminProgramEditor: React.FC = () => {
     ...originalContent,
     tagline: form.tagline.trim(),
     overview: form.overview.trim(),
+    objectives: form.objectives.map((t) => t.trim()).filter(Boolean),
+    howToApply: form.howToApply.trim(),
     quickFacts: form.quickFacts.filter((f) => f.label.trim() && f.value.trim()).map((f) => ({ label: f.label.trim(), value: f.value.trim() })),
     phases: form.phases.filter((p) => p.title.trim()).map((p) => ({ title: p.title.trim(), description: p.description.trim() })),
     eligibility: form.eligibility.map((t) => t.trim()).filter(Boolean),
@@ -810,11 +816,22 @@ const AdminProgramEditor: React.FC = () => {
             </AdminCard>
 
             <AdminCard>
-              <StringListEditor title="Eligibility (who can apply)" itemLabel="Eligibility item" addLabel="Add Item" items={form.eligibility} onChange={(v) => set('eligibility', v)} />
+              <StringListEditor title="Program objectives (optional)" itemLabel="Objective" addLabel="Add Objective" items={form.objectives} onChange={(v) => set('objectives', v)} />
+            </AdminCard>
+
+            <AdminCard>
+              <StringListEditor title="Eligibility (who can participate)" itemLabel="Eligibility item" addLabel="Add Item" items={form.eligibility} onChange={(v) => set('eligibility', v)} />
             </AdminCard>
 
             <AdminCard>
               <StringListEditor title="Participant benefits" itemLabel="Benefit" addLabel="Add Item" items={form.benefits} onChange={(v) => set('benefits', v)} />
+            </AdminCard>
+
+            <AdminCard>
+              <SectionTitle>How to apply or participate</SectionTitle>
+              <Field label="Instructions" hint="Optional. Explain what people need to do (apply, register, just turn up). Separate paragraphs with a blank line. The Apply button only appears when status is Applications Open and an application URL is set.">
+                {(fid) => <AdminTextarea id={fid} rows={4} value={form.howToApply} onChange={(e) => set('howToApply', e.target.value)} />}
+              </Field>
             </AdminCard>
 
             <AdminCard>
