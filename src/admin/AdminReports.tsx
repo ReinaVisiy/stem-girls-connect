@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Trash2, FileText, ExternalLink, Download, Pencil, X, GripVertical } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 import { uploadToBucketWithPath, describeUploadError } from './uploadFile';
-import { buildReportUrls, makeDownloadName } from '../lib/reportUrls';
+import { buildReportUrls, makeDownloadName, resolveDownloadName } from '../lib/reportUrls';
 import { AdminPageHeader, AdminCard, AdminButton, AdminInput, AdminTextarea, AdminLabel, AdminBanner, AdminFileName } from './AdminUI';
 
 interface Report {
@@ -79,18 +79,23 @@ const AdminReports: React.FC = () => {
       const title = form.title.trim();
 
       if (editingId) {
+        const existing = reports.find((r) => r.id === editingId);
         const updatePayload: Record<string, unknown> = {
           title,
           description: form.description.trim() || null,
           start_date: form.startDate || null,
           end_date: form.endDate || null,
+          // Keep the download filename in step with the title even when the
+          // PDF itself is not replaced.
+          download_name: existing
+            ? resolveDownloadName(existing, title, uploaded !== null)
+            : makeDownloadName(title),
         };
         // Replacing the PDF: point at the new object and keep the legacy
         // column in sync. The old storage object is intentionally left alone.
         if (uploaded) {
           updatePayload.file_path = uploaded.path;
           updatePayload.file_url = uploaded.publicUrl;
-          updatePayload.download_name = makeDownloadName(title);
         }
 
         const { error: err } = await supabase.from('reports').update(updatePayload).eq('id', editingId);

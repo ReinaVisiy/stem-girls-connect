@@ -43,6 +43,23 @@ export function makeDownloadName(title: string): string {
   return `${base || 'Report'}.pdf`;
 }
 
+/**
+ * Decides what `download_name` an edited report should be saved with.
+ * The name is regenerated from the title when the title changed or the PDF
+ * was replaced, or when the row has no name yet (legacy rows). Otherwise
+ * the stored name is kept, so saving unrelated edits never rewrites it.
+ */
+export function resolveDownloadName(
+  existing: { title: string; download_name?: string | null },
+  newTitle: string,
+  fileReplaced: boolean,
+): string {
+  const title = newTitle.trim();
+  const titleChanged = title !== existing.title.trim();
+  if (fileReplaced || titleChanged || !existing.download_name) return makeDownloadName(title);
+  return existing.download_name;
+}
+
 function encodePath(path: string): string {
   return path
     .split('/')
