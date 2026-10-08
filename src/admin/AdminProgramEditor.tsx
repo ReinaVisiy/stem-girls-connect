@@ -1,11 +1,12 @@
-import React, { useEffect, useId, useMemo, useState } from 'react';
-import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Eye, Pencil, Plus, Trash2 } from 'lucide-react';
+import React, { useEffect, useId, useMemo, useRef, useState } from 'react';
+import { Link, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { ArrowLeft, Download, Eye, FileJson, Pencil, Plus, Trash2 } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 import { uploadToBucket, describeUploadError } from './uploadFile';
 import {
   AdminPageHeader, AdminCard, AdminButton, AdminInput, AdminTextarea, AdminLabel, AdminSelect, AdminBanner, AdminFileName,
 } from './AdminUI';
+import { parseProgramJson, readProgramJsonFile, downloadExampleProgramJson } from '../lib/programImport';
 import StandardProgramPage from '../pages/programs/StandardProgramPage';
 import { buildReportUrls, type PublicReport } from '../lib/reportUrls';
 import {
@@ -192,6 +193,7 @@ const AdminProgramEditor: React.FC = () => {
   const isNew = !id;
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const location = useLocation();
 
   const [form, setForm] = useState<FormState>(emptyForm);
   const [originalContent, setOriginalContent] = useState<ProgramContent>({});
@@ -209,6 +211,15 @@ const AdminProgramEditor: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [preview, setPreview] = useState(searchParams.get('preview') === '1');
+  const [importResult, setImportResult] = useState<{
+    fileName: string;
+    applied: number;
+    errors: string[];
+    warnings: string[];
+    fatal: boolean;
+  } | null>(null);
+  const importPanelRef = useRef<HTMLDivElement>(null);
+  const handledNavImport = useRef(false);
 
   const set = <K extends keyof FormState>(key: K, value: FormState[K]) => setForm((f) => ({ ...f, [key]: value }));
 
@@ -296,6 +307,52 @@ const AdminProgramEditor: React.FC = () => {
   };
 
   const isStandard = form.pageTemplate === 'standard';
+
+  /**
+   * Prefills the form from program JSON. Never sets published/featured,
+   * never saves anything: the admin reviews, edits and presses Save.
+   */
+  const applyImport = (text: string, fileName: string) => {
+    const result = parseProgramJson(text);
+    const applied = Object.keys(result.values).length;
+
+    if (!result.fatal && applied > 0) {
+      setForm((f) => {
+        const next = { ...f, ...result.values };
+        if (!result.values.slug && result.values.title && !slugTouched) next.slug = slugify(result.values.title);
+        return next;
+      });
+      if (result.values.slug) setSlugTouched(true);
+      setSuccess(null);
+      setError(null);
+    }
+
+    setImportResult({ fileName, applied, errors: result.errors, warnings: result.warnings, fatal: result.fatal });
+    setTimeout(() => importPanelRef.current?.focus(), 0);
+  };
+
+  const handleImportFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = ''; // allow re-selecting the same file
+    if (!file) return;
+    if (!isNew && !window.confirm('Replace the matching fields in this form with the values from the file? Nothing is saved until you press Save Changes.')) return;
+    try {
+      applyImport(await readProgramJsonFile(file), file.name);
+    } catch (err) {
+      setImportResult({ fileName: file.name, applied: 0, errors: [err instanceof Error ? err.message : 'The file could not be read.'], warnings: [], fatal: true });
+      setTimeout(() => importPanelRef.current?.focus(), 0);
+    }
+  };
+
+  // A file chosen on the programs list arrives via router state.
+  useEffect(() => {
+    const state = location.state as { importText?: string; importFileName?: string } | null;
+    if (!isNew || loading || handledNavImport.current || !state?.importText) return;
+    handledNavImport.current = true;
+    applyImport(state.importText, state.importFileName ?? 'program.json');
+    navigate('.', { replace: true, state: null });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isNew, loading, location.state]);
 
   const templateOptions = useMemo(
     () => (SELECTABLE_TEMPLATES.includes(form.pageTemplate) ? SELECTABLE_TEMPLATES : [...SELECTABLE_TEMPLATES, form.pageTemplate]),
@@ -519,6 +576,63 @@ const AdminProgramEditor: React.FC = () => {
       {success && <AdminBanner type="success">{success}</AdminBanner>}
 
       <form onSubmit={handleSave} className="space-y-8">
+        {/* ---- JSON import (optional) ---- */}
+        {(isNew || isStandard) && (
+          <AdminCard>
+            <SectionTitle>Import from JSON (optional)</SectionTitle>
+            <p className="text-sm font-medium text-brandSlate mb-4">
+              Prefill this form from a <code>.json</code> file. You can review and change everything before saving, and nothing is published automatically. Images and reports are added below, not through the file.
+            </p>
+            <div className="flex flex-wrap items-center gap-3">
+              <label className="inline-flex items-center gap-2 px-5 py-2.5 min-h-11 rounded-xl text-xs font-extrabold uppercase tracking-widest bg-brandPink text-white shadow-md shadow-brandPink/20 hover:scale-[1.02] transition-all cursor-pointer focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-brandPink">
+                <FileJson size={14} aria-hidden="true" /> Import Program JSON
+                <input type="file" accept=".json,application/json" onChange={handleImportFile} className="sr-only" />
+              </label>
+              <AdminButton type="button" variant="ghost" onClick={downloadExampleProgramJson}>
+                <span className="inline-flex items-center gap-2">
+                  <Download size={14} aria-hidden="true" /> Download example file
+                </span>
+              </AdminButton>
+            </div>
+
+            {importResult && (
+              <div
+                ref={importPanelRef}
+                tabIndex={-1}
+                role={importResult.errors.length > 0 || importResult.fatal ? 'alert' : 'status'}
+                className="mt-6 space-y-3 outline-none"
+              >
+                {!importResult.fatal && importResult.applied > 0 && (
+                  <AdminBanner type="success">
+                    Imported {importResult.applied} field{importResult.applied === 1 ? '' : 's'} from “{importResult.fileName}”. Review everything below, then press {isNew ? 'Create Program' : 'Save Changes'}. Nothing has been saved or published yet.
+                  </AdminBanner>
+                )}
+                {!importResult.fatal && importResult.applied === 0 && importResult.errors.length === 0 && (
+                  <AdminBanner type="error">“{importResult.fileName}” did not contain any fields this form can use.</AdminBanner>
+                )}
+                {importResult.errors.length > 0 && (
+                  <div className="p-4 rounded-2xl text-sm font-bold bg-red-50 text-red-600 border border-red-100">
+                    <p className="mb-2">
+                      {importResult.fatal ? `“${importResult.fileName}” could not be imported:` : 'These parts of the file were skipped. Please fix them in the form or the file:'}
+                    </p>
+                    <ul className="list-disc pl-5 space-y-1 font-medium">
+                      {importResult.errors.map((m, i) => <li key={i}>{m}</li>)}
+                    </ul>
+                  </div>
+                )}
+                {importResult.warnings.length > 0 && (
+                  <div className="p-4 rounded-2xl text-sm font-bold bg-amber-50 text-amber-800 border border-amber-100">
+                    <p className="mb-2">Notes:</p>
+                    <ul className="list-disc pl-5 space-y-1 font-medium">
+                      {importResult.warnings.map((m, i) => <li key={i}>{m}</li>)}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
+          </AdminCard>
+        )}
+
         {/* ---- Basics ---- */}
         <AdminCard>
           <SectionTitle>Program details</SectionTitle>

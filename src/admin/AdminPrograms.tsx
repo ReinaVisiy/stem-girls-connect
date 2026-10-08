@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Trash2, Pencil, Eye, EyeOff, Plus } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Trash2, Pencil, Eye, EyeOff, Plus, FileJson } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 import { AdminPageHeader, AdminCard, AdminButton, AdminBanner } from './AdminUI';
 import { categoryLabel, statusLabel } from '../lib/programs';
+import { readProgramJsonFile } from '../lib/programImport';
 
 interface ProgramRow {
   id: number;
@@ -31,6 +32,7 @@ const AdminPrograms: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [busyId, setBusyId] = useState<number | null>(null);
+  const navigate = useNavigate();
 
   const load = async () => {
     setLoading(true);
@@ -48,6 +50,20 @@ const AdminPrograms: React.FC = () => {
   useEffect(() => {
     load();
   }, []);
+
+  // Reads the chosen .json here, then hands it to the editor, which validates
+  // it and prefills the normal form. Nothing is saved at this point.
+  const handleImportFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    try {
+      const importText = await readProgramJsonFile(file);
+      navigate('/admin/programs/new', { state: { importText, importFileName: file.name } });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'The file could not be read.');
+    }
+  };
 
   const togglePublished = async (p: ProgramRow) => {
     setBusyId(p.id);
@@ -96,13 +112,17 @@ const AdminPrograms: React.FC = () => {
       />
       {error && <AdminBanner type="error">{error}</AdminBanner>}
 
-      <div className="mb-8">
+      <div className="mb-8 flex flex-wrap gap-3">
         <Link
           to="/admin/programs/new"
           className="inline-flex items-center gap-2 bg-brandPink text-white px-5 py-2.5 rounded-xl text-xs font-extrabold uppercase tracking-widest shadow-md shadow-brandPink/20 hover:scale-[1.02] transition-all"
         >
           <Plus size={14} aria-hidden="true" /> Add Program
         </Link>
+        <label className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-extrabold uppercase tracking-widest bg-gray-50 text-brandSlate hover:bg-gray-100 cursor-pointer focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-brandPink">
+          <FileJson size={14} aria-hidden="true" /> Import Program JSON
+          <input type="file" accept=".json,application/json" onChange={handleImportFile} className="sr-only" />
+        </label>
       </div>
 
       {loading ? (
