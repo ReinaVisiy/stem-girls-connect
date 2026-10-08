@@ -52,7 +52,7 @@ const ProgramCta: React.FC<{ program: ProgramDetail; onDark?: boolean }> = ({ pr
   }
 };
 
-const StandardProgramPage: React.FC<{ program: ProgramDetail }> = ({ program }) => {
+const StandardProgramPage: React.FC<{ program: ProgramDetail; preview?: boolean }> = ({ program, preview = false }) => {
   const c = program.content ?? {};
 
   const dateRange = [formatProgramDate(program.start_date), formatProgramDate(program.end_date)].filter(Boolean).join(' – ');
@@ -87,11 +87,13 @@ const StandardProgramPage: React.FC<{ program: ProgramDetail }> = ({ program }) 
 
   return (
     <div className="pb-24">
+      {!preview && (
       <Seo
         title={`${program.title} | STEM Girls Connect`}
         description={program.short_description || c.tagline || `Learn about ${program.title}, a STEM Girls Connect program.`}
         path={`/programs/${program.slug}`}
       />
+      )}
 
       {/* 1. Hero */}
       <section className="relative bg-brandPink text-white overflow-hidden">

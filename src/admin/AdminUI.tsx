@@ -41,8 +41,15 @@ export const AdminTextarea: React.FC<React.TextareaHTMLAttributes<HTMLTextAreaEl
   />
 );
 
-export const AdminLabel: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <label className="block text-xs font-extrabold text-brandSlate uppercase tracking-widest mb-2">{children}</label>
+export const AdminLabel: React.FC<{ children: React.ReactNode; htmlFor?: string }> = ({ children, htmlFor }) => (
+  <label htmlFor={htmlFor} className="block text-xs font-extrabold text-brandSlate uppercase tracking-widest mb-2">{children}</label>
+);
+
+export const AdminSelect: React.FC<React.SelectHTMLAttributes<HTMLSelectElement>> = ({ className = '', ...props }) => (
+  <select
+    {...props}
+    className={`w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brandPink/40 ${className}`}
+  />
 );
 
 function formatFileSize(bytes: number): string {

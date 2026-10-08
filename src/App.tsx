@@ -28,6 +28,8 @@ const AdminBureau = lazy(() => import('./admin/AdminBureau'));
 const AdminPartners = lazy(() => import('./admin/AdminPartners'));
 const AdminPhotos = lazy(() => import('./admin/AdminPhotos'));
 const AdminContent = lazy(() => import('./admin/AdminContent'));
+const AdminPrograms = lazy(() => import('./admin/AdminPrograms'));
+const AdminProgramEditor = lazy(() => import('./admin/AdminProgramEditor'));
 const AdminReports = lazy(() => import('./admin/AdminReports'));
 const AdminPosts = lazy(() => import('./admin/AdminPosts'));
 const AdminStats = lazy(() => import('./admin/AdminStats'));
@@ -94,6 +96,9 @@ const App: React.FC = () => {
                   <Route path="partners" element={<AdminPartners />} />
                   <Route path="photos" element={<AdminPhotos />} />
                   <Route path="content" element={<AdminContent />} />
+                  <Route path="programs" element={<AdminPrograms />} />
+                  <Route path="programs/new" element={<AdminProgramEditor />} />
+                  <Route path="programs/:id" element={<AdminProgramEditor />} />
                   <Route path="reports" element={<AdminReports />} />
                   <Route path="posts" element={<AdminPosts />} />
                   <Route path="stats" element={<AdminStats />} />

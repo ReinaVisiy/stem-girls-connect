@@ -1,11 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Users, Image as ImageIcon, FileText, Newspaper, UsersRound, BarChart3, Mail } from 'lucide-react';
+import { Users, Image as ImageIcon, FileText, Newspaper, UsersRound, BarChart3, Mail, Layers } from 'lucide-react';
 import { useApiData } from '../hooks/useApiData';
 import { AdminPageHeader, AdminCard } from './AdminUI';
 
 const AdminDashboard: React.FC = () => {
   const { data: partners } = useApiData<unknown[]>('/api/partners');
+  const { data: programs } = useApiData<unknown[]>('/api/programs');
   const { data: reports } = useApiData<unknown[]>('/api/reports');
   const { data: posts } = useApiData<unknown[]>('/api/posts');
   const { data: bureau } = useApiData<unknown[]>('/api/bureau');
@@ -14,6 +15,7 @@ const AdminDashboard: React.FC = () => {
   const cards = [
     { to: '/admin/partners', label: 'Partners', icon: Users, count: partners?.length },
     { to: '/admin/photos', label: 'Photos', icon: ImageIcon, count: undefined },
+    { to: '/admin/programs', label: 'Programs', icon: Layers, count: programs?.length },
     { to: '/admin/reports', label: 'Reports', icon: FileText, count: reports?.length },
     { to: '/admin/posts', label: 'Posts', icon: Newspaper, count: posts?.length },
     { to: '/admin/bureau', label: 'Bureau', icon: UsersRound, count: bureau?.length },
