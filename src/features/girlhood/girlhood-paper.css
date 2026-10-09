@@ -392,6 +392,9 @@ body:has(.girlhood-composer[open]) {overflow:hidden;}
 .girlhood-composer label {display:block;margin:12px 0;}
 .girlhood-composer input:not([type=checkbox]),.girlhood-composer select {display:block;border:1px solid #55645a;padding:10px;max-width:100%;width:100%;}
 .girlhood-composer input[type=checkbox] {margin-right:10px;}
+.girlhood-composer select {min-height:48px;margin-bottom:20px;}
+.girlhood-composer .girlhood-button {margin:4px 0 8px;min-height:48px;}
+.girlhood-composer fieldset label {padding:6px 0;min-height:44px;}
 .girlhood-composer figure {margin:24px 0;}
 .girlhood-composer figure img {display:block;width:100%;height:auto;margin-bottom:16px;}
 @media(min-width:768px) {.girlhood-notes-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;} .girlhood-paper .girlhood-note-excerpt{font-size:clamp(14px,2vw,22px);}}

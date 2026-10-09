@@ -381,6 +381,8 @@ body:has(.girlhood-note-dialog[open]) {
   padding: 0.5rem 0 1.5rem;
 }
 .girlhood-choice {
+  padding: 0.35rem 0;
+  min-height: 44px;
   display: flex;
   align-items: flex-start;
   gap: 0.7rem;
@@ -393,11 +395,17 @@ body:has(.girlhood-note-dialog[open]) {
   flex-shrink: 0;
 }
 .girlhood-personal {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 1rem;
+  display: grid;
+  gap: 0.35rem;
   margin-bottom: 1.4rem;
+}
+.girlhood-personal > p {
+  font-size: 0.85rem;
+  margin: 0 0 0.6rem;
+  opacity: 0.85;
+}
+.girlhood-personal > .girlhood-choice {
+  margin: 0.4rem 0 0;
 }
 .girlhood-personal label > span {
   font-size: 0.85rem;
@@ -419,7 +427,9 @@ body:has(.girlhood-note-dialog[open]) {
   width: 100%;
 }
 .girlhood-age {
-  width: 85px;
+  width: 6.5rem;
+  min-height: 48px;
+  font-size: 1.1rem;
 }
 .girlhood-extra-choices {
   border-block: 1px solid var(--line);
@@ -563,9 +573,6 @@ body:has(.girlhood-note-dialog[open]) {
   }
   .girlhood-identity {
     grid-template-columns: 1fr;
-  }
-  .girlhood-personal > .girlhood-choice {
-    margin-left: 0;
   }
   .girlhood-note-dialog {
     width: 100%;
