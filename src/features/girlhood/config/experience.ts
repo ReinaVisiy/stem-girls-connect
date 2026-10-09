@@ -48,7 +48,7 @@ export const experience = {
     done: "Clear receipt from this tab",
     doneHelp:
       "Clears this tab’s recovery key and starts a fresh form. It does not withdraw your contribution.",
-    saved: "Your voice has a place here.",
+    saved: "Your little note is safely with us. Thank you for sharing it.",
     savedHelp: "Thank you for imagining a different future with us.",
     withdrawn: "This contribution has already been withdrawn.",
     receipt: "Private contribution receipt",
@@ -58,7 +58,7 @@ export const experience = {
     less: "Close",
     loading: "Gathering voices…",
     privacyNote:
-      "Your answers stay in memory. A private receipt-recovery key is kept in this tab until you clear it or close the tab.",
+      "",
     recoverMissing:
       "No saved contribution was found yet. You can retry or complete the form using this same attempt.",
     savedReminder:
@@ -115,7 +115,7 @@ export const experience = {
     done: "Effacer le reçu de cet onglet",
     doneHelp:
       "Efface la clé de récupération de cet onglet et ouvre un nouveau formulaire. Cela ne retire pas votre contribution.",
-    saved: "Votre voix a sa place ici.",
+    saved: "Votre petit mot est bien arrivé. Merci de l’avoir partagé.",
     savedHelp: "Merci d’imaginer un autre avenir avec nous.",
     withdrawn: "Cette contribution a déjà été retirée.",
     receipt: "Reçu privé de contribution",

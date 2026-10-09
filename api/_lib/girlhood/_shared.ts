@@ -66,7 +66,7 @@ export function postGuard(req: VercelRequest, res: VercelResponse) {
     res.status(400).json({ error: message(req, "invalid") });
     return false;
   }
-  if (Buffer.byteLength(JSON.stringify(req.body), "utf8") > 16000) {
+  if (Buffer.byteLength(JSON.stringify(req.body), "utf8") > 48000) {
     res.status(413).json({ error: message(req, "invalid") });
     return false;
   }

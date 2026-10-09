@@ -46,14 +46,14 @@ export function validate(input: Record<string, unknown>): string[] {
   if (!["en", "fr"].includes(String(input.language))) errors.push("language");
   if (
     typeof input.girlhoodResponse !== "string" ||
-    plain(input.girlhoodResponse).length < 10 ||
-    plain(input.girlhoodResponse).length > 500
+    plain(input.girlhoodResponse).length < 1 ||
+    plain(input.girlhoodResponse).length > 2000
   )
     errors.push("answers");
   for (const key of ["futureResponse", "supportResponse"]) {
     if (
       input[key] != null &&
-      (typeof input[key] !== "string" || plain(input[key]).length > 500)
+      (typeof input[key] !== "string" || plain(input[key]).length > 2000)
     )
       errors.push("answers");
   }

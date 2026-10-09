@@ -13,7 +13,7 @@
     "typecheck": "tsc --noEmit",
     "check": "npm run typecheck && npm test && npm run build",
     "preview:fixtures": "node tests/girlhood/ui-preview.mjs",
-    "test:browser": "node tests/girlhood/browser-smoke.mjs",
+    "test:browser": "node tests/girlhood/browser-design.mjs",
     "test:browser:release": "node tests/girlhood/browser-release.mjs"
   },
   "dependencies": {

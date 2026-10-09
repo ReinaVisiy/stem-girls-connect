@@ -1,6 +1,6 @@
-import { ContributionLink } from '../components/CampaignAvailability';
-import { useGirlhoodRuntime } from '../GirlhoodRuntime';
-import { useGirlhoodBasePath } from '../GirlhoodPaths';
+import { ContributionLink } from "../components/CampaignAvailability";
+import { useGirlhoodRuntime } from "../GirlhoodRuntime";
+import { useGirlhoodBasePath } from "../GirlhoodPaths";
 import { useEffect, useState } from "react";
 import { Link } from "../GirlhoodRuntime";
 import Seo from "../../../components/Seo";
@@ -16,7 +16,6 @@ export default function GirlhoodWall() {
   const [cursors, setCursors] = useState<(string | null)[]>([null]);
   const [nextCursor, setNextCursor] = useState<string | null>(null);
   const [category, setCategory] = useState("all"),
-    [responseLanguage, setResponseLanguage] = useState("all"),
     [page, setPage] = useState(1);
   const [responses, setResponses] = useState<GirlhoodPublicResponse[]>([]),
     [hasMore, setHasMore] = useState(false),
@@ -31,9 +30,9 @@ export default function GirlhoodWall() {
     const query = new URLSearchParams({
       page: String(page),
       category,
-      language: responseLanguage,
+      language: "all",
     });
-    if (cursor) query.set('cursor', cursor);
+    if (cursor) query.set("cursor", cursor);
     request("/api/girlhood/wall?" + query, { signal: controller.signal })
       .then(async (r) => {
         if (!r.ok) throw new Error();
@@ -51,26 +50,20 @@ export default function GirlhoodWall() {
         if (!controller.signal.aborted) setLoading(false);
       });
     return () => controller.abort();
-  }, [category, responseLanguage, page, cursor, retry, request]);
+  }, [category, page, cursor, retry, request]);
   return (
-    <section className="mx-auto max-w-6xl px-5 py-12">
+    <section className="girlhood-wall-page">
       <Seo
         title={t.voices + " | Girlhood Should Be Hers"}
         description={t.wallIntro}
-        path={basePath + '/wall'}
+        path={basePath + "/wall"}
       />
-      <h1 className="text-5xl font-black">{t.voices}</h1>
+      <h1 className="girlhood-page-title">{t.voices}</h1>
       <p className="mt-4 max-w-2xl">{t.wallIntro}</p>
-      <p className="mt-3 max-w-3xl text-sm">{language === 'fr' ? 'Les filles et les jeunes femmes sont au cœur de cette campagne. Les témoignages des femmes adultes et des alliés présentent leurs propres perspectives.' : 'Girls and young women are at the heart of this campaign. Adult women and allies speak from their own perspectives.'}</p>
-      <ContributionLink className="girlhood-button mt-6 inline-block"
-        >
+      <ContributionLink className="girlhood-button mt-6 inline-block">
         {t.add}
       </ContributionLink>
-      <div
-        className="mt-8 flex flex-wrap gap-2"
-        role="group"
-        aria-label={t.voices}
-      >
+      <div className="girlhood-filters" role="group" aria-label={t.voices}>
         {["all", ...Object.keys(t.categories)].map((key) => (
           <button
             key={key}
@@ -90,33 +83,10 @@ export default function GirlhoodWall() {
           </button>
         ))}
       </div>
-      <label className="mt-5 block font-bold">
-        {t.responseLanguage}
-        <select
-          className="girlhood-input mt-2 max-w-xs"
-          value={responseLanguage}
-          onChange={(e) => {
-            setResponseLanguage(e.target.value);
-            setPage(1);
-            setCursors([null]);
-          }}
-        >
-          <option value="all">{t.allLanguages}</option>
-          <option value="en" lang="en">
-            English
-          </option>
-          <option value="fr" lang="fr">
-            Français
-          </option>
-        </select>
-      </label>
       {loading ? (
         <div className="mt-8">
           <p role="status">{t.loading}</p>
-          <div
-            aria-hidden="true"
-            className="mt-4 grid gap-5 md:grid-cols-2 lg:grid-cols-3"
-          >
+          <div aria-hidden="true" className="girlhood-notes-grid">
             {[0, 1, 2].map((i) => (
               <div key={i} className="girlhood-skeleton" />
             ))}
@@ -137,7 +107,7 @@ export default function GirlhoodWall() {
           {t.empty}
         </p>
       ) : (
-        <div className="mt-8 grid items-start gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div className="girlhood-notes-grid">
           {responses.map((r) => (
             <GirlhoodResponseCard
               key={r.public_reference}
@@ -147,30 +117,34 @@ export default function GirlhoodWall() {
           ))}
         </div>
       )}
-      <nav
-        className="mt-8 flex items-center justify-between gap-3"
-        aria-label={t.page}
-      >
-        <button
-          disabled={loading || page === 1}
-          className="girlhood-button"
-          onClick={() => setPage((v) => v - 1)}
+      {(page > 1 || hasMore) && (
+        <nav
+          className="mt-8 flex items-center justify-between gap-3"
+          aria-label={t.page}
         >
-          {t.previous}
-        </button>
-        <span aria-live="polite">
-          {t.page} {page}
-        </span>
-        <button
-          disabled={loading || error || !hasMore || !nextCursor}
-          className="girlhood-button"
-          onClick={() => { setCursors((values) => [...values.slice(0, page), nextCursor]); setPage((v) => v + 1); }}
-        >
-          {t.next}
-        </button>
-      </nav>
+          <button
+            disabled={loading || page === 1}
+            className="girlhood-button"
+            onClick={() => setPage((v) => v - 1)}
+          >
+            {t.previous}
+          </button>
+          <span aria-live="polite">
+            {t.page} {page}
+          </span>
+          <button
+            disabled={loading || error || !hasMore || !nextCursor}
+            className="girlhood-button"
+            onClick={() => {
+              setCursors((values) => [...values.slice(0, page), nextCursor]);
+              setPage((v) => v + 1);
+            }}
+          >
+            {t.next}
+          </button>
+        </nav>
+      )}
       <p className="mt-10 text-sm">{t.disclaimer}</p>
     </section>
   );
 }
-

@@ -9,7 +9,7 @@ export default function GirlhoodLanguageToggle({
 }) {
   return (
     <div
-      className="inline-flex rounded-full bg-white p-1 shadow-sm"
+      className="girlhood-language inline-flex"
       role="group"
       aria-label={ui[language].language}
     >

@@ -26,6 +26,19 @@ const input = {
   acknowledgementReview: true,
   acknowledgementPrivacy: true,
 };
+test("short notes and long reflections keep optional thoughts optional", () => {
+  for (const text of ["Safe.", "Free to dream.", "Someone who believed in me.", "é".repeat(2000)]) {
+    assert.deepEqual(validate({ ...input, girlhoodResponse: text, futureResponse: "", supportResponse: "" }), []);
+    assert.equal(submissionRecord({ ...input, girlhoodResponse: text }).girlhood_response, text);
+  }
+  for (const text of ["", "   ", "x".repeat(2001), "x".repeat(10001)]) {
+    assert.ok(validate({ ...input, girlhoodResponse: text }).includes("answers"));
+  }
+  for (const key of ["futureResponse", "supportResponse"]) {
+    assert.deepEqual(validate({ ...input, [key]: "x".repeat(2000) }), []);
+    assert.ok(validate({ ...input, [key]: "x".repeat(2001) }).includes("answers"));
+  }
+});
 test("age must be explicitly supplied as an integer; false strings are never consent", () => {
   for (const age of ["", null, undefined, "13", 13.5, -1, 121])
     assert.ok(validate({ ...input, age }).includes("age"));
@@ -99,7 +112,7 @@ test("mutation guard rejects cross-origin, non-JSON and oversized payloads", () 
   assert.equal(postGuard(req, res), false);
   assert.equal(res.statusCode, 415);
   req.headers["content-type"] = "application/json";
-  req.body = { text: "x".repeat(16001) };
+  req.body = { text: "x".repeat(48001) };
   assert.equal(postGuard(req, res), false);
   assert.equal(res.statusCode, 413);
 });

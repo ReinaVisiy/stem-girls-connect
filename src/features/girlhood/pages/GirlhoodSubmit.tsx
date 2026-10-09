@@ -1,6 +1,10 @@
-import { useGirlhoodRuntime } from '../GirlhoodRuntime';
-import { AvailabilityNotice, availabilityCopy, useCampaignAvailability } from '../components/CampaignAvailability';
-import { useGirlhoodBasePath } from '../GirlhoodPaths';
+import { useGirlhoodRuntime } from "../GirlhoodRuntime";
+import {
+  AvailabilityNotice,
+  availabilityCopy,
+  useCampaignAvailability,
+} from "../components/CampaignAvailability";
+import { useGirlhoodBasePath } from "../GirlhoodPaths";
 import {
   useEffect,
   useRef,
@@ -10,24 +14,14 @@ import {
 } from "react";
 import { Link } from "../GirlhoodRuntime";
 import Seo from "../../../components/Seo";
-import {
-  Check,
-  Download,
-  ArrowRight,
-  ShieldCheck,
-  Sparkles,
-} from "lucide-react";
+import { Check, Download, ShieldCheck } from "lucide-react";
 import { experience } from "../config/experience";
-import GirlhoodResponseCard from "../components/GirlhoodResponseCard";
+
 import { copy } from "../config/copy";
 import { ui } from "../config/ui";
 import { useGirlhoodLanguage } from "../hooks/useGirlhoodLanguage";
-import type { GirlhoodSubmissionInput, GirlhoodPublicResponse } from "../types";
-import {
-  validateGirlhoodSubmission,
-  derivePublicCategory,
-  normalizePlainText,
-} from "../validation";
+import type { GirlhoodSubmissionInput } from "../types";
+import { validateGirlhoodSubmission } from "../validation";
 
 const empty: GirlhoodSubmissionInput = {
   age: "",
@@ -69,7 +63,7 @@ function Choice({
   required?: boolean;
 }) {
   return (
-    <label className="flex cursor-pointer gap-3 rounded-2xl border p-4">
+    <label className="girlhood-choice">
       <input
         type="checkbox"
         className="mt-1 size-5 shrink-0 accent-[#82246d]"
@@ -92,8 +86,9 @@ export default function GirlhoodSubmit() {
   const requestToken = useRef<string | null>(null);
   const [pendingReceipt, setPendingReceipt] = useState(false);
   const [form, setForm] = useState<GirlhoodSubmissionInput>(empty);
-  const [step, setStep] = useState(0),
-    [examples, setExamples] = useState(false),
+  const [activePrompt, setActivePrompt] = useState(0),
+    [detailsOpen, setDetailsOpen] = useState(false),
+    [receiptSaved, setReceiptSaved] = useState(false),
     [error, setError] = useState(""),
     [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<{
@@ -107,8 +102,8 @@ export default function GirlhoodSubmit() {
     alert = useRef<HTMLDivElement>(null),
     busy = useRef(false);
   useEffect(() => {
-    heading.current?.focus();
-  }, [step, success]);
+    if (success) heading.current?.focus();
+  }, [success]);
   useEffect(() => {
     if (error) alert.current?.focus();
   }, [error]);
@@ -125,7 +120,29 @@ export default function GirlhoodSubmit() {
     } catch {
       /* Storage disabled. */
     }
-  }, [request]);
+  }, [request, isPreview]);
+  useEffect(() => {
+    if (!success || receiptSaved) return;
+    const warn = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = "";
+    };
+    const remind = (event: MouseEvent) => {
+      if (
+        (event.target as HTMLElement).closest("a[href]") &&
+        !window.confirm(x.receiptHelp)
+      ) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    };
+    window.addEventListener("beforeunload", warn);
+    document.addEventListener("click", remind, true);
+    return () => {
+      window.removeEventListener("beforeunload", warn);
+      document.removeEventListener("click", remind, true);
+    };
+  }, [success, receiptSaved, x.receiptHelp]);
   const under13 = typeof form.age === "number" && form.age < 13;
   const update = <K extends keyof GirlhoodSubmissionInput>(
     key: K,
@@ -228,7 +245,7 @@ export default function GirlhoodSubmit() {
       "",
       x.receiptHelp,
       "",
-      window.location.origin + (basePath + '/withdraw'),
+      window.location.origin + (basePath + "/withdraw"),
       "info@stemgirlsconnect.org",
     ].join("\n");
     const url = URL.createObjectURL(
@@ -240,6 +257,7 @@ export default function GirlhoodSubmit() {
     link.click();
     window.setTimeout(() => URL.revokeObjectURL(url), 1000);
     setFeedback(x.downloaded);
+    setReceiptSaved(true);
   }
   function clearReceipt() {
     if (isPreview) return;
@@ -253,29 +271,16 @@ export default function GirlhoodSubmit() {
     setPendingReceipt(false);
     setSuccess(null);
     setForm(empty);
-    setStep(0);
+    setActivePrompt(0);
+    setDetailsOpen(false);
+    setReceiptSaved(false);
     setFeedback("");
     setError("");
   }
-  function next() {
-    setError("");
-    const blocking =
-      step === 0
-        ? errors.find((e) => ["age", "perspective", "identity"].includes(e))
-        : step === 1
-          ? errors.find((e) => e === "answers")
-          : errors[0];
-    if (blocking) {
-      setError(errorFor(blocking));
-      return;
-    }
-    setStep((s) => Math.min(s + 1, 3));
-    window.scrollTo({ top: 0, behavior: "instant" });
-  }
   async function submit(e: FormEvent) {
     e.preventDefault();
-    if (step < 3) {
-      next();
+    if (!detailsOpen) {
+      setDetailsOpen(true);
       return;
     }
     if (busy.current || isPreview) return;
@@ -287,7 +292,7 @@ export default function GirlhoodSubmit() {
     setLoading(true);
     setError("");
     try {
-      if (await availability.refresh() !== "open") return;
+      if ((await availability.refresh()) !== "open") return;
       const response = await request("/api/girlhood/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -296,8 +301,11 @@ export default function GirlhoodSubmit() {
       });
       const data = await response.json();
       if (data.code === "CAMPAIGN_CLOSED") {
-        availability.close(data.state === "not_yet_open" ? "not_yet_open" : "closed");
-        setError(availabilityCopy[language].closed); return;
+        availability.close(
+          data.state === "not_yet_open" ? "not_yet_open" : "closed",
+        );
+        setError(availabilityCopy[language].closed);
+        return;
       }
       if (!response.ok) throw new Error(data.error || l.sendError);
       if (
@@ -318,54 +326,37 @@ export default function GirlhoodSubmit() {
       setLoading(false);
     }
   }
-  async function copyText(value: string) {
+  async function copyText(value: string, receipt = false) {
     try {
       await navigator.clipboard.writeText(value);
       setFeedback(l.copied);
+      if (receipt) setReceiptSaved(true);
     } catch {
       setFeedback(l.copyFailed);
     }
   }
-  const preview: GirlhoodPublicResponse = {
-    public_reference: "preview",
-    public_category: derivePublicCategory(Number(form.age), form.perspective),
-    language,
-    public_girlhood_response: normalizePlainText(form.girlhoodResponse),
-    public_future_response: normalizePlainText(form.futureResponse) || null,
-    public_support_response: normalizePlainText(form.supportResponse) || null,
-    safe_display_name: form.consentDisplayName
-      ? normalizePlainText(form.displayName) || "Anonymous"
-      : "Anonymous",
-    safe_country: form.consentDisplayCountry
-      ? normalizePlainText(form.country)
-      : null,
-    safe_city: form.consentDisplayCity
-      ? normalizePlainText(form.cityRegion)
-      : null,
-    featured: false,
-    created_at: "",
-  };
-  const choices = [
-    ["consentPublic", l.publish],
-    ["consentDisplayName", l.showName],
-    ["consentDisplayCountry", l.showCountry],
-    ["consentDisplayCity", l.showCity],
-    ["consentReuse", l.reuse],
-    ["consentAnalysis", l.analysis],
-  ] as const;
   return (
-    <section className="girlhood-form-page mx-auto max-w-3xl px-5 py-12">
+    <section className="girlhood-form-page">
       <Seo
         title={
           (success ? l.received : t.addVoice) + " | Girlhood Should Be Hers"
         }
         description={t.intro}
-        path={basePath + '/share-your-voice'}
+        path={basePath + "/share-your-voice"}
       />
-      <h1 ref={heading} tabIndex={-1} className="text-4xl font-black">
+      <h1 ref={heading} tabIndex={-1} className="girlhood-page-title">
         {success ? l.received : t.addVoice}
       </h1>
-      {!success && <><p className="mt-4 text-lg">{x.invitation}</p><AvailabilityNotice /></>}
+      {!success && (
+        <>
+          <p className="girlhood-subtitle">
+            {language === "fr"
+              ? "Quelques mots, comme ils vous viennent."
+              : "A few words, just as they come."}
+          </p>
+          <AvailabilityNotice />
+        </>
+      )}
       {!success && pendingReceipt && (
         <aside className="girlhood-recovery mt-6" aria-label={x.recoveryTitle}>
           <ShieldCheck size={24} aria-hidden="true" />
@@ -391,7 +382,7 @@ export default function GirlhoodSubmit() {
           <h2 className="mt-6 text-3xl font-black">
             {success.withdrawn ? x.withdrawn : x.saved}
           </h2>
-          <p className="mt-3">{x.savedHelp}</p>
+
           <p className="mt-4">
             {!success.withdrawn &&
               (success.publicationRequested ? l.pending : l.privateReceipt)}
@@ -418,6 +409,30 @@ export default function GirlhoodSubmit() {
           <p className="mt-5 font-bold">{x.receiptHelp}</p>
           <button
             type="button"
+            className="girlhood-quiet-link mt-4 block"
+            onClick={() =>
+              copyText(
+                l.reference +
+                  ": " +
+                  success.publicReference +
+                  "\n" +
+                  l.code +
+                  ": " +
+                  success.withdrawalCode +
+                  "\n" +
+                  window.location.origin +
+                  basePath +
+                  "/withdraw",
+                true,
+              )
+            }
+          >
+            {language === "fr"
+              ? "Copier mon reçu privé"
+              : "Copy my private receipt"}
+          </button>
+          <button
+            type="button"
             className="girlhood-button mt-5 inline-flex items-center gap-2"
             onClick={downloadReceipt}
           >
@@ -428,14 +443,14 @@ export default function GirlhoodSubmit() {
             {feedback}
           </p>
           <div className="mt-6 flex flex-wrap gap-4">
-            <Link className="girlhood-button" to={basePath + '/wall'}>
+            <Link className="girlhood-button" to={basePath + "/wall"}>
               {t.wall}
             </Link>
-            <Link className="girlhood-button" to={basePath + '/withdraw'}>
+            <Link className="girlhood-button" to={basePath + "/withdraw"}>
               {l.withdraw}
             </Link>
             <button
-              onClick={() => copyText(window.location.origin + (basePath + ''))}
+              onClick={() => copyText(window.location.origin + (basePath + ""))}
               className="girlhood-button"
             >
               {l.shareLink}
@@ -452,75 +467,98 @@ export default function GirlhoodSubmit() {
             <p className="mt-2 text-sm">{x.doneHelp}</p>
           </div>
         </div>
-      ) : availability.state !== "open" && form.age === "" && !form.girlhoodResponse ? (
-        <div className="mt-6">{error && <p role="alert">{error}</p>}<Link to={basePath + "/withdraw"} className="underline">{l.withdraw}</Link></div>
+      ) : availability.state !== "open" &&
+        form.age === "" &&
+        !form.girlhoodResponse ? (
+        <div className="mt-6">
+          {error && <p role="alert">{error}</p>}
+          <Link to={basePath + "/withdraw"} className="underline">
+            {l.withdraw}
+          </Link>
+        </div>
       ) : (
-        <>
-          <div className="mt-8 flex items-center justify-between gap-3 text-sm font-bold">
-            <span aria-live="polite">
-              {x.step} {step + 1} {x.of} 4
-            </span>
-            <span className="inline-flex items-center gap-2">
-              <ShieldCheck size={16} aria-hidden="true" />
-              {x.trust}
-            </span>
-          </div>
+        <form onSubmit={submit} noValidate className="girlhood-notebook">
           <div
-            className="girlhood-progress mt-3"
-            role="progressbar"
-            aria-label={
-              language === "fr" ? "Progression du formulaire" : "Form progress"
-            }
-            aria-valuemin={1}
-            aria-valuemax={4}
-            aria-valuenow={step + 1}
+            className="girlhood-prompt-tabs"
+            role="group"
+            aria-label={language === "fr" ? "Vos pensées" : "Your thoughts"}
           >
-            <span style={{ width: `${(step + 1) * 25}%` }} />
+            {(language === "fr"
+              ? ["L’enfance", "Devenir", "Le soutien"]
+              : ["Girlhood", "Becoming", "Support"]
+            ).map((label, i) => (
+              <button
+                type="button"
+                key={label}
+                aria-pressed={activePrompt === i}
+                onClick={() => {
+                  setActivePrompt(i);
+                  document.getElementById("note-" + i)?.focus();
+                }}
+              >
+                {label}
+              </button>
+            ))}
           </div>
-          <ol
-            className="my-6 grid grid-cols-2 gap-3 sm:grid-cols-4"
-            aria-label={
-              language === "fr" ? "Étapes du formulaire" : "Form steps"
-            }
-          >
-            {l.steps.map((name, i) => (
-              <li
-                key={name}
-                aria-current={step === i ? "step" : undefined}
+          <div className="girlhood-writing-cards">
+            {(
+              [
+                ["girlhoodResponse", t.q1],
+                ["futureResponse", t.q2],
+                ["supportResponse", t.q3],
+              ] as const
+            ).map(([key, title], i) => (
+              <div
+                key={key}
                 className={
-                  step === i
-                    ? "border-b-4 border-brandPink pb-3 font-black"
-                    : "border-b-4 border-gray-200 pb-3"
+                  "girlhood-writing-card " +
+                  (activePrompt === i ? "is-active" : "")
                 }
               >
-                {i < step ? (
-                  <Check size={16} className="inline" aria-hidden="true" />
-                ) : (
-                  i + 1
-                )}
-                . {name}
-              </li>
-            ))}
-          </ol>
-          <form
-            onSubmit={submit}
-            noValidate
-            className="girlhood-form-card rounded-3xl bg-white p-6 sm:p-10"
-          >
-            <h2 className="text-2xl font-bold">{l.steps[step]}</h2>
-            <p className="mt-3 mb-6">{x.stepHelp[step]}</p>
-            {error && (
-              <div
-                ref={alert}
-                tabIndex={-1}
-                role="alert"
-                className="mt-4 rounded-xl bg-red-50 p-4 text-red-800"
-              >
-                {error}
+                <label htmlFor={"note-" + i}>
+                  {title}
+                  <span className="sr-only">
+                    {" "}
+                    · {i === 0 ? t.required : t.optional}
+                  </span>
+                </label>
+                <textarea
+                  id={"note-" + i}
+                  required={i === 0}
+                  rows={3}
+                  value={form[key]}
+                  placeholder={
+                    i === 0
+                      ? language === "fr"
+                        ? "Vos mots ici…"
+                        : "Your words here…"
+                      : language === "fr"
+                        ? "Si vous le souhaitez…"
+                        : "If you like…"
+                  }
+                  onFocus={() => setActivePrompt(i)}
+                  onChange={(e) => {
+                    update(key, e.target.value);
+                    e.target.style.height = "auto";
+                    e.target.style.height = e.target.scrollHeight + "px";
+                  }}
+                />
               </div>
-            )}
-            {step === 0 && (
-              <div className="mt-6 space-y-6">
+            ))}
+          </div>
+          <details
+            className="girlhood-before"
+            open={detailsOpen}
+            onToggle={(e) => setDetailsOpen(e.currentTarget.open)}
+          >
+            <summary>
+              {language === "fr"
+                ? "Avant de laisser votre petit mot"
+                : "Before you leave your note"}{" "}
+              <span aria-hidden="true">↗</span>
+            </summary>
+            <div className="girlhood-before-content">
+              <div className="girlhood-personal">
                 <Field label={l.age}>
                   <input
                     type="number"
@@ -535,279 +573,154 @@ export default function GirlhoodSubmit() {
                         e.target.value === "" ? "" : Number(e.target.value),
                       )
                     }
+                    className="girlhood-input girlhood-age"
                     aria-describedby="age-help"
-                    className="girlhood-input"
                   />
                 </Field>
-                <p id="age-help">{l.ageHelp}</p>
-                <fieldset>
-                  <legend className="mb-3 font-bold">{l.perspective}</legend>
-                  <div className="space-y-3">
-                    {(
-                      [
-                        ["own", l.own],
-                        ["ally", l.ally],
-                      ] as const
-                    ).map(([v, label]) => (
-                      <label key={v} className="flex gap-3">
-                        <input
-                          type="radio"
-                          name="perspective"
-                          value={v}
-                          checked={form.perspective === v}
-                          onChange={() => update("perspective", v)}
-                        />
-                        {label}
-                      </label>
-                    ))}
-                  </div>
-                </fieldset>
+                <p id="age-help">
+                  {language === "fr"
+                    ? "Votre âge reste privé."
+                    : "Your age stays private."}
+                </p>
+                <Choice
+                  label={l.ally}
+                  checked={form.perspective === "ally"}
+                  onChange={(v) => update("perspective", v ? "ally" : "own")}
+                />
+              </div>
+              {under13 ? (
+                <p className="girlhood-private-note">{l.under13}</p>
+              ) : (
+                <Choice
+                  label={l.publish}
+                  checked={form.consentPublic}
+                  onChange={(v) => update("consentPublic", v)}
+                />
+              )}
+              <details className="girlhood-extra-choices">
+                <summary>
+                  {language === "fr"
+                    ? "Signature et autres permissions (facultatif)"
+                    : "Signature and other permissions (optional)"}
+                </summary>
                 {!under13 && (
-                  <>
-                    <Field label={l.known + " · " + t.optional}>
+                  <div className="girlhood-identity">
+                    <Field
+                      label={
+                        language === "fr"
+                          ? "Nom ou surnom (facultatif)"
+                          : "Your name or nickname (optional)"
+                      }
+                    >
                       <input
+                        className="girlhood-input"
                         value={form.displayName}
                         maxLength={80}
                         onChange={(e) => update("displayName", e.target.value)}
-                        placeholder={l.anonymous}
-                        className="girlhood-input"
-                        aria-describedby="name-help"
                       />
                     </Field>
-                    <p id="name-help">{l.knownHelp}</p>
-                  </>
-                )}
-                {!under13 && <Field label={l.country + " · " + t.optional}>
-                  <input
-                    value={form.country}
-                    maxLength={100}
-                    onChange={(e) => update("country", e.target.value)}
-                    className="girlhood-input"
-                  />
-                </Field>}
-                {!under13 && (
-                  <Field label={l.city + " · " + t.optional}>
-                    <input
-                      value={form.cityRegion}
-                      maxLength={100}
-                      onChange={(e) => update("cityRegion", e.target.value)}
-                      className="girlhood-input"
-                    />
-                  </Field>
-                )}
-              </div>
-            )}
-            {step === 1 && (
-              <div className="mt-6 space-y-6">
-                {(
-                  [
-                    ["girlhoodResponse", t.q1, t.q1Help, true],
-                    ["futureResponse", t.q2, t.q2Help, false],
-                    ["supportResponse", t.q3, t.q3Help, false],
-                  ] as const
-                ).map(([key, title, help, required]) => (
-                  <div key={key}>
                     <Field
                       label={
-                        title + " · " + (required ? t.required : t.optional)
+                        language === "fr"
+                          ? "D’où écrivez-vous ? (facultatif)"
+                          : "Where are you writing from? (optional)"
                       }
                     >
-                      <textarea
-                        required={required}
-                        rows={4}
-                        maxLength={500}
-                        value={form[key]}
-                        onChange={(e) => update(key, e.target.value)}
+                      <input
                         className="girlhood-input"
-                        aria-describedby={key + "-help"}
+                        value={form.cityRegion}
+                        maxLength={100}
+                        onChange={(e) => update("cityRegion", e.target.value)}
                       />
                     </Field>
-                    <p id={key + "-help"} className="mt-2 text-sm">
-                      {help} ({form[key].length}/500)
-                    </p>
-                  </div>
-                ))}
-                <p className="text-sm">{l.privacyReminder}</p>
-                <button
-                  type="button"
-                  aria-expanded={examples}
-                  aria-controls="inspiration"
-                  onClick={() => setExamples((v) => !v)}
-                  className="font-bold text-brandPink"
-                >
-                  {l.inspiration}
-                </button>
-                {examples && (
-                  <p id="inspiration" className="rounded-xl bg-[#e3f4ec] p-4">
-                    {l.examples}
-                  </p>
-                )}
-              </div>
-            )}
-            {step === 2 && (
-              <div className="mt-6 space-y-4">
-                <p>{l.privacyIntro}</p>
-                <Link
-                  to={basePath + '/privacy'}
-                  target="_blank"
-                  rel="noopener"
-                  className="underline"
-                >
-                  {l.privacy}
-                </Link>
-                {under13 ? (
-                  <p className="rounded-xl bg-[#f9eaf3] p-4 font-bold">
-                    {l.under13}
-                  </p>
-                ) : (
-                  <>
-                    <Choice
-                      label={l.publish}
-                      checked={form.consentPublic}
-                      onChange={(v) => update("consentPublic", v)}
-                    />
                     {form.consentPublic && (
-                      <div className="space-y-3 pl-4">
-                        {choices.slice(1, 4).map(([key, label]) => (
-                          <Choice
-                            key={key}
-                            label={label}
-                            checked={form[key]}
-                            onChange={(v) => update(key, v)}
-                          />
-                        ))}
-                      </div>
+                      <>
+                        <Choice
+                          label={l.showName}
+                          checked={form.consentDisplayName}
+                          onChange={(v) => update("consentDisplayName", v)}
+                        />
+                        <Choice
+                          label={
+                            language === "fr"
+                              ? "Afficher ce lieu avec mon petit mot"
+                              : "Show this location with my note"
+                          }
+                          checked={form.consentDisplayCity}
+                          onChange={(v) => update("consentDisplayCity", v)}
+                        />
+                      </>
                     )}
-                    <Choice
-                      label={l.reuse}
-                      checked={form.consentReuse}
-                      onChange={(v) => update("consentReuse", v)}
-                    />
-                  </>
+                  </div>
+                )}
+                {!under13 && (
+                  <Choice
+                    label={l.reuse}
+                    checked={form.consentReuse}
+                    onChange={(v) => update("consentReuse", v)}
+                  />
                 )}
                 <Choice
                   label={l.analysis}
                   checked={form.consentAnalysis}
                   onChange={(v) => update("consentAnalysis", v)}
                 />
-                <Choice
-                  required
-                  label={l.review + " · " + t.required}
-                  checked={form.acknowledgementReview}
-                  onChange={(v) => update("acknowledgementReview", v)}
-                />
-                <Choice
-                  required
-                  label={l.privateInfo + " · " + t.required}
-                  checked={form.acknowledgementPrivacy}
-                  onChange={(v) => update("acknowledgementPrivacy", v)}
-                />
-                <div hidden>
-                  <input
-                    name="website"
-                    autoComplete="off"
-                    tabIndex={-1}
-                    value={form.website}
-                    onChange={(e) => update("website", e.target.value)}
-                  />
-                </div>
-              </div>
-            )}
-            {step === 3 && (
-              <div className="mt-6 space-y-5">
-                <dl className="rounded-xl bg-[#fff9f4] p-4">
-                  <dt className="font-bold">{l.age}</dt>
-                  <dd>{form.age}</dd>
-                  <dt className="mt-3 font-bold">{l.perspective}</dt>
-                  <dd>{form.perspective === "own" ? l.own : l.ally}</dd>
-                  {!under13 && (
-                    <>
-                      <dt className="mt-3 font-bold">{l.known}</dt>
-                      <dd>{form.displayName || l.anonymous}</dd>
-                      <dt className="mt-3 font-bold">{l.city}</dt>
-                      <dd>{form.cityRegion || "—"}</dd>
-                    </>
-                  )}
-                  <dt className="mt-3 font-bold">{l.country}</dt>
-                  <dd>{form.country || "—"}</dd>
-                </dl>
-                {(
-                  [
-                    ["girlhoodResponse", t.q1],
-                    ["futureResponse", t.q2],
-                    ["supportResponse", t.q3],
-                  ] as const
-                ).map(([key, label]) => (
-                  <div key={key}>
-                    <h3 className="font-bold">{label}</h3>
-                    <p className="whitespace-pre-wrap break-words">
-                      {normalizePlainText(form[key]) || "—"}
-                    </p>
-                  </div>
-                ))}
-                <h3 className="font-bold">{l.permissions}</h3>
-                <ul className="space-y-2">
-                  {choices
-                    .filter(([key]) => !under13 || key === "consentAnalysis")
-                    .map(([key, label]) => (
-                      <li key={key}>
-                        {label} <strong>{form[key] ? l.yes : l.no}</strong>
-                      </li>
-                    ))}
-                </ul>
-                {under13 && <p>{l.under13}</p>}
-                {!under13 && form.consentPublic && (
-                  <>
-                    <h3 className="font-bold">{l.preview}</h3>
-                    <GirlhoodResponseCard
-                      response={preview}
-                      language={language}
-                    />
-                  </>
-                )}
-                <button
-                  type="button"
-                  className="underline"
-                  disabled={loading}
-                  onClick={() => setStep(0)}
-                >
-                  {l.edit}
-                </button>
-              </div>
-            )}
-            <div className="mt-8 flex justify-between gap-3">
-              {step > 0 ? (
-                <button
-                  disabled={loading}
-                  type="button"
-                  className="girlhood-button"
-                  onClick={() => {
-                    setError("");
-                    setStep((s) => s - 1);
-                  }}
-                >
-                  {t.back}
-                </button>
-              ) : (
-                <span />
-              )}
-              <button
-                type="submit"
-                disabled={loading || availability.state !== "open" || (isPreview && step === 3)}
-                className="girlhood-button inline-flex items-center gap-2"
+              </details>
+              <Choice
+                required
+                label={l.review + " · " + t.required}
+                checked={form.acknowledgementReview}
+                onChange={(v) => update("acknowledgementReview", v)}
+              />
+              <Choice
+                required
+                label={l.privateInfo + " · " + t.required}
+                checked={form.acknowledgementPrivacy}
+                onChange={(v) => update("acknowledgementPrivacy", v)}
+              />
+              <Link
+                to={basePath + "/privacy"}
+                target="_blank"
+                rel="noopener"
+                className="girlhood-quiet-link"
               >
-                {loading ? l.sending : step === 3 ? t.submit : t.next}
-                {!loading &&
-                  (step === 3 ? (
-                    <Sparkles size={18} aria-hidden="true" />
-                  ) : (
-                    <ArrowRight size={18} aria-hidden="true" />
-                  ))}
-              </button>
+                {l.privacy}
+              </Link>
+              <div hidden>
+                <input
+                  name="website"
+                  autoComplete="off"
+                  tabIndex={-1}
+                  value={form.website}
+                  onChange={(e) => update("website", e.target.value)}
+                />
+              </div>
             </div>
-          </form>
-          <p className="mt-6 text-center text-sm">{x.privacyNote}</p>
-        </>
+          </details>
+          {error && (
+            <div
+              ref={alert}
+              tabIndex={-1}
+              role="alert"
+              className="girlhood-form-error"
+            >
+              {error}
+            </div>
+          )}
+          <div className="girlhood-send">
+            <button
+              type="submit"
+              disabled={
+                loading ||
+                availability.state !== "open" ||
+                (isPreview && detailsOpen)
+              }
+              className="girlhood-button"
+            >
+              {loading ? l.sending : t.submit} <span aria-hidden="true">↗</span>
+            </button>
+          </div>
+        </form>
       )}
     </section>
   );

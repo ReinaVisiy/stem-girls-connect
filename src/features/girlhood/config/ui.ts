@@ -1,8 +1,8 @@
 export const ui = {
   en: {
     home: "Campaign home",
-    voices: "Our voices",
-    add: "Add your voice ✦",
+    voices: "Their wishes",
+    add: "Leave a little wish",
     privacy: "Privacy & your choices",
     withdraw: "Withdraw your voice",
     language: "Campaign language",
@@ -21,7 +21,7 @@ export const ui = {
     previous: "Previous page",
     next: "Next page",
     page: "Page",
-    empty: "No approved voices match these filters yet.",
+    empty: "No wishes here yet. Yours could be the first.",
     disclaimer:
       "These responses come from campaign participants and do not represent all girls.",
     wallIntro:
@@ -72,7 +72,7 @@ export const ui = {
       "Your response will not be displayed publicly because you are under 13.",
     ageRequired: "Enter your age as a whole number between 0 and 120.",
     answerError:
-      "The first response must contain 10–500 characters; the other responses can contain up to 500.",
+      "Add a few words to the first thought. Each answer can be up to 2,000 characters.",
     choiceError: "Check your details and choices.",
     acknowledgeError: "Accept both required acknowledgements.",
     edit: "Back and edit",
@@ -80,7 +80,7 @@ export const ui = {
     permissions: "Your sharing choices",
     yes: "Yes",
     no: "No",
-    received: "Your voice has been received.",
+    received: "Thank you for your note.",
     thanks:
       "Thank you for imagining a world where every girl has space to learn, explore, question and choose.",
     pending:
@@ -122,8 +122,8 @@ export const ui = {
   },
   fr: {
     home: "Accueil de la campagne",
-    voices: "Nos voix",
-    add: "Faites entendre votre voix ✦",
+    voices: "Leurs souhaits",
+    add: "Laisser un petit souhait",
     privacy: "Confidentialité et vos choix",
     withdraw: "Retirer votre voix",
     language: "Langue de la campagne",
@@ -142,7 +142,7 @@ export const ui = {
     previous: "Page précédente",
     next: "Page suivante",
     page: "Page",
-    empty: "Aucune voix approuvée ne correspond encore à ces filtres.",
+    empty: "Pas encore de souhaits ici. Le vôtre pourrait être le premier.",
     disclaimer:
       "Ces réponses proviennent des personnes participant à la campagne et ne représentent pas toutes les filles.",
     wallIntro:
@@ -198,7 +198,7 @@ export const ui = {
       "Votre réponse ne sera pas affichée publiquement car vous avez moins de 13 ans.",
     ageRequired: "Saisissez votre âge en nombre entier entre 0 et 120.",
     answerError:
-      "La première réponse doit contenir entre 10 et 500 caractères ; les autres, jusqu’à 500.",
+      "Écrivez quelques mots pour la première pensée. Chaque réponse peut contenir jusqu’à 2 000 caractères.",
     choiceError: "Vérifiez vos informations et vos choix.",
     acknowledgeError: "Acceptez les deux déclarations obligatoires.",
     edit: "Retour et modification",
@@ -206,7 +206,7 @@ export const ui = {
     permissions: "Vos choix de partage",
     yes: "Oui",
     no: "Non",
-    received: "Votre voix a été reçue.",
+    received: "Merci pour votre petit mot.",
     thanks:
       "Merci d’imaginer un monde où chaque fille peut apprendre, explorer, questionner et choisir.",
     pending:

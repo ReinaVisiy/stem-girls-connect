@@ -20,10 +20,9 @@ try{
     await page.goto(base+'/programs/girlhood/withdraw');await page.getByLabel('Private withdrawal code',{exact:true}).waitFor();
   }
   fail=true;await page.goto(base+'/programs/girlhood/share-your-voice');await status().filter({hasText:'cannot check availability'}).waitFor();assert.equal(await page.getByRole('spinbutton').count(),0);
-  fail=false;state='open';await page.getByRole('button',{name:'Check again',exact:true}).click();await page.getByRole('spinbutton').fill('17');
-  await page.getByRole('button',{name:'Continue',exact:true}).click();await page.locator('textarea').first().fill('Keep these answers when collection closes.');
+  fail=false;state='open';await page.getByRole('button',{name:'Check again',exact:true}).click();await page.locator('textarea').first().fill('Keep these answers when collection closes.');
   state='closed';await page.evaluate(()=>window.dispatchEvent(new Event('focus')));await status().filter({hasText:'have closed'}).waitFor();
-  assert.equal(await page.locator('textarea').first().inputValue(),'Keep these answers when collection closes.');assert.ok(await page.getByRole('button',{name:'Continue',exact:true}).isDisabled());
+  assert.equal(await page.locator('textarea').first().inputValue(),'Keep these answers when collection closes.');assert.ok(await page.getByRole('button',{name:'Leave my note',exact:false}).isDisabled());
   await page.screenshot({path:resolve(artifacts,'closed-with-preserved-answers.png'),fullPage:true});
   console.log('PASS availability states, failed status, withdrawal access, mid-form closure and answer preservation');
   state='open';
@@ -31,7 +30,7 @@ try{
     await page.setViewportSize({width,height:1000});await page.goto(base+'/programs/girlhood');
     await page.locator('.girlhood-shell').waitFor();await page.evaluate(d=>document.documentElement.classList.toggle('dark',d),dark);
     await page.getByRole('button',{name:language==='fr'?'Français':'English',exact:true}).click();
-    await page.locator('.girlhood-possibilities').waitFor();await overflow();
+    await page.locator('.girlhood-invitation').waitFor();await overflow();
     await page.screenshot({path:resolve(artifacts,`home-${width}-${dark?'dark':'light'}-${language}.png`),fullPage:true});
     for(const path of ['share-your-voice','wall','privacy','withdraw']){
       await page.goto(base+'/programs/girlhood/'+path);await page.locator('.girlhood-shell h1').waitFor();await page.evaluate(d=>document.documentElement.classList.toggle('dark',d),dark);await overflow();
@@ -54,9 +53,10 @@ try{
   assert.equal(await ap.getByLabel('Slug',{exact:true}).inputValue(),'girlhood');
   await ap.getByRole('button',{name:'Preview',exact:true}).first().click();const preview=ap.getByRole('region',{name:'Girlhood administrator preview'});await preview.waitFor();
   await preview.getByRole('button',{name:'Français',exact:true}).click();await preview.getByRole('heading',{name:'L’enfance des filles devrait leur appartenir',exact:true}).waitFor();
-  await preview.getByRole('button',{name:'English',exact:true}).click();await preview.getByRole('button',{name:'Contribution',exact:true}).click();await preview.getByRole('spinbutton').fill('18');await preview.getByRole('button',{name:'Continue',exact:true}).click();await preview.locator('textarea').first().fill('An unsaved preview response.');await preview.getByRole('button',{name:'Continue',exact:true}).click();
+  await preview.getByRole('button',{name:'English',exact:true}).click();await preview.getByRole('button',{name:'Contribution',exact:true}).click();await preview.locator('textarea').first().fill('An unsaved preview response.');
+  await preview.locator('.girlhood-before summary').first().click();await preview.getByRole('spinbutton').fill('18');
   for(const c of await preview.locator('input[aria-required="true"]').all())await c.check();
-  await preview.getByRole('button',{name:'Continue',exact:true}).click();assert.ok(await preview.getByRole('button',{name:'Submit my voice ✦',exact:true}).isDisabled());
+  assert.ok(await preview.getByRole('button',{name:'Leave my note',exact:false}).isDisabled());
   await preview.getByRole('button',{name:'Voices / Voix',exact:true}).click();await preview.getByText('A childhood full of curiosity, friendship and possibilities.',{exact:false}).first().waitFor();
   await ap.screenshot({path:resolve(artifacts,'admin-fixture-preview.png'),fullPage:true});
   await preview.getByRole('button',{name:'Withdrawal / Retrait',exact:true}).click();assert.ok(await preview.getByRole('button',{name:'Withdraw my contribution',exact:true}).isDisabled());
