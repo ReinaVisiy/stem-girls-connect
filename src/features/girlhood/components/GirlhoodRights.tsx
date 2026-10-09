@@ -1,0 +1,76 @@
+import { Fragment, useId } from "react";
+import { rights, rightsSources } from "../config/rights";
+import type { GirlhoodLanguage } from "../types";
+
+/**
+ * The rights-based editorial beat shown below the hero: five sourced global
+ * indicators, kept short and calm (not a statistics dashboard). Each number is
+ * an in-page link to its source in the list below, so nobody has to leave the
+ * page to find where a figure comes from.
+ */
+export default function GirlhoodRights({
+  language,
+}: {
+  language: GirlhoodLanguage;
+}) {
+  const c = rights[language];
+  const uid = useId();
+  const headingId = uid + "-heading";
+  const sourceId = (i: number) => `${uid}-source-${i + 1}`;
+  return (
+    <section
+      className="girlhood-rights"
+      aria-labelledby={headingId}
+      lang={language}
+    >
+      <h2 id={headingId} className="girlhood-rights-lead">
+        {c.lead}
+      </h2>
+      <p className="girlhood-rights-list">{c.rights.join(" ")}</p>
+      <p className="girlhood-rights-note" role="note">
+        {c.contentNote}
+      </p>
+      {c.facts.map((fact) => (
+        <p className="girlhood-rights-fact" key={fact.source}>
+          {fact.before}
+          <strong>{fact.strong}</strong>
+          {fact.after}
+          <sup>
+            <a
+              className="girlhood-rights-ref"
+              href={"#" + sourceId(fact.source)}
+              aria-label={c.sourceLink(
+                fact.source + 1,
+                rightsSources[fact.source].label,
+              )}
+            >
+              {fact.source + 1}
+            </a>
+          </sup>
+        </p>
+      ))}
+      <p className="girlhood-rights-closing">
+        {c.closing.before}
+        <strong>{c.closing.strong}</strong>
+      </p>
+      <div className="girlhood-sources">
+        <h3>{c.sourcesHeading}</h3>
+        <ol>
+          {rightsSources.map((source, i) => (
+            <li id={sourceId(i)} key={source.url}>
+              <a href={source.url} target="_blank" rel="noopener noreferrer">
+                {source.label}
+                <span className="sr-only"> ({c.newTab})</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+        {c.sourcesNote && (
+          <Fragment>
+            <p className="girlhood-sources-note">{c.sourcesNote}</p>
+          </Fragment>
+        )}
+      </div>
+    </section>
+  );
+}

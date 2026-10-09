@@ -1,0 +1,403 @@
+/* Self-hosted serif (SIL OFL). Loaded from the package, no third-party CDN. */
+@import "@fontsource/eb-garamond/latin-500.css";
+@import "@fontsource/eb-garamond/latin-600.css";
+
+/* Design tokens for the taped-paper system. */
+.girlhood-shell,
+.girlhood-paper {
+  --girlhood-forest: #123f2d; /* deep green for title and prompts, ~11:1 on paper */
+  --girlhood-brand-green: #1d7448; /* SGC brand green, accents only */
+  --girlhood-plum: #82246d;
+  --girlhood-paper: #f6ecd8;
+  --girlhood-wall: #eadcc4;
+  --girlhood-ink: #1e2b23;
+  --girlhood-muted: #55645a; /* >= 4.5:1 on paper */
+  --girlhood-serif: "EB Garamond", Georgia, "Times New Roman", serif;
+}
+
+/* ---- the sheet ------------------------------------------------------ */
+.girlhood-paper {
+  position: relative;
+  container-type: inline-size;
+  width: 100%;
+  color: var(--girlhood-ink);
+  transform: rotate(var(--gp-rotate, 0deg));
+}
+.girlhood-paper-sheet {
+  position: relative;
+  min-height: 100cqw;
+  /* two soft, natural shadow levels that follow the deckled edge */
+  filter: drop-shadow(0 1px 1px rgb(70 50 25 / 0.2))
+    drop-shadow(0 12px 18px rgb(70 50 25 / 0.17));
+}
+.girlhood-paper.tone-0 .girlhood-paper-sheet {
+  filter: brightness(1.02) drop-shadow(0 1px 1px rgb(70 50 25 / 0.2))
+    drop-shadow(0 12px 18px rgb(70 50 25 / 0.17));
+}
+.girlhood-paper.tone-2 .girlhood-paper-sheet {
+  filter: brightness(0.98) drop-shadow(0 1px 1px rgb(70 50 25 / 0.2))
+    drop-shadow(0 12px 18px rgb(70 50 25 / 0.17));
+}
+/* Slices are 1000 x 160 / 1000 x 1520 / 1000 x 160 source pixels. */
+.girlhood-paper-top,
+.girlhood-paper-mid,
+.girlhood-paper-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+.girlhood-paper-top {
+  top: 0;
+  height: 16cqw;
+  background: var(--gp-top) 0 0 / 100% 100% no-repeat;
+}
+.girlhood-paper-mid {
+  top: 16cqw;
+  bottom: 16cqw;
+  background: var(--gp-mid) 0 0 / 100% auto repeat-y;
+}
+.girlhood-paper-bottom {
+  bottom: 0;
+  height: 16cqw;
+  background: var(--gp-bottom) 0 0 / 100% 100% no-repeat;
+}
+.girlhood-paper-content {
+  position: relative;
+  padding: 11cqw 10cqw 4cqw;
+  overflow-wrap: anywhere;
+}
+.girlhood-paper-footer {
+  position: relative;
+  padding: 0 10cqw 9cqw;
+  text-align: left; /* signature sits bottom left only */
+}
+.girlhood-paper.is-thumb .girlhood-paper-sheet {
+  min-height: 0;
+  aspect-ratio: 4 / 5;
+  filter: drop-shadow(0 1px 1px rgb(70 50 25 / 0.2))
+    drop-shadow(0 4px 6px rgb(70 50 25 / 0.15));
+}
+.girlhood-paper.is-thumb .girlhood-paper-content {
+  padding: 13cqw 9cqw 6cqw;
+}
+
+/* ---- tape ----------------------------------------------------------- */
+.girlhood-tape {
+  position: absolute;
+  left: calc(50% + var(--gp-tape-shift, 0%));
+  top: -1.5cqw;
+  width: 30cqw;
+  aspect-ratio: 300 / 86;
+  transform: translateX(-50%) rotate(var(--gp-tape-tilt, 0deg));
+  background: var(--gp-tape) center / 100% 100% no-repeat;
+  filter: drop-shadow(0 1px 1.5px rgb(70 50 25 / 0.28));
+  pointer-events: none;
+}
+.girlhood-paper.is-thumb .girlhood-tape {
+  width: 34cqw;
+  top: -2cqw;
+}
+
+/* ---- typography: one serif family, one deep green ------------------- */
+.girlhood-paper-title {
+  font-family: var(--girlhood-serif);
+  font-weight: 600;
+  color: var(--girlhood-forest);
+  text-align: center;
+  font-size: clamp(1.7rem, 7.6cqw, 3.4rem);
+  line-height: 1.12;
+  letter-spacing: -0.012em;
+  margin: 0 0 6cqw;
+  text-wrap: balance;
+}
+/* Never single out any word of the title (no italic, colour, underline). */
+.girlhood-paper-title *,
+.girlhood-paper-title em,
+.girlhood-paper-title strong {
+  font: inherit;
+  color: inherit;
+  text-decoration: none;
+}
+.girlhood-paper-prompt {
+  font-family: var(--girlhood-serif);
+  font-weight: 500;
+  color: var(--girlhood-forest);
+  font-size: clamp(1.1rem, 4.3cqw, 1.55rem);
+  line-height: 1.3;
+  margin: 0 0 0.35em;
+}
+.girlhood-paper-answer {
+  font-family: var(--girlhood-serif);
+  font-weight: 500;
+  color: var(--girlhood-ink);
+  font-size: clamp(1.1rem, 4.4cqw, 1.5rem);
+  line-height: 1.5;
+  white-space: pre-wrap;
+  margin: 0 0 7cqw;
+}
+.girlhood-paper-signature {
+  font-family: var(--girlhood-serif);
+  font-weight: 500;
+  color: var(--girlhood-forest);
+  font-size: clamp(1rem, 4cqw, 1.3rem);
+  margin: 0;
+}
+
+/* ---- the wall ------------------------------------------------------- */
+.girlhood-wall-surface {
+  background:
+    radial-gradient(120% 60% at 12% 0%, rgb(255 250 240 / 0.75), transparent 60%),
+    linear-gradient(160deg, #f1e4cd, var(--girlhood-wall) 55%, #e2cfb0);
+}
+.dark .girlhood-wall-surface {
+  background:
+    radial-gradient(120% 60% at 12% 0%, rgb(255 244 220 / 0.07), transparent 60%),
+    linear-gradient(160deg, #3b3228, #332b23 55%, #2d261f);
+}
+
+/* Browsers without container query units get a plain, readable sheet. */
+@supports not (width: 1cqw) {
+  .girlhood-paper-sheet {
+    min-height: 0;
+    background: var(--girlhood-paper);
+    border-radius: 3px;
+  }
+  .girlhood-paper-top,
+  .girlhood-paper-mid,
+  .girlhood-paper-bottom,
+  .girlhood-tape {
+    display: none;
+  }
+  .girlhood-paper-content,
+  .girlhood-paper-footer {
+    padding-inline: 1.5rem;
+  }
+  .girlhood-paper-content {
+    padding-top: 1.75rem;
+  }
+}
+
+/* ---- hero and rights section --------------------------------------- */
+.girlhood-shell {
+  --girlhood-heading: var(--girlhood-forest);
+}
+.dark .girlhood-shell {
+  --girlhood-heading: #cfe9d9;
+}
+.girlhood-hero {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 2rem;
+  text-align: center;
+}
+.girlhood-hero .girlhood-small-heading {
+  color: var(--girlhood-muted);
+}
+.dark .girlhood-hero .girlhood-small-heading {
+  color: inherit;
+}
+.girlhood-hero h1 {
+  font-family: var(--girlhood-serif);
+  font-weight: 600;
+  color: var(--girlhood-heading);
+  font-size: clamp(3rem, 12vw, 5.8rem);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  margin: 1.25rem auto 1rem;
+  max-width: 11ch;
+  text-wrap: balance;
+}
+.girlhood-hero-question {
+  font-family: var(--girlhood-serif);
+  font-weight: 500;
+  font-size: clamp(1.3rem, 4vw, 1.7rem);
+  color: var(--girlhood-plum);
+  margin: 0 auto;
+}
+.dark .girlhood-hero-question {
+  color: #e5a5d2;
+}
+.girlhood-hero .girlhood-invitation-copy {
+  margin: 1.4rem auto;
+}
+/* Decoration: hidden on phones so text and the main action come first. */
+.girlhood-hero-art {
+  display: none;
+}
+@media (min-width: 900px) {
+  .girlhood-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    align-items: center;
+    gap: 3rem;
+    text-align: left;
+    padding-block: 4.5rem 3rem;
+  }
+  .girlhood-hero h1,
+  .girlhood-hero .girlhood-invitation-copy,
+  .girlhood-hero-question {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .girlhood-hero .girlhood-invitation-actions {
+    justify-content: flex-start;
+  }
+  .girlhood-hero-art {
+    display: block;
+    max-width: 360px;
+    justify-self: center;
+    width: 100%;
+    transform: rotate(2deg);
+  }
+  .girlhood-hero-art .girlhood-paper-sheet {
+    min-height: 118cqw;
+  }
+}
+
+.girlhood-rights {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 3.5rem 1.5rem 4.5rem;
+  border-top: 1px solid var(--line);
+  font-family: var(--girlhood-serif);
+  font-weight: 500;
+}
+.girlhood-rights-lead {
+  font-weight: 600;
+  font-size: clamp(2rem, 6vw, 3rem);
+  line-height: 1.1;
+  color: var(--girlhood-heading);
+  margin: 0;
+}
+.girlhood-rights-list {
+  font-size: clamp(1.25rem, 3.6vw, 1.6rem);
+  line-height: 1.45;
+  margin: 0.6rem 0 0;
+}
+.girlhood-rights-note {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 0.8rem;
+  margin: 1.25rem 0 0;
+  opacity: 0.85;
+}
+.girlhood-rights-fact {
+  font-size: clamp(1.25rem, 3.6vw, 1.65rem);
+  line-height: 1.4;
+  margin: 2.1rem 0 0;
+}
+.girlhood-rights-fact strong,
+.girlhood-rights-closing strong {
+  font-weight: 600;
+  color: var(--girlhood-heading);
+}
+.girlhood-rights-ref {
+  display: inline-block;
+  min-width: 24px;
+  min-height: 24px;
+  line-height: 24px;
+  text-align: center;
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 0.7rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.girlhood-rights-closing {
+  font-size: clamp(1.4rem, 4vw, 1.9rem);
+  line-height: 1.35;
+  margin: 3rem 0 0;
+}
+.girlhood-sources {
+  margin-top: 3rem;
+  font-family: Inter, system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 0.85rem;
+}
+.girlhood-sources h3 {
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin: 0 0 0.6rem;
+}
+.girlhood-sources ol {
+  padding-left: 1.2rem;
+  list-style: decimal;
+}
+.girlhood-sources li {
+  margin: 0.25rem 0;
+  scroll-margin-top: 5rem;
+}
+.girlhood-sources a {
+  display: inline-block;
+  padding-block: 0.15rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.girlhood-sources-note {
+  margin: 0.5rem 0 0;
+  opacity: 0.85;
+}
+/* A line eases in as it enters the viewport where supported; otherwise it is
+   simply visible. Never fully hidden, never scroll-jacked. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .girlhood-rights-fact {
+      animation: girlhoodReveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 55%;
+    }
+  }
+}
+@keyframes girlhoodReveal {
+  from {
+    opacity: 0.35;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Shared paper surfaces, with readable text independent of the decoration. */
+.girlhood-wall-page { background: var(--girlhood-wall); color: var(--girlhood-ink); border-radius: 1rem; padding: 2rem 12px; }
+.girlhood-wall-page .girlhood-page-title {color:var(--girlhood-forest)}
+.girlhood-notes-grid {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 8px;padding:16px 0;}
+.girlhood-paper .girlhood-note-preview {display:block;width:100%;min-height:95px;padding:0;background:none;border:0;text-align:left;color:var(--girlhood-forest);}
+.girlhood-paper .girlhood-note-excerpt {display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:5;overflow:hidden;font-family:var(--girlhood-serif);font-size:14px;line-height:1.35;overflow-wrap:anywhere;}
+.girlhood-filters {display:flex;flex-wrap:nowrap;overflow-x:auto;max-width:100%;padding-bottom:10px;}
+.girlhood-filters button {flex-shrink:0;}
+.girlhood-note-dialog {background:var(--girlhood-wall);padding:36px 12px 20px;width:min(720px,calc(100% - 16px));max-height:90dvh;color:var(--girlhood-ink);border-radius:8px;}
+.girlhood-note-dialog .girlhood-paper {transform:none;}
+.girlhood-note-dialog .girlhood-note-close,.girlhood-composer .girlhood-note-close {position:absolute;right:8px;top:2px;z-index:2;color:#123f2d;background:#fff9ef;width:40px;height:40px;}
+.girlhood-public-share {padding:20px;display:flex;flex-wrap:wrap;gap:12px;}
+.girlhood-public-share button {border:1px solid #123f2d;border-radius:2rem;padding:10px 16px;}
+.girlhood-public-share label {width:100%;font-size:14px;}
+.girlhood-public-share input {display:block;width:100%;padding:10px;background:#fff9ef;}
+.girlhood-writing-paper {max-width:850px;margin:40px auto;}
+.girlhood-writing-paper .girlhood-writing-cards {display:block;margin:0;}
+.girlhood-writing-paper .girlhood-writing-card {display:block;background:none;box-shadow:none;border:0;border-radius:0;transform:none;min-height:0;padding:0;margin:0 0 24px;}
+.girlhood-writing-paper .girlhood-writing-card label {font-family:var(--girlhood-serif);font-size:clamp(20px,4cqw,30px);color:var(--girlhood-forest);font-weight:500;}
+.girlhood-writing-paper .girlhood-writing-card textarea {min-height:100px;font-family:var(--girlhood-serif);font-size:20px;line-height:1.5;color:var(--girlhood-ink);background:transparent;padding:8px 0;resize:vertical;border:0;border-radius:0;}
+.girlhood-writing-paper .girlhood-writing-card textarea::placeholder {color:#55645a;}
+.girlhood-writing-paper textarea:focus-visible {outline:2px solid #82246d;outline-offset:6px;}
+.girlhood-before > h2 {font-family:var(--girlhood-serif);font-size:26px;}
+.girlhood-create-image {margin:24px 0;}
+.girlhood-composer {width:min(800px,calc(100% - 20px));max-height:92dvh;padding:48px 24px 24px;background:#fcf6ed;color:#123f2d;border:0;border-radius:12px;}
+.girlhood-composer::backdrop {background:#14231c99;}
+body:has(.girlhood-composer[open]) {overflow:hidden;}
+.girlhood-composer h2 {font:600 32px 'EB Garamond',Georgia,serif;}
+.girlhood-composer p {margin:12px 0;}
+.girlhood-composer label {display:block;margin:12px 0;}
+.girlhood-composer input:not([type=checkbox]),.girlhood-composer select {display:block;border:1px solid #55645a;padding:10px;max-width:100%;width:100%;}
+.girlhood-composer input[type=checkbox] {margin-right:10px;}
+.girlhood-composer figure {margin:24px 0;}
+.girlhood-composer figure img {display:block;width:100%;height:auto;margin-bottom:16px;}
+@media(min-width:768px) {.girlhood-notes-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;} .girlhood-paper .girlhood-note-excerpt{font-size:clamp(14px,2vw,22px);}}
+@media(prefers-reduced-motion:reduce){.girlhood-paper,.girlhood-note-dialog{animation:none;transition:none;}}
+
+.girlhood-note-dialog {background-image:url('./assets/botanical-wall.webp');background-size:cover;background-position:center;}
+
+.girlhood-filters {justify-content:flex-start;}
+@media(max-width:600px){.girlhood-nav{padding:4px 12px;}.girlhood-nav nav{gap:8px;width:100%;justify-content:center;}.girlhood-nav nav > a {font-size:11px;}.girlhood-language {margin-left:auto;}.girlhood-language button{padding:4px 6px;}.girlhood-form-page{padding-top:24px;}}

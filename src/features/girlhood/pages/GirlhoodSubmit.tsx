@@ -1,3 +1,7 @@
+import { lazy, Suspense, useMemo } from 'react';
+import GirlhoodPaperFrame from '../paper/GirlhoodPaperFrame';
+import type { PersonalWords } from '../paper/renderImage';
+const PersonalImageComposer = lazy(() => import('../components/PersonalImageComposer'));
 import { useGirlhoodRuntime } from "../GirlhoodRuntime";
 import {
   AvailabilityNotice,
@@ -86,9 +90,7 @@ export default function GirlhoodSubmit() {
   const requestToken = useRef<string | null>(null);
   const [pendingReceipt, setPendingReceipt] = useState(false);
   const [form, setForm] = useState<GirlhoodSubmissionInput>(empty);
-  const [activePrompt, setActivePrompt] = useState(0),
-    [detailsOpen, setDetailsOpen] = useState(false),
-    [receiptSaved, setReceiptSaved] = useState(false),
+  const [receiptSaved, setReceiptSaved] = useState(false),
     [error, setError] = useState(""),
     [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<{
@@ -98,6 +100,10 @@ export default function GirlhoodSubmit() {
       withdrawn?: boolean;
     } | null>(null),
     [feedback, setFeedback] = useState("");
+  const [imageOpen, setImageOpen] = useState(false);
+  const [snapshot, setSnapshot] = useState<PersonalWords | null>(null);
+  const currentWords = useMemo<PersonalWords>(() => ({ answers: [form.girlhoodResponse, form.futureResponse, form.supportResponse], under13: typeof form.age === 'number' && form.age < 13, ageKnown: typeof form.age === 'number' }), [form.girlhoodResponse, form.futureResponse, form.supportResponse, form.age]);
+  const imageWords = success ? snapshot : currentWords;
   const heading = useRef<HTMLHeadingElement>(null),
     alert = useRef<HTMLDivElement>(null),
     busy = useRef(false);
@@ -129,7 +135,7 @@ export default function GirlhoodSubmit() {
     };
     const remind = (event: MouseEvent) => {
       if (
-        (event.target as HTMLElement).closest("a[href]") &&
+        (event.target as HTMLElement).closest("a[href]:not([download])") &&
         !window.confirm(x.receiptHelp)
       ) {
         event.preventDefault();
@@ -271,18 +277,14 @@ export default function GirlhoodSubmit() {
     setPendingReceipt(false);
     setSuccess(null);
     setForm(empty);
-    setActivePrompt(0);
-    setDetailsOpen(false);
+    setSnapshot(null);
+    setImageOpen(false);
     setReceiptSaved(false);
     setFeedback("");
     setError("");
   }
   async function submit(e: FormEvent) {
     e.preventDefault();
-    if (!detailsOpen) {
-      setDetailsOpen(true);
-      return;
-    }
     if (busy.current || isPreview) return;
     if (errors.length) {
       setError(errorFor(errors[0]));
@@ -313,6 +315,7 @@ export default function GirlhoodSubmit() {
         typeof data.withdrawalCode !== "string"
       )
         throw new Error(l.sendError);
+      setSnapshot(currentWords);
       setSuccess(data);
       setForm(empty);
     } catch (err) {
@@ -351,7 +354,7 @@ export default function GirlhoodSubmit() {
         <>
           <p className="girlhood-subtitle">
             {language === "fr"
-              ? "Quelques mots, comme ils vous viennent."
+              ? "Quelques mots, comme ils te viennent."
               : "A few words, just as they come."}
           </p>
           <AvailabilityNotice />
@@ -467,39 +470,10 @@ export default function GirlhoodSubmit() {
             <p className="mt-2 text-sm">{x.doneHelp}</p>
           </div>
         </div>
-      ) : availability.state !== "open" &&
-        form.age === "" &&
-        !form.girlhoodResponse ? (
-        <div className="mt-6">
-          {error && <p role="alert">{error}</p>}
-          <Link to={basePath + "/withdraw"} className="underline">
-            {l.withdraw}
-          </Link>
-        </div>
       ) : (
         <form onSubmit={submit} noValidate className="girlhood-notebook">
-          <div
-            className="girlhood-prompt-tabs"
-            role="group"
-            aria-label={language === "fr" ? "Vos pensées" : "Your thoughts"}
-          >
-            {(language === "fr"
-              ? ["L’enfance", "Devenir", "Le soutien"]
-              : ["Girlhood", "Becoming", "Support"]
-            ).map((label, i) => (
-              <button
-                type="button"
-                key={label}
-                aria-pressed={activePrompt === i}
-                onClick={() => {
-                  setActivePrompt(i);
-                  document.getElementById("note-" + i)?.focus();
-                }}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
+          <GirlhoodPaperFrame className="girlhood-writing-paper">
+            <h2 className="girlhood-paper-title">Girlhood Should Be Hers</h2>
           <div className="girlhood-writing-cards">
             {(
               [
@@ -510,10 +484,7 @@ export default function GirlhoodSubmit() {
             ).map(([key, title], i) => (
               <div
                 key={key}
-                className={
-                  "girlhood-writing-card " +
-                  (activePrompt === i ? "is-active" : "")
-                }
+                className="girlhood-writing-card is-active"
               >
                 <label htmlFor={"note-" + i}>
                   {title}
@@ -530,13 +501,12 @@ export default function GirlhoodSubmit() {
                   placeholder={
                     i === 0
                       ? language === "fr"
-                        ? "Vos mots ici…"
+                        ? "Tes mots ici…"
                         : "Your words here…"
                       : language === "fr"
-                        ? "Si vous le souhaitez…"
+                        ? "Si tu le souhaites…"
                         : "If you like…"
                   }
-                  onFocus={() => setActivePrompt(i)}
                   onChange={(e) => {
                     update(key, e.target.value);
                     e.target.style.height = "auto";
@@ -546,17 +516,16 @@ export default function GirlhoodSubmit() {
               </div>
             ))}
           </div>
-          <details
-            className="girlhood-before"
-            open={detailsOpen}
-            onToggle={(e) => setDetailsOpen(e.currentTarget.open)}
-          >
-            <summary>
+          </GirlhoodPaperFrame>
+          <p>{language === 'fr' ? 'Tu peux garder une image sans envoyer tes mots.' : 'You can keep an image without sending your words.'}</p>
+          <button type="button" className="girlhood-button girlhood-create-image" disabled={!currentWords.answers.some(answer => answer.trim())} onClick={() => setImageOpen(true)}>{language === 'fr' ? 'Créer mon image' : 'Create my image'}</button>
+          <section className="girlhood-before">
+            <h2>
               {language === "fr"
-                ? "Avant de laisser votre petit mot"
+                ? "Avant de partager tes mots"
                 : "Before you leave your note"}{" "}
               <span aria-hidden="true">↗</span>
-            </summary>
+            </h2>
             <div className="girlhood-before-content">
               <div className="girlhood-personal">
                 <Field label={l.age}>
@@ -579,7 +548,7 @@ export default function GirlhoodSubmit() {
                 </Field>
                 <p id="age-help">
                   {language === "fr"
-                    ? "Votre âge reste privé."
+                    ? "Ton âge reste privé."
                     : "Your age stays private."}
                 </p>
                 <Choice
@@ -622,7 +591,7 @@ export default function GirlhoodSubmit() {
                     <Field
                       label={
                         language === "fr"
-                          ? "D’où écrivez-vous ? (facultatif)"
+                          ? "D’où écris-tu ? (facultatif)"
                           : "Where are you writing from? (optional)"
                       }
                     >
@@ -696,7 +665,7 @@ export default function GirlhoodSubmit() {
                 />
               </div>
             </div>
-          </details>
+          </section>
           {error && (
             <div
               ref={alert}
@@ -713,7 +682,7 @@ export default function GirlhoodSubmit() {
               disabled={
                 loading ||
                 availability.state !== "open" ||
-                (isPreview && detailsOpen)
+                isPreview
               }
               className="girlhood-button"
             >
@@ -722,6 +691,8 @@ export default function GirlhoodSubmit() {
           </div>
         </form>
       )}
+      {success && imageWords && imageWords.answers.some(answer => answer.trim()) && <button type="button" className="girlhood-button girlhood-create-image" onClick={() => setImageOpen(true)}>{language === 'fr' ? 'Créer mon image' : 'Create my image'}</button>}
+      {imageOpen && imageWords && <Suspense fallback={<p role="status">{l.loading}</p>}><PersonalImageComposer words={imageWords} language={language} onClose={() => setImageOpen(false)} /></Suspense>}
     </section>
   );
 }

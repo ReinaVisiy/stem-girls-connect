@@ -8,7 +8,7 @@ try {
   const page=await browser.newPage({viewport:{width:1440,height:900}});
   await page.route('**/api/girlhood/wall?*',r=>r.fulfill({json:{responses:[],hasMore:false,nextCursor:null}}));
   await page.goto(base+'/programs/girlhood');await page.locator('#campaign-content h1').waitFor();
-  await page.getByRole('link',{name:name==='before'?'Add your voice ✦':'Leave a little wish',exact:false}).first().waitFor();
+  await page.getByRole('link',{name:name==='before'?'Add your voice ✦':'Write your version',exact:false}).first().waitFor();
   const text=await page.locator('#campaign-content').innerText();
   result[name]={words:text.trim().split(/\s+/).length,text};
   await page.close();

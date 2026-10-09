@@ -39,7 +39,7 @@ export default function GirlhoodLayout({ children }: { children: ReactNode }) {
         </nav>
       </div>
       <section id="campaign-content">{children}</section>
-      <nav aria-label={language === "fr" ? "Vos droits" : "Your privacy choices"} className="mx-auto flex max-w-6xl flex-wrap justify-center gap-5 border-t px-5 py-8 text-sm font-bold">
+      <nav aria-label={language === "fr" ? "Tes droits" : "Your privacy choices"} className="mx-auto flex max-w-6xl flex-wrap justify-center gap-5 border-t px-5 py-8 text-sm font-bold">
         <Link to={basePath + '/privacy'}>{t.privacy}</Link>
         <Link to={basePath + '/withdraw'}>{t.withdraw}</Link>
       </nav>

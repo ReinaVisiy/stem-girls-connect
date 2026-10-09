@@ -1,0 +1,1 @@
+export const PUBLIC_NOTE_FIELDS = 'public_reference,public_category,language,public_girlhood_response,public_future_response,public_support_response,safe_display_name,safe_country,safe_city,featured,created_at';
