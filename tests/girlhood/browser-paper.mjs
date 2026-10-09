@@ -5,7 +5,7 @@ import { chromium } from 'playwright';
 const output=resolve(process.env.UI_ARTIFACT_DIR || '../../outputs/girlhood-paper/after');
 await mkdir(output,{recursive:true});
 const browser=await chromium.launch({channel:'msedge'});
-const context=await browser.newContext({viewport:{width:390,height:844},recordVideo:{dir:output,size:{width:390,height:844}},reducedMotion:'reduce'});
+const context=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'reduce'});
 const page=await context.newPage();
 const errors=[];page.on('pageerror',e=>errors.push(e.message));
 let available=true, empty=false, state='open';
@@ -33,7 +33,7 @@ try {
  await page.keyboard.press('Escape');assert.ok(await trigger.evaluate(e=>e===document.activeElement));
  await page.goto(base+'/wall?note=fixture-0');await dialog.getByText('Anything she imagines.').waitFor();
  available=false;await page.evaluate(()=>window.dispatchEvent(new Event('focus')));await dialog.getByText('This note is unavailable.').waitFor();assert.equal(await dialog.getByText('Anything she imagines.').count(),0);available=true;
- await page.keyboard.press('Escape');empty=true;await page.reload();await page.getByRole('status').waitFor();await page.screenshot({path:resolve(output,'empty-390.png'),fullPage:true});empty=false;
+ await page.keyboard.press('Escape');await page.waitForURL('**/wall');empty=true;await page.reload();await page.getByText('No stories here yet.',{exact:true}).waitFor();await page.screenshot({path:resolve(output,'empty-390.png'),fullPage:true});empty=false;
  state='closed';await page.goto(base+'/share-your-voice');await page.locator('#note-0').fill('Free.');await page.locator('#note-1').fill('A scientist, an artist, herself.');await page.locator('#note-2').fill('Someone who listens and room to try.');
  assert.ok(await page.getByRole('button',{name:'Share my words'}).isDisabled());
  const outgoing=[];const track=r=>{if(r.postData())outgoing.push(r.postData());};page.on('request',track);

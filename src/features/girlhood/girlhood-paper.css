@@ -386,6 +386,8 @@
 .girlhood-create-image {margin:24px 0;}
 .girlhood-composer {width:min(800px,calc(100% - 20px));max-height:92dvh;padding:48px 24px 24px;background:#fcf6ed;color:#123f2d;border:0;border-radius:12px;}
 .girlhood-composer::backdrop {background:#14231c99;}
+.girlhood-composer {top:4dvh;bottom:auto;margin:0 auto;scroll-behavior:auto;overflow-anchor:none;}
+.girlhood-composer .girlhood-button:hover:not(:disabled) {transform:none;}
 body:has(.girlhood-composer[open]) {overflow:hidden;}
 .girlhood-composer h2 {font:600 32px 'EB Garamond',Georgia,serif;}
 .girlhood-composer p {margin:12px 0;}

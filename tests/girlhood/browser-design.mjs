@@ -55,7 +55,7 @@ const overflow = async () =>
   );
 const go = async (path) => {
   await page.goto(base + "/programs/girlhood" + path);
-  await page.locator(".girlhood-shell").waitFor();
+  await page.locator(".girlhood-shell h1").waitFor();
 };
 try {
   for (const width of [360, 390, 768, 1440]) {
