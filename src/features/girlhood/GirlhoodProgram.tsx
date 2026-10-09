@@ -5,6 +5,7 @@ import { isGirlhoodSubPath } from '../../../shared/girlhoodRoutes';
 import { GirlhoodBasePath } from './GirlhoodPaths';
 import GirlhoodLayout from './components/GirlhoodLayout';
 import './girlhood.css';
+import './girlhood-paper.css';
 import { CampaignAvailabilityProvider } from './components/CampaignAvailability';
 
 const pages = {
