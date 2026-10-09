@@ -124,7 +124,7 @@ const server = createServer(async (req, res) => {
     res.end("Not found");
   }
 });
-server.listen(4178, "127.0.0.1", () =>
+server.listen(Number(process.env.UI_PORT || 4178), "127.0.0.1", () =>
   console.log("UI fixture preview: http://127.0.0.1:4178/girlhood"),
 );
 

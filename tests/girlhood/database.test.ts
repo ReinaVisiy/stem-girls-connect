@@ -32,6 +32,15 @@ test("PostgreSQL migration, grants, privacy, moderation, withdrawal, counts and 
     ),
   );
   const admin = "00000000-0000-0000-0000-000000000001";
+  await db.exec(await readFile("supabase/migrations/20261008231632_girlhood_note_lengths.sql", "utf8"));
+  await t.test("short and long notes survive the database, oversize is rejected", async () => {
+    for (const answer of ["Safe.", "é".repeat(2000)]) {
+      const result = await db.query<{girlhood_response:string}>("insert into public.girlhood_submissions (public_reference,withdrawal_hash,age,perspective,public_category,language,girlhood_response,consent_version) values (gen_random_uuid()::text,'hash',12,'own','girl','en',$1,'test') returning girlhood_response", [answer]);
+      assert.equal(result.rows[0].girlhood_response, answer);
+    }
+    await assert.rejects(db.query("insert into public.girlhood_submissions (public_reference,withdrawal_hash,age,perspective,public_category,language,girlhood_response,consent_version) values (gen_random_uuid()::text,'hash',12,'own','girl','en',$1,'test')", ["x".repeat(2001)]));
+    await db.exec("delete from public.girlhood_submissions");
+  });
   await db.query<Record<string, unknown>>(
     "insert into auth.users values ($1)",
     [admin],

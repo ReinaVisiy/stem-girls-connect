@@ -449,7 +449,7 @@ export default function AdminGirlhood() {
                   <label key={key} className="block">
                     Answer {i + 1}
                     <AdminTextarea
-                      maxLength={500}
+                      maxLength={2000}
                       rows={3}
                       value={text[key]}
                       onChange={(e) =>
