@@ -8,6 +8,7 @@ import { copy } from "../config/copy";
 import GirlhoodResponseCard from "../components/GirlhoodResponseCard";
 import GirlhoodRights from "../components/GirlhoodRights";
 import GirlhoodPaperFrame from "../paper/GirlhoodPaperFrame";
+import TypewriterGreeting, { isGreetingSeason } from "../components/TypewriterGreeting";
 import { useGirlhoodLanguage } from "../hooks/useGirlhoodLanguage";
 import type { GirlhoodPublicResponse } from "../types";
 export default function GirlhoodHome() {
@@ -43,6 +44,7 @@ export default function GirlhoodHome() {
       />
       <section className="girlhood-invitation girlhood-hero">
         <div className="girlhood-hero-text">
+          {isGreetingSeason() && <TypewriterGreeting language={language} />}
           <p className="girlhood-small-heading">{t.eyebrow}</p>
           <h1>{t.heroTitle}</h1>
           <p className="girlhood-hero-question">{t.question}</p>

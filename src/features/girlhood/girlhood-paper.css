@@ -197,6 +197,48 @@
 .dark .girlhood-hero .girlhood-small-heading {
   color: inherit;
 }
+.girlhood-greeting {
+  font-family: var(--girlhood-serif);
+  font-weight: 600;
+  font-size: clamp(1.25rem, 5vw, 1.9rem);
+  line-height: 1.25;
+  color: var(--girlhood-plum);
+  margin: 0 auto 1.25rem;
+  max-width: 24ch;
+  text-wrap: balance;
+}
+.dark .girlhood-greeting {
+  color: #e5a5d2;
+}
+.girlhood-greeting-stage {
+  display: inline-grid;
+  text-align: left;
+}
+.girlhood-greeting-stage > span {
+  grid-area: 1 / 1;
+}
+.girlhood-greeting-ghost {
+  visibility: hidden;
+}
+.girlhood-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 3px;
+  vertical-align: -0.12em;
+  background: currentColor;
+  animation: girlhood-blink 0.9s steps(1) infinite;
+}
+.girlhood-cursor.is-done {
+  opacity: 0;
+  animation: none;
+}
+@keyframes girlhood-blink {
+  50% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .girlhood-cursor { animation: none; opacity: 0; }
+}
 .girlhood-hero h1 {
   font-family: var(--girlhood-serif);
   font-weight: 600;
