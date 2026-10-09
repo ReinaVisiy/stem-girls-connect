@@ -24,3 +24,17 @@ dist-ssr
 *.sw?
 
 supabase/.temp/
+
+# Environment files (keep the example only)
+.env
+.env.*
+!.env.local.example
+
+# Test and tooling output
+coverage
+test-results
+playwright-report
+.playwright
+screenshots
+*.tsbuildinfo
+.vercel

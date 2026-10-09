@@ -2,7 +2,7 @@
 
 The five 202608/202609 SQL files were recovered verbatim from the live project's `supabase_migrations.schema_migrations.statements`, read-only on 2026-10-08. They contain schema/functions, not production participant data or credentials. The four historical October website migrations retain their live versions: 20261008010839, 20261008101204, 20261008114127, 20261008114140. All nine are already applied in production. No Girlhood migration was applied there during refinement.
 
-Never replay these historical files against an existing project. Inspect the target's migration history first. For the authorized production rollout, follow the newsletter prepare/deploy/contract sequence in `GIRLHOOD_CAMPAIGN_SETUP.md`; an indiscriminate migration push can revoke the old newsletter endpoint's access too early.
+Never replay these historical files against an existing project. Inspect the target's migration history first. For the authorized production rollout, follow the newsletter prepare/deploy/contract sequence in `docs/girlhood/campaign-setup.md`; an indiscriminate migration push can revoke the old newsletter endpoint's access too early.
 
 ## Fresh development installation
 
