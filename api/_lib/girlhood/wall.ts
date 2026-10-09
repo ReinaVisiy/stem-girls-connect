@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { getSupabaseServiceClient } from "../supabase.js";
+import { PUBLIC_NOTE_FIELDS } from './public-fields.js';
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader("Cache-Control", "no-store");
   if (req.method !== "GET")
@@ -21,7 +22,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     let query = getSupabaseServiceClient()
       .from("girlhood_public_responses")
       .select(
-        "public_reference,public_category,language,public_girlhood_response,public_future_response,public_support_response,safe_display_name,safe_country,safe_city,featured,created_at",
+        PUBLIC_NOTE_FIELDS,
       )
       .order("created_at", { ascending: false })
       .order("public_reference", { ascending: false })

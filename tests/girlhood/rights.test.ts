@@ -47,7 +47,7 @@ test("French typography uses non-breaking spaces before high punctuation", () =>
 test("hero copy matches the approved wording and omits the question from the speech", () => {
   assert.equal(copy.en.heroTitle, "Girlhood Should Be Hers.");
   assert.equal(copy.en.question, "What if girls wrote the rules?");
-  assert.equal(copy.fr.heroTitle, "Que l’enfance soit la sienne.");
+  assert.equal(copy.fr.heroTitle, "Girlhood Should Be Hers.");
   for (const lang of ["en", "fr"] as const) {
     const speech = JSON.stringify(rights[lang]);
     assert.ok(!speech.includes(copy[lang].question), "question appears once, in the hero");

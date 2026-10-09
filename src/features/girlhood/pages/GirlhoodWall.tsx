@@ -1,3 +1,6 @@
+import PublicNoteDialog from '../components/PublicNoteDialog';
+import GirlhoodPaperFrame from '../paper/GirlhoodPaperFrame';
+import { useSearchParams } from 'react-router-dom';
 import { ContributionLink } from "../components/CampaignAvailability";
 import { useGirlhoodRuntime } from "../GirlhoodRuntime";
 import { useGirlhoodBasePath } from "../GirlhoodPaths";
@@ -9,7 +12,10 @@ import { useGirlhoodLanguage } from "../hooks/useGirlhoodLanguage";
 import { ui } from "../config/ui";
 import type { GirlhoodCategory, GirlhoodPublicResponse } from "../types";
 export default function GirlhoodWall() {
-  const { request } = useGirlhoodRuntime();
+  const [params, setParams] = useSearchParams();
+  const selected = params.get("note");
+  const openNote = (reference: string) => setParams({note: reference});
+  const { request, preview } = useGirlhoodRuntime();
   const basePath = useGirlhoodBasePath();
   const { language } = useGirlhoodLanguage();
   const t = ui[language];
@@ -103,9 +109,7 @@ export default function GirlhoodWall() {
           </button>
         </div>
       ) : responses.length === 0 ? (
-        <p role="status" className="py-12">
-          {t.empty}
-        </p>
+        <div><p role="status" className="py-12">{t.empty}</p><div className="girlhood-notes-grid" aria-hidden="true">{[0,1,2].map(i => <GirlhoodPaperFrame key={i} size="thumb"><span /></GirlhoodPaperFrame>)}</div></div>
       ) : (
         <div className="girlhood-notes-grid">
           {responses.map((r) => (
@@ -113,6 +117,7 @@ export default function GirlhoodWall() {
               key={r.public_reference}
               response={r}
               language={language}
+              onOpen={preview ? undefined : openNote}
             />
           ))}
         </div>
@@ -144,6 +149,7 @@ export default function GirlhoodWall() {
           </button>
         </nav>
       )}
+      {!preview && selected && <PublicNoteDialog reference={selected} language={language} onClose={() => setParams({})} />}
       <p className="mt-10 text-sm">{t.disclaimer}</p>
     </section>
   );

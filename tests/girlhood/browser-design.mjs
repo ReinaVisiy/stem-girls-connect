@@ -41,6 +41,7 @@ await page.route("**/api/girlhood/wall?*", (route) =>
     json: { responses: notes, hasMore: false, nextCursor: null },
   }),
 );
+await page.route('**/api/girlhood/note?*', route => route.fulfill({json:{response:notes[0]}}));
 let state = "open";
 await page.route("**/api/girlhood/status", (route) =>
   route.fulfill({ json: { state } }),
@@ -73,8 +74,9 @@ try {
           .evaluate(
             (el) => getComputedStyle(el).gridTemplateColumns.split(" ").length,
           );
-        assert.equal(columns, width < 900 ? 3 : 6);
+        assert.equal(columns, width < 768 ? 3 : 4);
         await page.locator(".girlhood-note-preview").first().click();
+        await page.getByRole("dialog").locator("section p").last().waitFor();
         assert.ok(await page.getByRole("dialog").isVisible());
         assert.equal(
           await page
@@ -106,14 +108,12 @@ try {
   await page.setViewportSize({ width: 390, height: 844 });
   await go("/share-your-voice");
   assert.equal(await page.getByRole("progressbar").count(), 0);
-  assert.ok(!(await page.getByRole("spinbutton").isVisible()));
+  assert.ok(await page.getByRole("spinbutton").isVisible());
   await page.locator("#note-0").fill("Safe.");
-  await page.getByRole("button", { name: "Becoming", exact: true }).click();
   await page.locator("#note-1").fill("Anything.");
-  await page.getByRole("button", { name: "Girlhood", exact: true }).click();
   assert.equal(await page.locator("#note-0").inputValue(), "Safe.");
   await page
-    .getByRole("button", { name: "Leave my note", exact: false })
+    .getByRole("button", { name: "Share my words", exact: false })
     .click();
   await page.getByRole("spinbutton").fill("12");
   assert.ok(
@@ -166,7 +166,7 @@ try {
     await checkbox.check();
   await page.locator("#note-0").fill("x".repeat(2001));
   await page
-    .getByRole("button", { name: "Leave my note", exact: false })
+    .getByRole("button", { name: "Share my words", exact: false })
     .click();
   await page.getByRole("alert").filter({ hasText: "2,000" }).waitFor();
   assert.equal(
@@ -181,7 +181,7 @@ try {
     () => document.querySelector(".girlhood-send button").disabled,
   );
   await page
-    .getByRole("button", { name: "Leave my note", exact: false })
+    .getByRole("button", { name: "Share my words", exact: false })
     .isDisabled()
     .then((v) => assert.ok(v));
   assert.equal(await page.locator("#note-0").inputValue(), "Safe.");
@@ -191,7 +191,7 @@ try {
     () => !document.querySelector(".girlhood-send button").disabled,
   );
   await page
-    .getByRole("button", { name: "Leave my note", exact: false })
+    .getByRole("button", { name: "Share my words", exact: false })
     .click();
   await page.locator(".girlhood-receipt").waitFor();
   await page.screenshot({
@@ -237,7 +237,7 @@ try {
     state = value;
     await go("/share-your-voice");
     await page.locator(".girlhood-availability").waitFor();
-    assert.equal(await page.locator("textarea").count(), 0);
+    assert.equal(await page.locator("textarea").count(), 3);
   }
   state = "open";
   await go("/share-your-voice");

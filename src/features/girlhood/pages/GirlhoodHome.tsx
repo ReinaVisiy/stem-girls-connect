@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import { ContributionLink } from "../components/CampaignAvailability";
 import { Link, useGirlhoodRuntime } from "../GirlhoodRuntime";
@@ -10,7 +11,8 @@ import GirlhoodPaperFrame from "../paper/GirlhoodPaperFrame";
 import { useGirlhoodLanguage } from "../hooks/useGirlhoodLanguage";
 import type { GirlhoodPublicResponse } from "../types";
 export default function GirlhoodHome() {
-  const { request } = useGirlhoodRuntime();
+  const navigate = useNavigate();
+  const { request, preview } = useGirlhoodRuntime();
   const basePath = useGirlhoodBasePath();
   const { language } = useGirlhoodLanguage();
   const t = copy[language];
@@ -66,6 +68,7 @@ export default function GirlhoodHome() {
               <GirlhoodResponseCard
                 key={response.public_reference}
                 response={response}
+                onOpen={preview ? undefined : reference => navigate(basePath + "/wall?note=" + encodeURIComponent(reference))}
                 language={language}
               />
             ))}

@@ -75,3 +75,14 @@ The five figures in `src/features/girlhood/config/rights.ts` come from the campa
 A person must open all five links and confirm the wording before launch, in particular claim 4. The population and measure of each claim (for example "alive today", "before turning 18") are protected by `tests/girlhood/rights.test.ts`.
 
 Other open items for Item 2: the French copy (title adaptation, informal *tu* register, French rights speech) still needs a fluent read-through and a campaign-owner decision. Privacy and form copy elsewhere in French still use *vous*.
+
+
+## Local continuation, 9 October 2026 (Node 24)
+
+The remote already contained the three commits through a95ecac on design/girlhood-magic, with no open PR. To preserve that work, design/girlhood-personal-images was created from fetched origin/main and fast-forwarded to those commits. Main still resolves to 052d1c9. Initial GitHub network failures were retried successfully.
+
+Fresh read-only production screenshots were captured at 360, 390 and 1440 px for home, wall and writer, before the new local implementation was deployed anywhere. These are in girlhood-paper/before. No production submissions were created. The older Node 22 results above belong to the inherited branch; this continuation uses Node 24.19.0 and installed Edge through Playwright.
+
+All five editorial figures were independently checked against the primary pages linked in config/rights.ts on 9 October: UNICEF Girl Goals (122 million out of school), UNICEF childhood sexual violence (one in eight for rape/sexual assault), UNICEF FGM report (over 230 million), UNICEF International Day of the Girl 2026 (one in five married before 18), and UNESCO STEM education (35%, unchanged for ten years). These checks supersede the incomplete verification section above. Sources preserve their distinct populations and measures; child marriage is prevalence, not an annual incidence estimate.
+
+The official English title is retained in French pending an approved adapted name. Public UI uses informal tu; a fluent human editorial read-through remains a release review item. No safeguarding contacts have been invented.

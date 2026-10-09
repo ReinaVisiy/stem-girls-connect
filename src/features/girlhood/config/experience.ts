@@ -66,9 +66,9 @@ export const experience = {
   },
   fr: {
     eyebrow: "Un peu d’imagination. Un monde de possibles.",
-    hero: "Que donneriez-vous à chaque fille ?",
+    hero: "Que donnerais-tu à chaque fille ?",
     heroHelp:
-      "Choisissez une possibilité. Puis imaginez l’enfance qu’elle mérite.",
+      "Choisis une possibilité. Puis imagine l’enfance qu’elle mérite.",
     possibilities: [
       {
         word: "Curiosité",
@@ -86,49 +86,49 @@ export const experience = {
         note: "Se sentir en sécurité, soutenue et accueillie, telle qu’elle est.",
       },
     ],
-    invitation: "Pas de réponse parfaite. Simplement votre voix.",
-    small: "Français ou anglais · Votre vie privée, votre choix",
-    journey: "Quelques instants. Vos propres mots.",
+    invitation: "Pas de réponse parfaite. Simplement ta voix.",
+    small: "Français ou anglais · Ta vie privée, ton choix",
+    journey: "Quelques instants. Tes propres mots.",
     journeyHelp:
-      "Imaginez librement. Choisissez quoi partager. Dessinons un avenir meilleur.",
-    trust: "Votre voix vous appartient.",
+      "Imagine librement. Choisis quoi partager. Dessinons un avenir meilleur.",
+    trust: "Ta voix t’appartient.",
     trustHelp:
-      "Chaque contribution est relue avant publication. Vous choisissez si elle apparaît publiquement et pouvez la retirer plus tard.",
+      "Chaque contribution est relue avant publication. Tu choisis si elle apparaît publiquement et peux la retirer plus tard.",
     begin: "Commencer ma contribution",
     step: "Étape",
     of: "sur",
     stepHelp: [
-      "Quelques mots sur vous. Seul votre âge est obligatoire ici.",
-      "Vos mots comptent. La première question est obligatoire ; les autres sont facultatives.",
-      "Vous décidez. La publication et toutes les autres autorisations sont facultatives.",
-      "Prenez un instant. Relisez vos mots et vos choix avant l’envoi.",
+      "Quelques mots sur toi. Seul ton âge est obligatoire ici.",
+      "Tes mots comptent. La première question est obligatoire ; les autres sont facultatives.",
+      "Tu décides. La publication et toutes les autres autorisations sont facultatives.",
+      "Prends un instant. Relis tes mots et tes choix avant l’envoi.",
     ],
-    recoveryTitle: "Vérifions que votre voix est bien arrivée.",
+    recoveryTitle: "Vérifions que ta voix est bien arrivée.",
     recoveryHelp:
-      "Cet onglet conserve une clé privée de récupération, jamais vos réponses. Si un envoi a été interrompu, récupérez son reçu avant de recommencer.",
+      "Cet onglet conserve une clé privée de récupération, jamais tes réponses. Si un envoi a été interrompu, récupère son reçu avant de recommencer.",
     recover: "Récupérer mon reçu",
     download: "Télécharger mon reçu privé",
     downloaded:
-      "Téléchargement du reçu lancé. Conservez-le dans un endroit privé.",
+      "Téléchargement du reçu lancé. Conserve-le dans un endroit privé.",
     receiptHelp:
-      "Ces deux codes permettent de retirer votre contribution. Enregistrez-les avant de partir.",
+      "Ces deux codes permettent de retirer ta contribution. Enregistre-les avant de partir.",
     done: "Effacer le reçu de cet onglet",
     doneHelp:
-      "Efface la clé de récupération de cet onglet et ouvre un nouveau formulaire. Cela ne retire pas votre contribution.",
-    saved: "Votre petit mot est bien arrivé. Merci de l’avoir partagé.",
+      "Efface la clé de récupération de cet onglet et ouvre un nouveau formulaire. Cela ne retire pas ta contribution.",
+    saved: "Ton petit mot est bien arrivé. Merci de l’avoir partagé.",
     savedHelp: "Merci d’imaginer un autre avenir avec nous.",
     withdrawn: "Cette contribution a déjà été retirée.",
     receipt: "Reçu privé de contribution",
     retryHelp:
-      "Nous n’avons pas pu confirmer l’envoi. Votre tentative est conservée : réessayez ou récupérez votre reçu.",
+      "Nous n’avons pas pu confirmer l’envoi. Ta tentative est conservée : réessaie ou récupère ton reçu.",
     details: "Lire la suite de cette voix",
     less: "Fermer",
     loading: "Les voix se rassemblent…",
     privacyNote:
-      "Vos réponses restent en mémoire. Une clé privée de récupération du reçu reste dans cet onglet jusqu’à son effacement ou la fermeture de l’onglet.",
+      "Tes réponses restent en mémoire. Une clé privée de récupération du reçu reste dans cet onglet jusqu’à son effacement ou la fermeture de l’onglet.",
     recoverMissing:
-      "Aucune contribution enregistrée pour le moment. Réessayez ou remplissez le formulaire avec cette même tentative.",
+      "Aucune contribution enregistrée pour le moment. Réessaie ou remplis le formulaire avec cette même tentative.",
     savedReminder:
-      "Enregistrez d’abord votre reçu privé. Effacer la clé de récupération de cet onglet ?",
+      "Enregistre d’abord ton reçu privé. Effacer la clé de récupération de cet onglet ?",
   },
 } as const;

@@ -1,3 +1,4 @@
+import botanicalWall from '../assets/botanical-wall.webp';
 import paperTop from "../assets/paper-top.webp";
 import paperMid from "../assets/paper-mid.webp";
 import paperBottom from "../assets/paper-bottom.webp";
@@ -5,10 +6,6 @@ import paperTopSm from "../assets/paper-top-sm.webp";
 import paperMidSm from "../assets/paper-mid-sm.webp";
 import paperBottomSm from "../assets/paper-bottom-sm.webp";
 import tape from "../assets/tape.png";
-import wall1350 from "../assets/wall-1350.webp";
-import wall1920 from "../assets/wall-1920.webp";
-import foreground1350 from "../assets/foreground-1350.webp";
-import foreground1920 from "../assets/foreground-1920.webp";
 
 /**
  * The paper is three slices cut from one master sheet (see
@@ -32,6 +29,5 @@ export const paperAssets = {
   /** 400px-wide slices for small wall thumbnails. */
   small: { top: paperTopSm, mid: paperMidSm, bottom: paperBottomSm },
   tape,
-  wall: { portrait: wall1350, story: wall1920 },
-  foreground: { portrait: foreground1350, story: foreground1920 },
+  wall: { portrait: botanicalWall, story: botanicalWall },
 } as const;

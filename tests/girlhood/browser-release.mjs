@@ -16,13 +16,13 @@ try{
   for(const [value,text] of [['not_yet_open','not yet open'],['closed','have closed']]){
     state=value;await page.goto(base+'/programs/girlhood');await status().filter({hasText:text}).waitFor();
     assert.equal(await page.locator('.girlhood-shell a[href$="share-your-voice"]').count(),0);
-    await page.goto(base+'/programs/girlhood/share-your-voice');await status().filter({hasText:text}).waitFor();assert.equal(await page.getByRole('spinbutton').count(),0);
+    await page.goto(base+'/programs/girlhood/share-your-voice');await status().filter({hasText:text}).waitFor();assert.equal(await page.getByRole('spinbutton').count(),1);
     await page.goto(base+'/programs/girlhood/withdraw');await page.getByLabel('Private withdrawal code',{exact:true}).waitFor();
   }
-  fail=true;await page.goto(base+'/programs/girlhood/share-your-voice');await status().filter({hasText:'cannot check availability'}).waitFor();assert.equal(await page.getByRole('spinbutton').count(),0);
+  fail=true;await page.goto(base+'/programs/girlhood/share-your-voice');await status().filter({hasText:'cannot check availability'}).waitFor();assert.equal(await page.getByRole('spinbutton').count(),1);
   fail=false;state='open';await page.getByRole('button',{name:'Check again',exact:true}).click();await page.locator('textarea').first().fill('Keep these answers when collection closes.');
   state='closed';await page.evaluate(()=>window.dispatchEvent(new Event('focus')));await status().filter({hasText:'have closed'}).waitFor();
-  assert.equal(await page.locator('textarea').first().inputValue(),'Keep these answers when collection closes.');assert.ok(await page.getByRole('button',{name:'Leave my note',exact:false}).isDisabled());
+  assert.equal(await page.locator('textarea').first().inputValue(),'Keep these answers when collection closes.');assert.ok(await page.getByRole('button',{name:'Share my words',exact:false}).isDisabled());
   await page.screenshot({path:resolve(artifacts,'closed-with-preserved-answers.png'),fullPage:true});
   console.log('PASS availability states, failed status, withdrawal access, mid-form closure and answer preservation');
   state='open';
@@ -52,11 +52,11 @@ try{
   await ap.goto(base+'/admin/programs/new');await ap.getByLabel('Page template',{exact:true}).selectOption('girlhood');
   assert.equal(await ap.getByLabel('Slug',{exact:true}).inputValue(),'girlhood');
   await ap.getByRole('button',{name:'Preview',exact:true}).first().click();const preview=ap.getByRole('region',{name:'Girlhood administrator preview'});await preview.waitFor();
-  await preview.getByRole('button',{name:'Français',exact:true}).click();await preview.getByRole('heading',{name:'Que l’enfance soit la sienne.',exact:true}).waitFor();
+  await preview.getByRole('button',{name:'Français',exact:true}).click();await preview.getByRole('heading',{name:'Girlhood Should Be Hers.',exact:true}).waitFor();
   await preview.getByRole('button',{name:'English',exact:true}).click();await preview.getByRole('button',{name:'Contribution',exact:true}).click();await preview.locator('textarea').first().fill('An unsaved preview response.');
-  await preview.locator('.girlhood-before summary').first().click();await preview.getByRole('spinbutton').fill('18');
+  await preview.getByRole('spinbutton').fill('18');
   for(const c of await preview.locator('input[aria-required="true"]').all())await c.check();
-  assert.ok(await preview.getByRole('button',{name:'Leave my note',exact:false}).isDisabled());
+  assert.ok(await preview.getByRole('button',{name:'Share my words',exact:false}).isDisabled());
   await preview.getByRole('button',{name:'Voices / Voix',exact:true}).click();await preview.getByText('A childhood full of curiosity, friendship and possibilities.',{exact:false}).first().waitFor();
   await ap.screenshot({path:resolve(artifacts,'admin-fixture-preview.png'),fullPage:true});
   await preview.getByRole('button',{name:'Withdrawal / Retrait',exact:true}).click();assert.ok(await preview.getByRole('button',{name:'Withdraw my contribution',exact:true}).isDisabled());
