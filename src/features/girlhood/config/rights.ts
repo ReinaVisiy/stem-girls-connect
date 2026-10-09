@@ -8,7 +8,7 @@ import type { GirlhoodLanguage } from "../types";
  * "before turning 18"). Do not shorten these without re-reading the source.
  *
  * Figures and links come from the campaign plan dated 9 October 2026 and must
- * be re-checked by a person before launch (see docs/girlhood-design-baseline.md).
+ * be re-checked by a person before launch (see docs/girlhood/redesign.md).
  */
 export interface RightsFact {
   before?: string;
@@ -24,9 +24,10 @@ export interface RightsSource {
 }
 export interface RightsCopy {
   heading: string;
-  contentNote: string;
   lead: string;
   rights: string[];
+  /** The turn from the rights to the numbers. */
+  bridge: string;
   facts: RightsFact[];
   closing: { before: string; strong: string };
   sourcesHeading: string;
@@ -63,10 +64,9 @@ export const rightsSources: RightsSource[] = [
 export const rights: Record<GirlhoodLanguage, RightsCopy> = {
   en: {
     heading: "Every girl has rights",
-    contentNote:
-      "This section mentions sexual violence and harmful practices.",
     lead: "Every girl has rights.",
     rights: ["To learn.", "To be safe.", "To be healthy.", "To be heard."],
+    bridge: "Yet for millions of girls, these rights are still promises on paper.",
     facts: [
       { strong: "120 million girls", before: "More than ", after: " are out of school.", source: 0 },
       {
@@ -99,8 +99,6 @@ export const rights: Record<GirlhoodLanguage, RightsCopy> = {
   },
   fr: {
     heading: "Chaque fille a des droits",
-    contentNote:
-      "Cette section évoque des violences sexuelles et des pratiques néfastes.",
     lead: "Chaque fille a des droits.",
     rights: [
       "Apprendre.",
@@ -108,6 +106,8 @@ export const rights: Record<GirlhoodLanguage, RightsCopy> = {
       "Être soignée.",
       "Être écoutée.",
     ],
+    bridge:
+      "Pourtant, pour des millions de filles, ces droits ne sont encore que des promesses sur le papier.",
     facts: [
       {
         before: "Plus de ",

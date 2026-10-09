@@ -26,10 +26,12 @@ export default function GirlhoodRights({
       <h2 id={headingId} className="girlhood-rights-lead">
         {c.lead}
       </h2>
-      <p className="girlhood-rights-list">{c.rights.join(" ")}</p>
-      <p className="girlhood-rights-note" role="note">
-        {c.contentNote}
+      <p className="girlhood-rights-list">
+        {c.rights.map((right) => (
+          <span key={right}>{right}</span>
+        ))}
       </p>
+      <p className="girlhood-rights-bridge">{c.bridge}</p>
       {c.facts.map((fact) => (
         <p className="girlhood-rights-fact" key={fact.source}>
           {fact.before}

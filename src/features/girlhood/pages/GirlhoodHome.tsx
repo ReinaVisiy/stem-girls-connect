@@ -42,7 +42,12 @@ export default function GirlhoodHome() {
         description={t.intro}
         path={basePath}
       />
-      <section className="girlhood-invitation girlhood-hero">
+      <section
+        className={
+          "girlhood-invitation girlhood-hero" +
+          (isGreetingSeason() ? " has-greeting" : "")
+        }
+      >
         <div className="girlhood-hero-text">
           {isGreetingSeason() && <TypewriterGreeting language={language} />}
           <p className="girlhood-small-heading">{t.eyebrow}</p>

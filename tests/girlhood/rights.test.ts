@@ -20,7 +20,7 @@ test("rights section keeps five sourced indicators in both languages", () => {
       [0, 1, 2, 3, 4],
       "each fact points at its own source",
     );
-    assert.ok(c.contentNote.length > 0, "content note is present");
+    assert.ok(c.bridge.length > 0, "the turn from rights to numbers is present");
   }
 });
 
