@@ -446,3 +446,111 @@ body:has(.girlhood-composer[open]) {overflow:hidden;}
 
 .girlhood-filters {justify-content:flex-start;}
 @media(max-width:600px){.girlhood-nav{padding:4px 12px;}.girlhood-nav nav{gap:8px;width:100%;justify-content:center;}.girlhood-nav nav > a {font-size:11px;}.girlhood-language {margin-left:auto;}.girlhood-language button{padding:4px 6px;}.girlhood-form-page{padding-top:24px;}}
+
+/* ---- dreamy layer ---------------------------------------------------
+   Soft blush, lilac and golden light over warm cream. Decoration only:
+   it sits behind content, never changes text colours, and its motion is
+   very slow and switched off for reduced-motion users. */
+.girlhood-shell {
+  position: relative;
+  isolation: isolate;
+  background:
+    radial-gradient(70% 45% at 8% 4%, rgb(255 214 232 / 0.75), transparent 70%),
+    radial-gradient(60% 40% at 96% 10%, rgb(226 211 255 / 0.7), transparent 70%),
+    radial-gradient(70% 45% at 85% 52%, rgb(255 233 205 / 0.65), transparent 70%),
+    radial-gradient(80% 50% at 10% 92%, rgb(216 238 224 / 0.7), transparent 70%),
+    #fffaf3;
+}
+.girlhood-shell::before,
+.girlhood-shell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+.girlhood-shell::before {
+  background:
+    radial-gradient(circle at 18% 22%, rgb(255 255 255 / 0.9) 0 2px, transparent 3px),
+    radial-gradient(circle at 78% 14%, rgb(255 255 255 / 0.9) 0 2px, transparent 3px),
+    radial-gradient(circle at 62% 38%, rgb(255 240 200 / 0.95) 0 2.5px, transparent 4px),
+    radial-gradient(circle at 12% 58%, rgb(255 255 255 / 0.9) 0 2px, transparent 3px),
+    radial-gradient(circle at 88% 70%, rgb(255 240 200 / 0.95) 0 2.5px, transparent 4px),
+    radial-gradient(circle at 40% 84%, rgb(255 255 255 / 0.9) 0 2px, transparent 3px);
+  animation: girlhood-twinkle 7s ease-in-out infinite alternate;
+}
+.girlhood-shell::after {
+  background:
+    radial-gradient(40% 30% at 30% 20%, rgb(255 200 225 / 0.35), transparent 70%),
+    radial-gradient(35% 28% at 75% 65%, rgb(214 196 255 / 0.3), transparent 70%);
+  animation: girlhood-drift 26s ease-in-out infinite alternate;
+}
+@keyframes girlhood-twinkle {
+  from { opacity: 0.35; }
+  to { opacity: 1; }
+}
+@keyframes girlhood-drift {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(3%, 2%, 0) scale(1.06); }
+}
+.dark .girlhood-shell {
+  background:
+    radial-gradient(70% 45% at 8% 4%, rgb(130 36 109 / 0.35), transparent 70%),
+    radial-gradient(60% 40% at 96% 10%, rgb(90 70 170 / 0.3), transparent 70%),
+    radial-gradient(80% 50% at 10% 92%, rgb(40 90 80 / 0.3), transparent 70%),
+    #221d25;
+}
+.dark .girlhood-shell::before {
+  opacity: 0.5;
+  animation: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .girlhood-shell::before,
+  .girlhood-shell::after {
+    animation: none;
+  }
+}
+
+/* heading glow: same font and colour, just a soft light behind it */
+.girlhood-hero h1 {
+  text-shadow: 0 2px 28px rgb(255 205 228 / 0.85);
+}
+.dark .girlhood-hero h1 {
+  text-shadow: 0 2px 28px rgb(188 110 170 / 0.4);
+}
+
+/* buttons and fields */
+.girlhood-button {
+  background: linear-gradient(135deg, #82246d, #b0509a);
+  box-shadow: 0 8px 24px rgb(130 36 109 / 0.28);
+}
+.girlhood-button:hover:not(:disabled) {
+  box-shadow: 0 12px 30px rgb(130 36 109 / 0.38);
+}
+.girlhood-input,
+.girlhood-shell textarea {
+  border-radius: 14px;
+  background: rgb(255 255 255 / 0.72);
+}
+.dark .girlhood-input,
+.dark .girlhood-shell textarea {
+  background: rgb(255 255 255 / 0.06);
+}
+.girlhood-shell :focus-visible {
+  box-shadow: 0 0 0 4px rgb(176 80 154 / 0.25);
+}
+
+/* dialogs: soft lilac veil instead of a dark overlay */
+.girlhood-note-dialog::backdrop,
+.girlhood-composer::backdrop {
+  background: rgb(92 48 104 / 0.32);
+  backdrop-filter: blur(6px);
+}
+.girlhood-composer {
+  background:
+    radial-gradient(80% 40% at 0% 0%, rgb(255 214 232 / 0.7), transparent 70%),
+    radial-gradient(70% 40% at 100% 0%, rgb(226 211 255 / 0.6), transparent 70%),
+    #fffaf3;
+  border-radius: 24px;
+  box-shadow: 0 30px 80px rgb(92 48 104 / 0.3);
+}
