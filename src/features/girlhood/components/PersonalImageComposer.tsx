@@ -32,7 +32,7 @@ export default function PersonalImageComposer({words, language, onClose}: {words
     <button type="button" className="girlhood-note-close" onClick={() => dialog.current?.close()} aria-label={fr ? 'Fermer' : 'Close'} autoFocus>×</button>
     <h2 id="personal-image-title">{fr ? 'Ton image, tes mots' : 'Your image, your words'}</h2>
     <p>{fr ? 'Créée sur ton appareil. Tes mots ne sont pas envoyés pour créer cette image.' : 'Created on your device. Your words are not uploaded to make this image.'}</p>
-    <p>{words.under13 ? (fr ? 'Avant de partager ailleurs, demande à un adulte de confiance. Évite ton nom complet et tes coordonnées.' : 'Before sharing elsewhere, ask a trusted adult. Avoid your full name and contact details.') : (fr ? 'Vérifie ce que tu souhaites partager ailleurs. Évite les informations privées.' : 'Check what you want to share elsewhere. Leave out private information.')}</p>
+    <p>{words.under13 || !words.ageKnown ? (fr ? 'Avant de partager ailleurs, demande à un adulte de confiance. Évite ton nom complet et tes coordonnées.' : 'Before sharing elsewhere, ask a trusted adult. Avoid your full name and contact details.') : (fr ? 'Vérifie ce que tu souhaites partager ailleurs. Évite les informations privées.' : 'Check what you want to share elsewhere. Leave out private information.')}</p>
     <fieldset><legend>{fr ? 'Inclure dans l’image' : 'Include in the image'}</legend>
       {[t.q1,t.q2,t.q3].map((prompt,i) => words.answers[i] && <label key={prompt}><input type="checkbox" checked={included[i]} onChange={e => setIncluded(values => values.map((v,n) => n === i ? e.target.checked : v))}/>{prompt}</label>)}
     </fieldset>
