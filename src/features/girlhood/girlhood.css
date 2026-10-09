@@ -407,6 +407,18 @@ body:has(.girlhood-note-dialog[open]) {
 .girlhood-personal > .girlhood-choice {
   margin: 0.4rem 0 0;
 }
+.girlhood-perspective {
+  border: 0;
+  padding: 0;
+  margin: 0 0 0.9rem;
+}
+.girlhood-perspective legend {
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+.girlhood-perspective .girlhood-choice {
+  margin: 0;
+}
 .girlhood-personal label > span {
   font-size: 0.85rem;
   font-weight: 500;

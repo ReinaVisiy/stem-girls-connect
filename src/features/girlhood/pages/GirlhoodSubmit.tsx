@@ -29,7 +29,7 @@ import { validateGirlhoodSubmission } from "../validation";
 
 const empty: GirlhoodSubmissionInput = {
   age: "",
-  perspective: "own",
+  perspective: "",
   language: "en",
   displayName: "",
   country: "",
@@ -181,6 +181,8 @@ export default function GirlhoodSubmit() {
   function errorFor(code: string) {
     return code === "age"
       ? l.ageRequired
+      : code === "perspective"
+        ? l.perspectiveRequired
       : code === "answers"
         ? l.answerError
         : code === "acknowledgements"
@@ -529,6 +531,29 @@ export default function GirlhoodSubmit() {
             </h2>
             <div className="girlhood-before-content">
               <div className="girlhood-personal">
+                <fieldset className="girlhood-perspective">
+                  <legend>
+                    {l.perspectiveQuestion}
+                    {" · "}
+                    {language === "fr" ? "Obligatoire" : "Required"}
+                  </legend>
+                  {(["own", "ally"] as const).map((value) => (
+                    <label className="girlhood-choice" key={value}>
+                      <input
+                        type="radio"
+                        name="perspective"
+                        value={value}
+                        className="mt-1 size-5 shrink-0 accent-[#82246d]"
+                        checked={form.perspective === value}
+                        onChange={() => update("perspective", value)}
+                        aria-required="true"
+                      />
+                      <span>
+                        {value === "own" ? l.perspectiveOwn : l.perspectiveAlly}
+                      </span>
+                    </label>
+                  ))}
+                </fieldset>
                 <Field label={l.age}>
                   <input
                     type="number"
@@ -552,11 +577,6 @@ export default function GirlhoodSubmit() {
                     ? "Ton âge reste privé."
                     : "Your age stays private."}
                 </p>
-                <Choice
-                  label={l.ally}
-                  checked={form.perspective === "ally"}
-                  onChange={(v) => update("perspective", v ? "ally" : "own")}
-                />
               </div>
               {under13 ? (
                 <p className="girlhood-private-note">{l.under13}</p>

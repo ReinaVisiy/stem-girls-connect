@@ -49,3 +49,11 @@ test("13 to 17 year olds who show a name or place wait for review; without ident
 test("a public name that fails the checks holds the note", () => {
   assert.equal(submissionRecord({ ...base, displayName: "see www.spam.com", consentDisplayName: true }).moderation_status, "pending");
 });
+
+test("a submission must say whether it is from a girl or woman, or from an ally", async () => {
+  const { validate } = await import("../../shared/girlhood");
+  const form = { ...base, acknowledgementReview: true, acknowledgementPrivacy: true };
+  assert.ok(validate({ ...form, perspective: "" }).includes("perspective"));
+  assert.ok(!validate({ ...form, perspective: "own" }).includes("perspective"));
+  assert.ok(!validate({ ...form, perspective: "ally" }).includes("perspective"));
+});

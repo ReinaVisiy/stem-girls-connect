@@ -71,6 +71,10 @@ export const ui = {
     under13:
       "Your response will not be displayed publicly because you are under 13.",
     ageRequired: "Enter your age as a whole number between 0 and 120.",
+    perspectiveQuestion: "I am writing as",
+    perspectiveOwn: "A girl or woman",
+    perspectiveAlly: "An ally or supporter",
+    perspectiveRequired: "Choose whether you are writing as a girl or woman, or as an ally or supporter.",
     answerError:
       "Add a few words to the first thought. Each answer can be up to 2,000 characters.",
     choiceError: "Check your details and choices.",
@@ -198,6 +202,10 @@ export const ui = {
     under13:
       "Ta réponse ne sera pas affichée publiquement car tu as moins de 13 ans.",
     ageRequired: "Saisis ton âge en nombre entier entre 0 et 120.",
+    perspectiveQuestion: "J’écris en tant que",
+    perspectiveOwn: "Une fille ou une femme",
+    perspectiveAlly: "Un·e allié·e ou un·e soutien",
+    perspectiveRequired: "Indique si tu écris en tant que fille ou femme, ou en tant qu’allié·e ou soutien.",
     answerError:
       "Écris quelques mots pour la première pensée. Chaque réponse peut contenir jusqu’à 2 000 caractères.",
     choiceError: "Vérifie tes informations et tes choix.",

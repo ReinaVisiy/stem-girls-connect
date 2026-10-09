@@ -11,7 +11,7 @@ export type GirlhoodModerationStatus =
 
 export interface GirlhoodSubmissionInput {
   age: number | "";
-  perspective: GirlhoodPerspective;
+  perspective: GirlhoodPerspective | "";
   language: GirlhoodLanguage;
   displayName: string;
   country: string;
