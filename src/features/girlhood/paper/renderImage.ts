@@ -1,5 +1,5 @@
 import { paperAssets } from './paperAssets';
-import { paginate, wrapText } from './textLayout';
+import { fitLayout, wrapText } from './textLayout';
 import { copy } from '../config/copy';
 import type { GirlhoodLanguage } from '../types';
 
@@ -18,10 +18,10 @@ export async function renderImages(words: PersonalWords, included: boolean[], si
   const height = format === 'story' ? 1920 : 1350;
   const canvas = document.createElement('canvas'); canvas.width = 1080; canvas.height = height;
   const ctx = canvas.getContext('2d'); if (!ctx) throw new Error('Canvas unavailable');
-  const font = (heading: boolean) => { ctx.font = `${heading ? 600 : 500} ${heading ? 38 : 34}px "EB Garamond", Georgia, serif`; };
+  const font = (heading: boolean, size: number) => { ctx.font = `${heading ? 600 : 500} ${size}px "EB Garamond", Georgia, serif`; };
   const t = copy[language];
-  const pages = paginate([t.q1, t.q2, t.q3].map((prompt, i) => ({prompt, answer: included[i] ? words.answers[i] : ''})), 760, height,
-    text => {font(false); return ctx.measureText(text).width;}, text => {font(true); return ctx.measureText(text).width;});
+  const pages = fitLayout([t.q1, t.q2, t.q3].map((prompt, i) => ({prompt, answer: included[i] ? words.answers[i] : ''})), 760, height,
+    (text, size, heading) => {font(heading, size); return ctx.measureText(text).width;});
   const output: RenderedPage[] = [];
   try {
     for (let p = 0; p < pages.length; p++) {
@@ -35,9 +35,9 @@ export async function renderImages(words: PersonalWords, included: boolean[], si
       ctx.fillStyle = '#123f2d'; ctx.textBaseline = 'top';
       ctx.font = '600 58px "EB Garamond", Georgia, serif';
       ctx.fillText('Girlhood Should Be Hers', 540 - ctx.measureText('Girlhood Should Be Hers').width / 2, 150);
-      for (const line of pages[p]) {font(line.heading); ctx.fillText(line.text, 160, line.y);}
+      for (const line of pages[p]) {font(line.heading, line.size); ctx.fillText(line.text, 160, line.y);}
       if (p === pages.length - 1 && signature) {
-        ctx.font = '500 28px "EB Garamond", Georgia, serif';
+        ctx.font = '500 32px "EB Garamond", Georgia, serif';
         const lines = wrapText(signature, 530, text => ctx.measureText(text).width);
         lines.forEach((line, i) => ctx.fillText(line.text, 160, height - 120 - (lines.length - i) * 34));
       }

@@ -18,3 +18,21 @@ test('three maximum-length answers continue across sheets without dropped charac
     assert.ok(pages.flat().every(l => l.y >= 285 && l.y + (l.heading ? 48 : 43) <= height - 260));
   }
 });
+
+test('short notes use a large size on one centred sheet; long notes shrink then continue', async () => {
+  const { fitLayout } = await import('../../src/features/girlhood/paper/textLayout');
+  const measureAt = (s: string, size: number) => s.length * size * 0.5;
+  const short = [{prompt: 'Girlhood should be...', answer: 'Freedom'}, {prompt: 'Free to become...', answer: 'Anything she dreams'}, {prompt: 'What would help?', answer: 'Mentorship'}];
+  for (const height of [1350, 1920]) {
+    const one = fitLayout(short, 760, height, measureAt);
+    assert.equal(one.length, 1);
+    assert.ok(Math.max(...one[0].map(l => l.size)) > 40, 'short answers should be large');
+    assert.ok(one[0][0].y > 285, 'content block is centred, not pinned to the top');
+    assert.ok(one[0].every(l => l.y >= 285 && l.y < height - 260));
+    const long = ['a', 'b', 'c'].map((c, i) => ({prompt: `Prompt ${i}`, answer: c.repeat(2000)}));
+    const many = fitLayout(long, 760, height, measureAt);
+    assert.ok(many.length > 1);
+    assert.equal(many.flat().filter(l => !l.heading).map(l => l.text).join(''), long.map(s => s.answer).join(''));
+    assert.ok(many.flat().every(l => l.size >= 22));
+  }
+});

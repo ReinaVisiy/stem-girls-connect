@@ -25,22 +25,59 @@ export function wrapText(text: string, width: number, measure: Measurer): TextLi
   });
 }
 
-export type LayoutLine = { text: string; y: number; heading: boolean };
-export function paginate(sections: { prompt: string; answer: string }[], width: number, height: number, measure: Measurer, measureHeading: Measurer) {
+export type LayoutLine = { text: string; y: number; heading: boolean; size: number };
+export type PageMetrics = { body: number; head: number; bodyStep: number; headStep: number; gap: number };
+export const defaultMetrics: PageMetrics = { body: 34, head: 38, bodyStep: 43, headStep: 48, gap: 35 };
+const TOP = 285, BOTTOM = 260;
+
+/** Line metrics for a given answer font size; prompts are a little smaller than answers. */
+export function metricsFor(body: number): PageMetrics {
+  const head = Math.round(body * 0.74);
+  return { body, head, bodyStep: Math.round(body * 1.3), headStep: Math.round(head * 1.45), gap: Math.round(body * 0.9) };
+}
+
+export function paginate(sections: { prompt: string; answer: string }[], width: number, height: number, measure: Measurer, measureHeading: Measurer, m: PageMetrics = defaultMetrics) {
   const pages: LayoutLine[][] = [[]];
-  let y = 285;
+  let y = TOP;
   const add = (text: string, heading: boolean) => {
-    const step = heading ? 48 : 43;
-    if (y + step > height - 260) { pages.push([]); y = 285; }
-    pages[pages.length - 1].push({ text, y, heading }); y += step;
+    const step = heading ? m.headStep : m.bodyStep;
+    if (y + step > height - BOTTOM) { pages.push([]); y = TOP; }
+    pages[pages.length - 1].push({ text, y, heading, size: heading ? m.head : m.body }); y += step;
   };
   for (const section of sections) {
     if (!section.answer) continue;
     const headings = wrapText(section.prompt, width, measureHeading);
-    if (y + headings.length * 48 + 43 > height - 260) { pages.push([]); y = 285; }
+    if (y + headings.length * m.headStep + m.bodyStep > height - BOTTOM) { pages.push([]); y = TOP; }
     headings.forEach(line => add(line.text, true));
     wrapText(section.answer, width, measure).forEach(line => add(line.text, false));
-    y += 35;
+    y += m.gap;
+  }
+  return pages;
+}
+
+/**
+ * Picks the largest answer size that keeps everything on one sheet, so short notes fill the paper
+ * and the block is centred. Longer notes use the smallest legible size and continue on more sheets.
+ * Text is never trimmed.
+ */
+export function fitLayout(sections: { prompt: string; answer: string }[], width: number, height: number, measureAt: (text: string, size: number, heading: boolean) => number, maxBody = 62, minBody = 30) {
+  const run = (body: number) => {
+    const m = metricsFor(body);
+    return paginate(sections, width, height, s => measureAt(s, m.body, false), s => measureAt(s, m.head, true), m);
+  };
+  let pages = run(minBody);
+  if (pages.length === 1) {
+    for (let body = maxBody; body > minBody; body -= 2) {
+      const attempt = run(body);
+      if (attempt.length === 1) { pages = attempt; break; }
+    }
+  }
+  if (pages.length === 1 && pages[0].length) {
+    const lines = pages[0];
+    const last = lines[lines.length - 1];
+    const extent = last.y + (last.heading ? metricsFor(last.size / 0.74).headStep : Math.round(last.size * 1.3)) - lines[0].y;
+    const shift = Math.max(0, Math.floor((height - BOTTOM - TOP - extent) / 2));
+    pages = [lines.map(l => ({ ...l, y: l.y + shift }))];
   }
   return pages;
 }
