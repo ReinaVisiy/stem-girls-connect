@@ -102,7 +102,7 @@ export default function GirlhoodSubmit() {
     [feedback, setFeedback] = useState("");
   const [imageOpen, setImageOpen] = useState(false);
   const [snapshot, setSnapshot] = useState<PersonalWords | null>(null);
-  const currentWords = useMemo<PersonalWords>(() => ({ answers: [form.girlhoodResponse, form.futureResponse, form.supportResponse], under13: typeof form.age === 'number' && form.age < 13 }), [form.girlhoodResponse, form.futureResponse, form.supportResponse, form.age]);
+  const currentWords = useMemo<PersonalWords>(() => ({ answers: [form.girlhoodResponse, form.futureResponse, form.supportResponse], under13: typeof form.age === 'number' && form.age < 13, ageKnown: typeof form.age === 'number' }), [form.girlhoodResponse, form.futureResponse, form.supportResponse, form.age]);
   const imageWords = success ? snapshot : currentWords;
   const heading = useRef<HTMLHeadingElement>(null),
     alert = useRef<HTMLDivElement>(null),
