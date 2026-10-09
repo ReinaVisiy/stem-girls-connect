@@ -202,7 +202,7 @@ try {
   assert.equal(codes.length, 2);
   page.once("dialog", (dialog) => dialog.dismiss());
   await page
-    .getByRole("link", { name: "Read their wishes", exact: true })
+    .getByRole("link", { name: "In their own words", exact: true })
     .click();
   assert.ok(
     await page.locator(".girlhood-receipt").isVisible(),

@@ -8,6 +8,11 @@ type Props = {
   /** "thumb" uses the small slices for wall previews. */
   size?: "full" | "thumb";
   /**
+   * Which image slices to load. Defaults to "small" for thumbnails and "full"
+   * otherwise; small decorative uses of the full-size layout can ask for "small".
+   */
+  slices?: "full" | "small";
+  /**
    * Opaque public reference. When given, tilt, tape position and shade are
    * derived deterministically from it; otherwise the neutral look is used.
    */
@@ -28,6 +33,7 @@ type Props = {
 export default function GirlhoodPaperFrame({
   as: Tag = "div",
   size = "full",
+  slices: slicesProp,
   reference,
   tape = true,
   className,
@@ -35,7 +41,10 @@ export default function GirlhoodPaperFrame({
   children,
 }: Props) {
   const v = reference ? noteVariant(reference) : NEUTRAL_VARIANT;
-  const slices = size === "thumb" ? paperAssets.small : paperAssets.full;
+  const slices =
+    (slicesProp ?? (size === "thumb" ? "small" : "full")) === "small"
+      ? paperAssets.small
+      : paperAssets.full;
   const style = {
     "--gp-rotate": `${v.rotate}deg`,
     "--gp-tape-shift": `${v.tapeShift}%`,

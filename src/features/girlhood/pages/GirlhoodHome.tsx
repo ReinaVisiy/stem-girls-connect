@@ -5,6 +5,8 @@ import { useGirlhoodBasePath } from "../GirlhoodPaths";
 import Seo from "../../../components/Seo";
 import { copy } from "../config/copy";
 import GirlhoodResponseCard from "../components/GirlhoodResponseCard";
+import GirlhoodRights from "../components/GirlhoodRights";
+import GirlhoodPaperFrame from "../paper/GirlhoodPaperFrame";
 import { useGirlhoodLanguage } from "../hooks/useGirlhoodLanguage";
 import type { GirlhoodPublicResponse } from "../types";
 export default function GirlhoodHome() {
@@ -37,43 +39,26 @@ export default function GirlhoodHome() {
         description={t.intro}
         path={basePath}
       />
-      <section className="girlhood-invitation">
-        <div className="girlhood-paper-art" aria-hidden="true">
-          <span>✳</span>
-          <div />
-          <i />
+      <section className="girlhood-invitation girlhood-hero">
+        <div className="girlhood-hero-text">
+          <p className="girlhood-small-heading">{t.eyebrow}</p>
+          <h1>{t.heroTitle}</h1>
+          <p className="girlhood-hero-question">{t.question}</p>
+          <p className="girlhood-invitation-copy">{t.intro}</p>
+          <div className="girlhood-invitation-actions">
+            <ContributionLink>
+              {t.addVoice} <span aria-hidden="true">↗</span>
+            </ContributionLink>
+            <Link className="girlhood-quiet-link" to={basePath + "/wall"}>
+              {t.wall}
+            </Link>
+          </div>
         </div>
-        <p className="girlhood-small-heading">
-          {language === "fr"
-            ? "11 octobre · Journée de la fille"
-            : "October 11 · Day of the Girl"}
-        </p>
-        <h1>
-          {language === "en" ? (
-            <>
-              Girlhood
-              <br />
-              Should Be <em>Hers</em>
-            </>
-          ) : (
-            t.title
-          )}
-        </h1>
-        <p className="girlhood-invitation-copy">{t.intro}</p>
-        <div className="girlhood-invitation-actions">
-          <ContributionLink>
-            {t.addVoice} <span aria-hidden="true">↗</span>
-          </ContributionLink>
-          <Link className="girlhood-quiet-link" to={basePath + "/wall"}>
-            {t.wall}
-          </Link>
+        <div className="girlhood-hero-art" aria-hidden="true">
+          <GirlhoodPaperFrame reference="girlhood-hero" slices="small" />
         </div>
-        <p className="girlhood-handwritten" aria-hidden="true">
-          {language === "fr"
-            ? "un petit mot pour elle"
-            : "a little note for her"}
-        </p>
       </section>
+      <GirlhoodRights language={language} />
       {voices.length > 0 && (
         <section className="girlhood-home-notes" aria-label={t.wall}>
           <div className="girlhood-notes-grid">

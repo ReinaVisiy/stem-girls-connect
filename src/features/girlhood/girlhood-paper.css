@@ -177,3 +177,185 @@
     padding-top: 1.75rem;
   }
 }
+
+/* ---- hero and rights section --------------------------------------- */
+.girlhood-shell {
+  --girlhood-heading: var(--girlhood-forest);
+}
+.dark .girlhood-shell {
+  --girlhood-heading: #cfe9d9;
+}
+.girlhood-hero {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 2rem;
+  text-align: center;
+}
+.girlhood-hero .girlhood-small-heading {
+  color: var(--girlhood-muted);
+}
+.dark .girlhood-hero .girlhood-small-heading {
+  color: inherit;
+}
+.girlhood-hero h1 {
+  font-family: var(--girlhood-serif);
+  font-weight: 600;
+  color: var(--girlhood-heading);
+  font-size: clamp(3rem, 12vw, 5.8rem);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  margin: 1.25rem auto 1rem;
+  max-width: 11ch;
+  text-wrap: balance;
+}
+.girlhood-hero-question {
+  font-family: var(--girlhood-serif);
+  font-weight: 500;
+  font-size: clamp(1.3rem, 4vw, 1.7rem);
+  color: var(--girlhood-plum);
+  margin: 0 auto;
+}
+.dark .girlhood-hero-question {
+  color: #e5a5d2;
+}
+.girlhood-hero .girlhood-invitation-copy {
+  margin: 1.4rem auto;
+}
+/* Decoration: hidden on phones so text and the main action come first. */
+.girlhood-hero-art {
+  display: none;
+}
+@media (min-width: 900px) {
+  .girlhood-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    align-items: center;
+    gap: 3rem;
+    text-align: left;
+    padding-block: 4.5rem 3rem;
+  }
+  .girlhood-hero h1,
+  .girlhood-hero .girlhood-invitation-copy,
+  .girlhood-hero-question {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .girlhood-hero .girlhood-invitation-actions {
+    justify-content: flex-start;
+  }
+  .girlhood-hero-art {
+    display: block;
+    max-width: 360px;
+    justify-self: center;
+    width: 100%;
+    transform: rotate(2deg);
+  }
+  .girlhood-hero-art .girlhood-paper-sheet {
+    min-height: 118cqw;
+  }
+}
+
+.girlhood-rights {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 3.5rem 1.5rem 4.5rem;
+  border-top: 1px solid var(--line);
+  font-family: var(--girlhood-serif);
+  font-weight: 500;
+}
+.girlhood-rights-lead {
+  font-weight: 600;
+  font-size: clamp(2rem, 6vw, 3rem);
+  line-height: 1.1;
+  color: var(--girlhood-heading);
+  margin: 0;
+}
+.girlhood-rights-list {
+  font-size: clamp(1.25rem, 3.6vw, 1.6rem);
+  line-height: 1.45;
+  margin: 0.6rem 0 0;
+}
+.girlhood-rights-note {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 0.8rem;
+  margin: 1.25rem 0 0;
+  opacity: 0.85;
+}
+.girlhood-rights-fact {
+  font-size: clamp(1.25rem, 3.6vw, 1.65rem);
+  line-height: 1.4;
+  margin: 2.1rem 0 0;
+}
+.girlhood-rights-fact strong,
+.girlhood-rights-closing strong {
+  font-weight: 600;
+  color: var(--girlhood-heading);
+}
+.girlhood-rights-ref {
+  display: inline-block;
+  min-width: 24px;
+  min-height: 24px;
+  line-height: 24px;
+  text-align: center;
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 0.7rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.girlhood-rights-closing {
+  font-size: clamp(1.4rem, 4vw, 1.9rem);
+  line-height: 1.35;
+  margin: 3rem 0 0;
+}
+.girlhood-sources {
+  margin-top: 3rem;
+  font-family: Inter, system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 0.85rem;
+}
+.girlhood-sources h3 {
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin: 0 0 0.6rem;
+}
+.girlhood-sources ol {
+  padding-left: 1.2rem;
+  list-style: decimal;
+}
+.girlhood-sources li {
+  margin: 0.25rem 0;
+  scroll-margin-top: 5rem;
+}
+.girlhood-sources a {
+  display: inline-block;
+  padding-block: 0.15rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.girlhood-sources-note {
+  margin: 0.5rem 0 0;
+  opacity: 0.85;
+}
+/* A line eases in as it enters the viewport where supported; otherwise it is
+   simply visible. Never fully hidden, never scroll-jacked. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .girlhood-rights-fact {
+      animation: girlhoodReveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 55%;
+    }
+  }
+}
+@keyframes girlhoodReveal {
+  from {
+    opacity: 0.35;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

@@ -59,3 +59,19 @@ There are no `--girlhood-forest`, `--girlhood-wall` or `--girlhood-muted` tokens
 - The mobile issues listed in the plan (clipped hero shapes, `Allies` filter wrapping, one-prompt-at-a-time writer, collapsed consent) were observed by the plan's author on 9 October and have not been independently re-verified here.
 - No Lighthouse, real-device or Vercel preview results exist yet.
 - Visual proof for later items needs a machine with a browser, or a preview deployment.
+
+## Rights statistics: verification status (Item 2)
+
+The five figures in `src/features/girlhood/config/rights.ts` come from the campaign plan of 9 October 2026. Checked in this session, without a browser:
+
+| # | Claim | What was confirmed here |
+|---|---|---|
+| 1 | More than 120 million girls out of school | UNICEF Girl Goals page exists (published 2025-03-06); a search result headline reports 122 million girls out of school. Page text itself could not be read. |
+| 2 | One in eight girls and women, rape or sexual assault before 18 | UNICEF press release headline "Over 370 million girls and women globally subjected to rape or sexual assault as children". The linked topic page text did not expose the figure to an automated fetch. |
+| 3 | More than 230 million girls and women, FGM | UNICEF press release headline confirms 230 million girls and women alive today. |
+| 4 | About one in five girls married before 18 | **Not confirmed.** The linked UNICEF page could not be fetched (permission not granted) and no search result confirmed the wording. |
+| 5 | Women 35% of STEM graduates, unchanged in a decade | News headlines citing UNESCO confirm 35% and "unchanged in a decade". The UNESCO page itself could not be fetched. |
+
+A person must open all five links and confirm the wording before launch, in particular claim 4. The population and measure of each claim (for example "alive today", "before turning 18") are protected by `tests/girlhood/rights.test.ts`.
+
+Other open items for Item 2: the French copy (title adaptation, informal *tu* register, French rights speech) still needs a fluent read-through and a campaign-owner decision. Privacy and form copy elsewhere in French still use *vous*.

@@ -1,8 +1,8 @@
 export const ui = {
   en: {
     home: "Campaign home",
-    voices: "Their wishes",
-    add: "Leave a little wish",
+    voices: "In Their Own Words",
+    add: "Write your version",
     privacy: "Privacy & your choices",
     withdraw: "Withdraw your voice",
     language: "Campaign language",
@@ -21,7 +21,7 @@ export const ui = {
     previous: "Previous page",
     next: "Next page",
     page: "Page",
-    empty: "No wishes here yet. Yours could be the first.",
+    empty: "No stories here yet.",
     disclaimer:
       "These responses come from campaign participants and do not represent all girls.",
     wallIntro:
@@ -122,8 +122,8 @@ export const ui = {
   },
   fr: {
     home: "Accueil de la campagne",
-    voices: "Leurs souhaits",
-    add: "Laisser un petit souhait",
+    voices: "Avec leurs propres mots",
+    add: "Écris ta version",
     privacy: "Confidentialité et vos choix",
     withdraw: "Retirer votre voix",
     language: "Langue de la campagne",
@@ -142,7 +142,7 @@ export const ui = {
     previous: "Page précédente",
     next: "Page suivante",
     page: "Page",
-    empty: "Pas encore de souhaits ici. Le vôtre pourrait être le premier.",
+    empty: "Aucune histoire ici pour l’instant.",
     disclaimer:
       "Ces réponses proviennent des personnes participant à la campagne et ne représentent pas toutes les filles.",
     wallIntro:

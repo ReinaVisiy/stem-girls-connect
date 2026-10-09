@@ -108,10 +108,6 @@
   margin: 1.5rem auto;
   max-width: 900px;
 }
-.girlhood-invitation h1 em {
-  font-weight: 400;
-  color: var(--plum);
-}
 .girlhood-invitation-copy {
   font-size: 1.05rem;
   line-height: 1.75;
@@ -124,50 +120,6 @@
   justify-content: center;
   gap: 1.6rem;
   flex-wrap: wrap;
-}
-.girlhood-handwritten {
-  font-family: Georgia, serif;
-  font-style: italic;
-  font-size: 1.1rem;
-  color: var(--plum);
-  transform: rotate(-5deg);
-  margin: 2rem 0 0;
-}
-.girlhood-paper-art {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  overflow: hidden;
-}
-.girlhood-paper-art div,
-.girlhood-paper-art i {
-  position: absolute;
-  width: 140px;
-  height: 180px;
-  background: var(--pink);
-  border: 1px solid var(--line);
-  top: 25%;
-  left: 1%;
-  transform: rotate(-13deg);
-  box-shadow: 3px 8px 0 rgb(67 38 61 / 0.03);
-}
-.girlhood-paper-art i {
-  left: auto;
-  right: 1%;
-  top: 48%;
-  width: 115px;
-  height: 130px;
-  transform: rotate(12deg);
-  background: var(--green);
-}
-.girlhood-paper-art span {
-  position: absolute;
-  right: 9%;
-  top: 16%;
-  font-size: 3rem;
-  font-weight: 300;
-  color: var(--plum);
 }
 .girlhood-home-notes,
 .girlhood-wall-page {
@@ -562,21 +514,6 @@ body:has(.girlhood-note-dialog[open]) {
 @media (max-width: 767px) {
   .girlhood-invitation {
     padding-top: 3rem;
-  }
-  .girlhood-paper-art div {
-    width: 65px;
-    height: 85px;
-    left: -35px;
-    top: 13%;
-  }
-  .girlhood-paper-art i {
-    right: -50px;
-    top: 65%;
-  }
-  .girlhood-paper-art span {
-    font-size: 1.7rem;
-    right: 6%;
-    top: 8%;
   }
   .girlhood-invitation-copy {
     font-size: 0.95rem;

@@ -52,7 +52,7 @@ try{
   await ap.goto(base+'/admin/programs/new');await ap.getByLabel('Page template',{exact:true}).selectOption('girlhood');
   assert.equal(await ap.getByLabel('Slug',{exact:true}).inputValue(),'girlhood');
   await ap.getByRole('button',{name:'Preview',exact:true}).first().click();const preview=ap.getByRole('region',{name:'Girlhood administrator preview'});await preview.waitFor();
-  await preview.getByRole('button',{name:'Français',exact:true}).click();await preview.getByRole('heading',{name:'L’enfance des filles devrait leur appartenir',exact:true}).waitFor();
+  await preview.getByRole('button',{name:'Français',exact:true}).click();await preview.getByRole('heading',{name:'Que l’enfance soit la sienne.',exact:true}).waitFor();
   await preview.getByRole('button',{name:'English',exact:true}).click();await preview.getByRole('button',{name:'Contribution',exact:true}).click();await preview.locator('textarea').first().fill('An unsaved preview response.');
   await preview.locator('.girlhood-before summary').first().click();await preview.getByRole('spinbutton').fill('18');
   for(const c of await preview.locator('input[aria-required="true"]').all())await c.check();
