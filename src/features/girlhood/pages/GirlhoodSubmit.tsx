@@ -97,6 +97,7 @@ export default function GirlhoodSubmit() {
       publicReference: string;
       withdrawalCode: string;
       publicationRequested?: boolean;
+      published?: boolean;
       withdrawn?: boolean;
     } | null>(null),
     [feedback, setFeedback] = useState("");
@@ -388,7 +389,7 @@ export default function GirlhoodSubmit() {
 
           <p className="mt-4">
             {!success.withdrawn &&
-              (success.publicationRequested ? l.pending : l.privateReceipt)}
+              (success.published ? l.published : success.publicationRequested ? l.pending : l.privateReceipt)}
           </p>
           <div className="mt-6 space-y-4">
             {[

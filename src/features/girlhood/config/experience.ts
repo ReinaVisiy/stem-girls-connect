@@ -27,7 +27,7 @@ export const experience = {
       "Imagine freely. Choose what to share. Help us picture something better.",
     trust: "Your voice belongs to you.",
     trustHelp:
-      "Every contribution is reviewed before publication. You choose whether it appears publicly, and you can withdraw it later.",
+      "You choose whether your note appears publicly. If it passes our automatic safety checks it goes on the wall right away, otherwise the team reviews it first. You can withdraw it later.",
     begin: "Begin your contribution",
     step: "Step",
     of: "of",
@@ -93,7 +93,7 @@ export const experience = {
       "Imagine librement. Choisis quoi partager. Dessinons un avenir meilleur.",
     trust: "Ta voix t’appartient.",
     trustHelp:
-      "Chaque contribution est relue avant publication. Tu choisis si elle apparaît publiquement et peux la retirer plus tard.",
+      "Tu choisis si ta note apparaît publiquement. Si elle passe nos contrôles de sécurité automatiques, elle arrive tout de suite sur le mur, sinon l’équipe la relit d’abord. Tu peux la retirer plus tard.",
     begin: "Commencer ma contribution",
     step: "Étape",
     of: "sur",

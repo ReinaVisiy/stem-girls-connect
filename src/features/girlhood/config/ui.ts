@@ -65,7 +65,7 @@ export const ui = {
     analysis:
       "My de-identified response may be included in campaign analysis and aggregate findings.",
     review:
-      "I understand that submissions are reviewed and that submitting does not guarantee publication.",
+      "I understand that notes shared publicly appear right away if they pass automatic safety checks, and that others wait for a team review.",
     privateInfo:
       "My response does not intentionally include another person’s private contact details, address or sensitive information.",
     under13:
@@ -84,7 +84,8 @@ export const ui = {
     thanks:
       "Thank you for imagining a world where every girl has space to learn, explore, question and choose.",
     pending:
-      "Your response can appear only after review by STEM Girls Connect.",
+      "Your note is saved. It stays private until the STEM Girls Connect team has reviewed it.",
+    published: "Your note is now on the wall. You can withdraw it at any time.",
     privateReceipt: "Your response will remain private.",
     save: "Save both values to withdraw later. This tab can recover your receipt while its private recovery key is available.",
     reference: "Submission reference",
@@ -191,7 +192,7 @@ export const ui = {
     analysis:
       "Ma réponse désidentifiée peut être incluse dans l’analyse et les résultats globaux de la campagne.",
     review:
-      "Je comprends que les réponses sont examinées et que leur envoi ne garantit pas leur publication.",
+      "Je comprends que les notes partagées publiquement apparaissent tout de suite si elles passent des contrôles de sécurité automatiques, et que les autres attendent une relecture de l’équipe.",
     privateInfo:
       "Ma réponse ne contient pas intentionnellement les coordonnées privées, l’adresse ou d’autres informations sensibles d’une autre personne.",
     under13:
@@ -210,7 +211,8 @@ export const ui = {
     thanks:
       "Merci d’imaginer un monde où chaque fille peut apprendre, explorer, questionner et choisir.",
     pending:
-      "Ta réponse ne pourra apparaître qu’après examen par STEM Girls Connect.",
+      "Ta note est enregistrée. Elle reste privée tant que l’équipe de STEM Girls Connect ne l’a pas relue.",
+    published: "Ta note est maintenant sur le mur. Tu peux la retirer à tout moment.",
     privateReceipt: "Ta réponse restera privée.",
     save: "Conserve ces deux valeurs pour un retrait ultérieur. Cet onglet peut récupérer ton reçu tant que sa clé privée reste disponible.",
     reference: "Référence de la contribution",

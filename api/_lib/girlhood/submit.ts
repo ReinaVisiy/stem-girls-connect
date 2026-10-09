@@ -53,7 +53,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const { data, error } = await db
         .from("girlhood_submissions")
         .select(
-          "public_reference,request_payload_hash,consent_public,withdrawn_at",
+          "public_reference,request_payload_hash,consent_public,withdrawn_at,moderation_status",
         )
         .eq("request_token_hash", requestHash)
         .maybeSingle();
@@ -79,6 +79,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           publicReference: saved.public_reference,
           withdrawalCode,
           publicationRequested: saved.consent_public,
+          published:
+            saved.consent_public === true &&
+            !saved.withdrawn_at &&
+            saved.moderation_status === "approved",
           withdrawn: Boolean(saved.withdrawn_at),
         });
     };
@@ -113,6 +117,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             request_payload_hash: payloadHash,
             consent_public: record!.consent_public,
             withdrawn_at: null,
+            moderation_status: record!.moderation_status,
           },
           201,
         );
