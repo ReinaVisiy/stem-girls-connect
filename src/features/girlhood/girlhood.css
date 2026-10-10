@@ -443,18 +443,6 @@ body:has(.girlhood-note-dialog[open]) {
   min-height: 48px;
   font-size: 1.1rem;
 }
-.girlhood-extra-choices {
-  border-block: 1px solid var(--line);
-  padding: 0.5rem 0;
-  margin: 1.2rem 0;
-  font-size: 0.85rem;
-}
-.girlhood-extra-choices summary {
-  display: flex;
-  align-items: center;
-  text-decoration: underline;
-  text-underline-offset: 4px;
-}
 .girlhood-identity {
   display: grid;
   grid-template-columns: 1fr 1fr;
