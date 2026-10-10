@@ -24,7 +24,7 @@ export default function GirlhoodRights({
       aria-labelledby={headingId}
       lang={language}
     >
-      <h2 id={headingId} className="girlhood-rights-title">
+      <h2 id={headingId} className="sr-only">
         {c.heading}
       </h2>
       <p className="girlhood-rights-lead">{c.lead}</p>
