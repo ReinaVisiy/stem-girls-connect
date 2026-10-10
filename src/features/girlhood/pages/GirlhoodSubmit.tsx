@@ -607,6 +607,7 @@ export default function GirlhoodSubmit() {
                     : "Your age stays private."}
                 </p>
                 {!under13 && (
+                  <>
                   <Field
                     label={
                       language === "fr"
@@ -622,6 +623,22 @@ export default function GirlhoodSubmit() {
                       onChange={(e) => update("country", e.target.value)}
                     />
                   </Field>
+                  <Field
+                    label={
+                      language === "fr"
+                        ? "Dans quelle ville ou région ? (facultatif)"
+                        : "City or region (optional)"
+                    }
+                  >
+                    <input
+                      className="girlhood-input"
+                      value={form.cityRegion}
+                      maxLength={100}
+                      autoComplete="address-level2"
+                      onChange={(e) => update("cityRegion", e.target.value)}
+                    />
+                  </Field>
+                  </>
                 )}
               </div>
               {under13 ? (
@@ -649,6 +666,15 @@ export default function GirlhoodSubmit() {
                         checked={form.consentDisplayCountry}
                         onChange={(v) => update("consentDisplayCountry", v)}
                       />
+                      <Choice
+                        label={
+                          language === "fr"
+                            ? "Afficher cette ville ou région avec mon petit mot"
+                            : "Show this city or region with my note"
+                        }
+                        checked={form.consentDisplayCity}
+                        onChange={(v) => update("consentDisplayCity", v)}
+                      />
                     </div>
                   )}
                 </>
@@ -670,54 +696,6 @@ export default function GirlhoodSubmit() {
                   onChange={(v) => update("acknowledgementPrivacy", v)}
                 />
               </div>
-              <details className="girlhood-extra-choices">
-                <summary>
-                  {language === "fr"
-                    ? "Autres choix (facultatif)"
-                    : "More choices (optional)"}
-                </summary>
-                {!under13 && (
-                  <div className="girlhood-identity">
-                    <Field
-                      label={
-                        language === "fr"
-                          ? "D’où écris-tu ? (facultatif)"
-                          : "City or region (optional)"
-                      }
-                    >
-                      <input
-                        className="girlhood-input"
-                        value={form.cityRegion}
-                        maxLength={100}
-                        onChange={(e) => update("cityRegion", e.target.value)}
-                      />
-                    </Field>
-                    {form.consentPublic && (
-                      <Choice
-                        label={
-                          language === "fr"
-                            ? "Afficher cette ville ou région avec mon petit mot"
-                            : "Show this city or region with my note"
-                        }
-                        checked={form.consentDisplayCity}
-                        onChange={(v) => update("consentDisplayCity", v)}
-                      />
-                    )}
-                  </div>
-                )}
-                {!under13 && (
-                  <Choice
-                    label={l.reuse}
-                    checked={form.consentReuse}
-                    onChange={(v) => update("consentReuse", v)}
-                  />
-                )}
-                <Choice
-                  label={l.analysis}
-                  checked={form.consentAnalysis}
-                  onChange={(v) => update("consentAnalysis", v)}
-                />
-              </details>
               <Link
                 to={basePath + "/privacy"}
                 target="_blank"

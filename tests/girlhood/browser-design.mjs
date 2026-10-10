@@ -136,12 +136,11 @@ try {
     .first()
     .locator("input")
     .check();
-  await page.locator(".girlhood-extra-choices summary").click();
   await page
     .getByLabel("Your name or nickname (optional)", { exact: true })
     .fill("Local test");
   await page
-    .getByLabel("Where are you writing from? (optional)", { exact: true })
+    .getByLabel("City or region (optional)", { exact: true })
     .fill("Test place");
   assert.equal(
     await page.getByLabel("Show this location with my note").isChecked(),
@@ -158,7 +157,7 @@ try {
   );
   assert.equal(
     await page
-      .getByLabel("Where are you writing from? (optional)", { exact: true })
+      .getByLabel("City or region (optional)", { exact: true })
       .inputValue(),
     "",
   );
