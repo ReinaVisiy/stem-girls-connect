@@ -940,3 +940,17 @@ body:has(.girlhood-composer[open]) {overflow:hidden;}
   text-align: center;
   padding: 0.55rem 0.8rem;
 }
+
+/* required checks sit in their own labelled group, apart from the optional drawer */
+.girlhood-required-checks {
+  margin-top: 1.5rem;
+  padding: 1rem 1rem 0.4rem;
+  border: 1px solid rgb(130 36 109 / 0.3);
+  border-radius: 16px;
+  background: rgb(255 255 255 / 0.55);
+}
+.girlhood-required-title {
+  margin: 0 0 0.4rem;
+  font-weight: 700;
+  color: var(--girlhood-plum);
+}
