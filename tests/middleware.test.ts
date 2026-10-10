@@ -58,6 +58,7 @@ describe('middleware: /programs/:slug', () => {
     const { html } = await get('/programs/girlhood');
     expect(html).toContain('<meta property="og:image" content="https://stemgirlsconnect.org/girlhood-share.png" />');
     expect(html).not.toContain('https://img/x.jpg');
+    expect(html).toContain('content="Every girl deserves a childhood she can call her own.');
   });
 
   it('queries only published programs with a supported template (drafts/unsupported never fetched)', async () => {

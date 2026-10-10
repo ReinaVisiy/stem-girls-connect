@@ -1,4 +1,5 @@
 import { isGirlhoodSubPath } from './shared/girlhoodRoutes.js';
+import { GIRLHOOD_DESCRIPTION } from './shared/girlhoodMeta.js';
 import { SUPPORTED_PAGE_TEMPLATES, STANDARD_TEMPLATE } from './src/lib/programTemplates.js';
 
 export const config = {
@@ -363,7 +364,9 @@ export default async function middleware(request: Request): Promise<Response> {
 
         if (program && (rest.length === 0 || (program.page_template === 'girlhood' && isGirlhoodSubPath(rest.join('/'))))) {
           const title = String(program.title);
-          const description = program.short_description
+          const description = program.page_template === 'girlhood'
+            ? GIRLHOOD_DESCRIPTION.en
+            : program.short_description
             ? String(program.short_description)
             : `Learn about ${title}, a STEM Girls Connect program.`;
           meta = {

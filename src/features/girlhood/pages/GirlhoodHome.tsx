@@ -5,6 +5,7 @@ import { Link, useGirlhoodRuntime } from "../GirlhoodRuntime";
 import { useGirlhoodBasePath } from "../GirlhoodPaths";
 import Seo from "../../../components/Seo";
 import { copy } from "../config/copy";
+import { GIRLHOOD_DESCRIPTION } from "../../../../shared/girlhoodMeta";
 import GirlhoodResponseCard from "../components/GirlhoodResponseCard";
 import GirlhoodRights from "../components/GirlhoodRights";
 import GirlhoodPaperFrame from "../paper/GirlhoodPaperFrame";
@@ -40,7 +41,7 @@ export default function GirlhoodHome() {
     <>
       <Seo
         title={t.title + " | STEM Girls Connect"}
-        description={t.intro}
+        description={GIRLHOOD_DESCRIPTION[language]}
         path={basePath}
       />
       <section
