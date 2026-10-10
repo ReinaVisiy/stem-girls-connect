@@ -171,6 +171,20 @@ export function submissionRecord(input: Record<string, unknown>) {
     consent_reuse: !under13 && input.consentReuse === true,
     consent_analysis: input.consentAnalysis === true,
     consent_version: CONSENT_VERSION,
+    // The public view shows the name and place from these columns, so an instantly published note
+    // needs them filled (a moderator fills them for notes that wait for review).
+    public_display_name:
+      autoApproved && input.consentDisplayName === true && !under13
+        ? plain(input.displayName, 80) || null
+        : null,
+    public_country:
+      autoApproved && input.consentDisplayCountry === true && !under13
+        ? plain(input.country, 100) || null
+        : null,
+    public_city:
+      autoApproved && input.consentDisplayCity === true && !under13
+        ? plain(input.cityRegion, 100) || null
+        : null,
     moderation_status: autoApproved ? "approved" : "pending",
     moderation_reason: autoApproved ? "auto_checks_passed" : null,
   };
