@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import type { GirlhoodLanguage } from '../types';
 
 const text: Record<GirlhoodLanguage, string> = {
@@ -9,37 +8,24 @@ const text: Record<GirlhoodLanguage, string> = {
 /** The greeting is shown during October, the month of 11 October (International Day of the Girl Child). */
 export const isGreetingSeason = (now: Date = new Date()) => now.getMonth() === 9;
 
-const prefersReducedMotion = () =>
-  typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
+/**
+ * Each word fades and rises softly into place, one after another. CSS only, so it works across
+ * several lines with no layout shift. Under reduced motion the words simply show.
+ * (The file keeps its old name; it no longer types letter by letter.)
+ */
 export default function TypewriterGreeting({ language }: { language: GirlhoodLanguage }) {
   const full = text[language];
-  const glyphs = Array.from(full);
-  const [count, setCount] = useState(() => (prefersReducedMotion() ? glyphs.length : 0));
-
-  useEffect(() => {
-    if (prefersReducedMotion()) { setCount(glyphs.length); return; }
-    setCount(0);
-    let shown = 0;
-    const timer = window.setInterval(() => {
-      shown += 1;
-      setCount(shown);
-      if (shown >= glyphs.length) window.clearInterval(timer);
-    }, 55);
-    return () => window.clearInterval(timer);
-  }, [full]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const typing = count < glyphs.length;
+  const words = full.split(' ');
   return (
     <p className="girlhood-greeting" lang={language}>
       <span className="sr-only">{full}</span>
-      <span className="girlhood-greeting-stage" aria-hidden="true">
-        {/* The invisible full text reserves the final height, so nothing shifts while typing. */}
-        <span className="girlhood-greeting-ghost">{full}</span>
-        <span className="girlhood-greeting-live">
-          {glyphs.slice(0, count).join('')}
-          <span className={'girlhood-cursor' + (typing ? '' : ' is-done')} />
-        </span>
+      <span className="girlhood-greeting-live" aria-hidden="true">
+        {words.map((word, i) => (
+          <span key={i} className="girlhood-greeting-word" style={{ animationDelay: `${0.15 + i * 0.22}s` }}>
+            {word}
+            {i < words.length - 1 ? ' ' : ''}
+          </span>
+        ))}
       </span>
     </p>
   );
