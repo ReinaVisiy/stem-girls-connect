@@ -653,6 +653,23 @@ export default function GirlhoodSubmit() {
                   )}
                 </>
               )}
+              <div className="girlhood-required-checks" role="group" aria-labelledby="required-checks-title">
+                <p id="required-checks-title" className="girlhood-required-title">
+                  {language === "fr" ? "Avant d’envoyer (obligatoire)" : "Before you share (required)"}
+                </p>
+                <Choice
+                  required
+                  label={l.review + " · " + t.required}
+                  checked={form.acknowledgementReview}
+                  onChange={(v) => update("acknowledgementReview", v)}
+                />
+                <Choice
+                  required
+                  label={l.privateInfo + " · " + t.required}
+                  checked={form.acknowledgementPrivacy}
+                  onChange={(v) => update("acknowledgementPrivacy", v)}
+                />
+              </div>
               <details className="girlhood-extra-choices">
                 <summary>
                   {language === "fr"
@@ -701,18 +718,6 @@ export default function GirlhoodSubmit() {
                   onChange={(v) => update("consentAnalysis", v)}
                 />
               </details>
-              <Choice
-                required
-                label={l.review + " · " + t.required}
-                checked={form.acknowledgementReview}
-                onChange={(v) => update("acknowledgementReview", v)}
-              />
-              <Choice
-                required
-                label={l.privateInfo + " · " + t.required}
-                checked={form.acknowledgementPrivacy}
-                onChange={(v) => update("acknowledgementPrivacy", v)}
-              />
               <Link
                 to={basePath + "/privacy"}
                 target="_blank"
