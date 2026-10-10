@@ -16,17 +16,13 @@ export default function GirlhoodRights({
   const c = rights[language];
   const uid = useId();
   const sources = useRef<HTMLDetailsElement>(null);
-  const headingId = uid + "-heading";
   const sourceId = (i: number) => `${uid}-source-${i + 1}`;
   return (
     <section
       className="girlhood-rights"
-      aria-labelledby={headingId}
+      aria-label={c.lead}
       lang={language}
     >
-      <h2 id={headingId} className="sr-only">
-        {c.heading}
-      </h2>
       <p className="girlhood-rights-lead">{c.lead}</p>
       <p className="girlhood-rights-list">
         {c.rights.map((right) => (

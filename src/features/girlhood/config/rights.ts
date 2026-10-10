@@ -23,7 +23,6 @@ export interface RightsSource {
   url: string;
 }
 export interface RightsCopy {
-  heading: string;
   lead: string;
   rights: string[];
   /** The turn from the rights to the numbers. */
@@ -64,7 +63,6 @@ export const rightsSources: RightsSource[] = [
 
 export const rights: Record<GirlhoodLanguage, RightsCopy> = {
   en: {
-    heading: "Why Girlhood Matters",
     lead: "Every girl has rights.",
     rights: ["To learn.", "To be safe.", "To be healthy.", "To be heard."],
     bridge: "Yet for millions of girls, these rights are still promises on paper.",
@@ -102,7 +100,6 @@ export const rights: Record<GirlhoodLanguage, RightsCopy> = {
     newTab: "opens in a new tab",
   },
   fr: {
-    heading: "Pourquoi l’enfance des filles compte",
     lead: "Chaque fille a des droits.",
     rights: [
       "Apprendre.",

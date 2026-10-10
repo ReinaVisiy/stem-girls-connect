@@ -52,7 +52,6 @@ test("hero copy matches the approved wording and has no rhetorical question", ()
 });
 
 test("the closing lines and sources disclosure are present", () => {
-  assert.equal(rights.en.heading, "Why Girlhood Matters");
   assert.match(rights.en.closing.before, /Stereotypes should never decide what a girl can become\./);
   assert.equal(rights.en.closing.strong, "Girlhood should be hers.");
   assert.equal(rights.en.viewSources, "View sources");
