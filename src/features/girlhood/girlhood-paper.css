@@ -954,3 +954,33 @@ body:has(.girlhood-composer[open]) {overflow:hidden;}
   font-weight: 700;
   color: var(--girlhood-plum);
 }
+
+/* anonymous-note pop-up for participants under 13 */
+.girlhood-anon-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  background: rgb(20 8 18 / 0.6);
+}
+.girlhood-anon-dialog {
+  max-width: 26rem;
+  padding: 1.75rem 1.5rem;
+  border-radius: 22px;
+  background: #fffaf3;
+  color: #3b0f33;
+  text-align: center;
+  box-shadow: 0 24px 60px rgb(0 0 0 / 0.4);
+}
+.girlhood-anon-dialog h2 {
+  font-family: var(--girlhood-serif);
+  font-weight: 600;
+  font-size: 1.7rem;
+  margin: 0 0 0.6rem;
+}
+.girlhood-anon-dialog p {
+  line-height: 1.55;
+  margin: 0 0 1.3rem;
+}

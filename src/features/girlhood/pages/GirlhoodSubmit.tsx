@@ -151,6 +151,16 @@ export default function GirlhoodSubmit() {
     };
   }, [success, receiptSaved, x.receiptHelp]);
   const under13 = typeof form.age === "number" && form.age < 13;
+  // A pop-up tells young participants their note will show anonymously. It waits a moment after
+  // the last keystroke so typing "17" does not trigger it at "1", and shows once per entry.
+  const [anonNotice, setAnonNotice] = useState(false);
+  const noticeSeen = useRef(false);
+  useEffect(() => {
+    if (!under13) { noticeSeen.current = false; return; }
+    if (noticeSeen.current) return;
+    const id = window.setTimeout(() => { noticeSeen.current = true; setAnonNotice(true); }, 900);
+    return () => window.clearTimeout(id);
+  }, [under13, form.age]);
   const update = <K extends keyof GirlhoodSubmissionInput>(
     key: K,
     value: GirlhoodSubmissionInput[K],
@@ -161,7 +171,6 @@ export default function GirlhoodSubmit() {
         Object.assign(next, {
           country: "",
           cityRegion: "",
-          consentPublic: false,
           consentDisplayName: false,
           consentDisplayCountry: false,
           consentDisplayCity: false,
@@ -638,11 +647,21 @@ export default function GirlhoodSubmit() {
                       onChange={(e) => update("cityRegion", e.target.value)}
                     />
                   </Field>
+                  {typeof form.age === "number" && form.age < 18 && (
+                    <p className="girlhood-private-note">{l.placeReview}</p>
+                  )}
                   </>
                 )}
               </div>
               {under13 ? (
-                <p className="girlhood-private-note">{l.under13}</p>
+                <>
+                  <Choice
+                    label={l.publish}
+                    checked={form.consentPublic}
+                    onChange={(v) => update("consentPublic", v)}
+                  />
+                  <p className="girlhood-private-note">{l.under13}</p>
+                </>
               ) : (
                 <>
                   <Choice
@@ -741,6 +760,15 @@ export default function GirlhoodSubmit() {
         </form>
       )}
       {success && imageWords && imageWords.answers.some(answer => answer.trim()) && <button type="button" className="girlhood-button girlhood-create-image" onClick={() => setImageOpen(true)}>{language === 'fr' ? 'Créer mon image' : 'Create my image'}</button>}
+      {anonNotice && (
+        <div className="girlhood-anon-backdrop" role="presentation">
+          <div className="girlhood-anon-dialog" role="alertdialog" aria-modal="true" aria-labelledby="anon-title" aria-describedby="anon-text">
+            <h2 id="anon-title">{l.anonTitle}</h2>
+            <p id="anon-text">{l.anonText}</p>
+            <button type="button" className="girlhood-button" autoFocus onClick={() => setAnonNotice(false)}>{l.anonOk}</button>
+          </div>
+        </div>
+      )}
       {imageOpen && imageWords && <Suspense fallback={<p role="status">{l.loading}</p>}><PersonalImageComposer words={imageWords} language={language} onClose={() => setImageOpen(false)} /></Suspense>}
     </section>
   );

@@ -51,10 +51,10 @@ test("age must be explicitly supplied as an integer; false strings are never con
     ),
   );
 });
-test("under-13 public permissions and identity are stripped regardless of payload", () => {
+test("under-13 notes can be public, but name, place and reuse are always removed", () => {
   const record = submissionRecord(input);
+  assert.equal(record.consent_public, true);
   for (const key of [
-    "consent_public",
     "consent_display_name",
     "consent_display_country",
     "consent_display_city",
@@ -62,16 +62,15 @@ test("under-13 public permissions and identity are stripped regardless of payloa
   ])
     assert.equal(record[key as keyof typeof record], false);
   assert.equal(record.display_name, null);
+  assert.equal(record.country, null);
   assert.equal(record.city_region, null);
-  for (const status of [
-    "pending",
-    "approved",
-    "approved_redacted",
-    "withdrawn",
-    "escalated",
-  ])
+  assert.equal(record.public_display_name, null);
+  assert.equal(record.public_country, null);
+  assert.equal(record.public_city, null);
+  assert.equal(submissionRecord({ ...input, consentPublic: false }).consent_public, false);
+  for (const status of ["pending", "withdrawn", "escalated"])
     assert.equal(eligible(12, true, status, null), false);
-  assert.equal(eligible(13, true, "approved", null), true);
+  assert.equal(eligible(12, true, "approved", null), true);
   assert.equal(eligible(13, false, "approved", null), false);
   assert.equal(eligible(13, true, "approved", new Date()), false);
 });

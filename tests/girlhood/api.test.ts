@@ -144,7 +144,7 @@ test("lost response retry and reload recovery return the original receipt withou
     await submit(req(input), first);
     assert.equal(first.statusCode, 201);
     const stored = [...db.records.values()][0];
-    assert.equal(stored.consent_public, false);
+    assert.equal(stored.consent_public, true); // under 13s may be public, never with identity
     assert.equal(stored.display_name, null);
     assert.equal(
       stored.withdrawal_hash,

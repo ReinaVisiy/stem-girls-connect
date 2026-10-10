@@ -103,6 +103,14 @@ test('fresh baseline, safe newsletter rollout and campaign safeguards on isolate
     await db.exec("update public.girlhood_submissions set moderation_status='withdrawn' where public_reference='TEST';reset role;");
     await assert.rejects(db.exec("update public.girlhood_submissions set withdrawn_at=null where public_reference='TEST'"));
     assert.equal((await db.query<{n:number}>('select count(*)::int as n from public.girlhood_public_responses')).rows[0].n,0);
+    // Under 13s may be public, but always anonymous, even if identity is supplied directly.
+    await db.exec(`insert into public.girlhood_submissions(public_reference,withdrawal_hash,age,perspective,public_category,language,girlhood_response,public_girlhood_response,consent_public,consent_display_name,consent_display_country,consent_display_city,consent_reuse,consent_version,moderation_status,display_name,country,city_region,public_display_name,public_country,public_city) values('KID','k',10,'own','girl','en','Free to play','Free to play',true,true,true,true,true,'test','approved','Ada','Cameroon','Douala','Ada','Cameroon','Douala');`);
+    const kid=(await db.query<{safe_display_name:string;safe_country:string|null;safe_city:string|null;consent_public:boolean;public_display_name:string|null}>("select v.safe_display_name,v.safe_country,v.safe_city,s.consent_public,s.public_display_name from public.girlhood_public_responses v join public.girlhood_submissions s using(public_reference) where public_reference='KID'")).rows[0];
+    assert.equal(kid.consent_public,true);
+    assert.equal(kid.safe_display_name,'Anonymous');
+    assert.equal(kid.safe_country,null);
+    assert.equal(kid.safe_city,null);
+    assert.equal(kid.public_display_name,null);
   } finally { await db.close(); }
 });
 

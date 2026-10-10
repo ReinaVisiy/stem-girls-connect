@@ -26,7 +26,7 @@ export function eligible(
   withdrawn: unknown,
 ) {
   return (
-    age >= 13 &&
+    Number.isInteger(age) &&
     consent === true &&
     PUBLIC_STATUSES.includes(status) &&
     !withdrawn
@@ -128,36 +128,32 @@ export function autoReviewIssues(texts: string[]): string[] {
 export function submissionRecord(input: Record<string, unknown>) {
   const age = input.age as number;
   const under13 = age < 13;
-  const consent = !under13 && input.consentPublic === true;
+  const consent = input.consentPublic === true;
+  const minor = age < 18;
   const q1 = plain(input.girlhoodResponse),
     q2 = plain(input.futureResponse) || null,
     q3 = plain(input.supportResponse) || null;
-  const showsIdentity =
-    consent &&
-    (input.consentDisplayName === true ||
-      input.consentDisplayCountry === true ||
-      input.consentDisplayCity === true);
-  // Published at once only for 13+ who agreed to publish, when every public text passes the
-  // automatic checks. Under 18s who also choose to show a name or place wait for a person.
+  // Published at once when the person agreed to publish and every public text passes the
+  // automatic checks. Under 13s are always anonymous (no name, country or city). Under 18s show
+  // their name, but a country or city they chose to show waits for a person to approve it.
+  const nameText = under13 ? "" : plain(input.displayName, 80);
+  const countryText = under13 ? "" : plain(input.country, 100);
+  const cityText = under13 ? "" : plain(input.cityRegion, 100);
   const autoApproved =
     consent &&
-    (age >= 18 || !showsIdentity) &&
-    autoReviewIssues([
-      q1,
-      q2 ?? "",
-      q3 ?? "",
-      plain(input.displayName, 80),
-      plain(input.country, 100),
-      plain(input.cityRegion, 100),
-    ]).length === 0;
+    autoReviewIssues([q1, q2 ?? "", q3 ?? "", nameText, countryText, cityText]).length === 0;
+  const showName = consent && !under13 && input.consentDisplayName === true;
+  const showCountry = consent && !under13 && input.consentDisplayCountry === true;
+  const showCity = consent && !under13 && input.consentDisplayCity === true;
+  const placeWaits = autoApproved && minor && ((showCountry && !!countryText) || (showCity && !!cityText));
   return {
     age,
     perspective: input.perspective,
     language: input.language,
     public_category: deriveCategory(age, String(input.perspective)),
-    display_name: under13 ? null : plain(input.displayName, 80) || "Anonymous",
-    country: under13 ? null : plain(input.country, 100) || null,
-    city_region: under13 ? null : plain(input.cityRegion, 100) || null,
+    display_name: under13 ? null : nameText || "Anonymous",
+    country: under13 ? null : countryText || null,
+    city_region: under13 ? null : cityText || null,
     girlhood_response: q1,
     future_response: q2,
     support_response: q3,
@@ -165,27 +161,18 @@ export function submissionRecord(input: Record<string, unknown>) {
     public_future_response: q2,
     public_support_response: q3,
     consent_public: consent,
-    consent_display_name: consent && input.consentDisplayName === true,
-    consent_display_country: consent && input.consentDisplayCountry === true,
-    consent_display_city: consent && input.consentDisplayCity === true,
+    consent_display_name: showName,
+    consent_display_country: showCountry,
+    consent_display_city: showCity,
     consent_reuse: !under13 && input.consentReuse === true,
     consent_analysis: input.consentAnalysis === true,
     consent_version: CONSENT_VERSION,
     // The public view shows the name and place from these columns, so an instantly published note
     // needs them filled (a moderator fills them for notes that wait for review).
-    public_display_name:
-      autoApproved && input.consentDisplayName === true && !under13
-        ? plain(input.displayName, 80) || null
-        : null,
-    public_country:
-      autoApproved && input.consentDisplayCountry === true && !under13
-        ? plain(input.country, 100) || null
-        : null,
-    public_city:
-      autoApproved && input.consentDisplayCity === true && !under13
-        ? plain(input.cityRegion, 100) || null
-        : null,
+    public_display_name: autoApproved && showName ? nameText || null : null,
+    public_country: autoApproved && showCountry && !minor ? countryText || null : null,
+    public_city: autoApproved && showCity && !minor ? cityText || null : null,
     moderation_status: autoApproved ? "approved" : "pending",
-    moderation_reason: autoApproved ? "auto_checks_passed" : null,
+    moderation_reason: autoApproved ? (placeWaits ? "auto_place_pending" : "auto_checks_passed") : null,
   };
 }

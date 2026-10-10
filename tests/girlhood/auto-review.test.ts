@@ -29,8 +29,8 @@ test("adults who agree to publish and pass the checks are approved at once", () 
   assert.equal(record.moderation_status, "approved");
   assert.equal(record.moderation_reason, "auto_checks_passed");
 });
-test("under 13s are never approved and stay fully private", () => {
-  const record = submissionRecord({ ...base, age: 12 });
+test("under 13s who do not agree to publish stay private", () => {
+  const record = submissionRecord({ ...base, age: 12, consentPublic: false });
   assert.equal(record.moderation_status, "pending");
   assert.equal(record.consent_public, false);
 });
@@ -40,11 +40,25 @@ test("no consent to publish means no approval", () => {
 test("notes that fail the checks wait for a person", () => {
   assert.equal(submissionRecord({ ...base, girlhoodResponse: "email me girl@example.com" }).moderation_status, "pending");
 });
-test("13 to 17 year olds who show a name or place wait for review; without identity they publish", () => {
-  assert.equal(submissionRecord({ ...base, age: 15, displayName: "Ada", consentDisplayName: true }).moderation_status, "pending");
-  assert.equal(submissionRecord({ ...base, age: 15, cityRegion: "Douala", consentDisplayCity: true }).moderation_status, "pending");
-  assert.equal(submissionRecord({ ...base, age: 15 }).moderation_status, "approved");
-  assert.equal(submissionRecord({ ...base, age: 25, displayName: "Ada", consentDisplayName: true }).moderation_status, "approved");
+test("under 18s publish at once with a name; a country or city waits for approval", () => {
+  const teen = submissionRecord({ ...base, age: 15, displayName: "Ada", consentDisplayName: true });
+  assert.equal(teen.moderation_status, "approved");
+  assert.equal(teen.public_display_name, "Ada");
+  const withPlace = submissionRecord({ ...base, age: 15, country: "Cameroon", consentDisplayCountry: true, cityRegion: "Douala", consentDisplayCity: true });
+  assert.equal(withPlace.moderation_status, "approved");
+  assert.equal(withPlace.moderation_reason, "auto_place_pending");
+  assert.equal(withPlace.public_country, null);
+  assert.equal(withPlace.public_city, null);
+  const adult = submissionRecord({ ...base, age: 25, country: "Cameroon", consentDisplayCountry: true });
+  assert.equal(adult.moderation_reason, "auto_checks_passed");
+  assert.equal(adult.public_country, "Cameroon");
+});
+test("under 13s publish at once and anonymously when the checks pass", () => {
+  const child = submissionRecord({ ...base, age: 10, displayName: "Ada", consentDisplayName: true, country: "Cameroon", consentDisplayCountry: true });
+  assert.equal(child.moderation_status, "approved");
+  assert.equal(child.public_display_name, null);
+  assert.equal(child.public_country, null);
+  assert.equal(submissionRecord({ ...base, age: 10, girlhoodResponse: "call me on 0612345678" }).moderation_status, "pending");
 });
 test("a public name that fails the checks holds the note", () => {
   assert.equal(submissionRecord({ ...base, displayName: "see www.spam.com", consentDisplayName: true }).moderation_status, "pending");
@@ -67,6 +81,4 @@ test("an instantly published note carries the public name and place the person a
   const hidden = submissionRecord({ ...base, age: 25, displayName: "Ada", country: "Cameroon" });
   assert.equal(hidden.public_display_name, null);
   assert.equal(hidden.public_country, null);
-  const waiting = submissionRecord({ ...base, age: 15, displayName: "Ada", consentDisplayName: true });
-  assert.equal(waiting.public_display_name, null);
 });

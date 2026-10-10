@@ -70,7 +70,13 @@ export const ui = {
     privateInfo:
       "My response does not intentionally include another person’s private contact details, address or sensitive information.",
     under13:
-      "Your response will not be displayed publicly because you are under 13.",
+      "If you choose to publish, your note appears anonymously: never with a name or place.",
+    placeReview:
+      "Your name can show right away. A country or city is held back until our team approves it.",
+    anonTitle: "Your note will be anonymous",
+    anonText:
+      "Because you are under 13, if you choose to share your note on the wall it will appear without your name, country or city. Nobody will see who wrote it.",
+    anonOk: "Got it",
     ageRequired: "Enter your age as a whole number between 0 and 120.",
     perspectiveQuestion: "I am writing as",
     perspectiveOwn: "A girl or woman",
@@ -109,7 +115,7 @@ export const ui = {
     privacyIntro:
       "STEM Girls Connect receives and moderates your answers for the Girlhood Should Be Hers campaign.",
     privacyAge:
-      "We ask your exact age privately to apply publication rules and understand who is participating. There is no minimum participation age. Individual responses from participants under 13 never appear publicly.",
+      "We ask your exact age privately to apply publication rules and understand who is participating. There is no minimum participation age. Notes from participants under 13 can appear on the wall, always anonymously, never with a name or place.",
     privacyChoices:
       "Website publication, displaying your chosen name or location, campaign reuse and de-identified analysis are separate choices. All are optional. Moderation approval never overrides your choices.",
     privacyRetention:
@@ -202,7 +208,13 @@ export const ui = {
     privateInfo:
       "Ma réponse ne contient pas intentionnellement les coordonnées privées, l’adresse ou d’autres informations sensibles d’une autre personne.",
     under13:
-      "Ta réponse ne sera pas affichée publiquement car tu as moins de 13 ans.",
+      "Si tu choisis de publier, ton mot apparaît de façon anonyme : jamais avec un nom ou un lieu.",
+    placeReview:
+      "Ton prénom peut s’afficher tout de suite. Un pays ou une ville reste masqué jusqu’à l’approbation de notre équipe.",
+    anonTitle: "Ton mot sera anonyme",
+    anonText:
+      "Comme tu as moins de 13 ans, si tu choisis de partager ton mot sur le mur, il apparaîtra sans ton nom, ton pays ni ta ville. Personne ne saura qui l’a écrit.",
+    anonOk: "Compris",
     ageRequired: "Saisis ton âge en nombre entier entre 0 et 120.",
     perspectiveQuestion: "J’écris en tant que",
     perspectiveOwn: "Une fille ou une femme",
@@ -242,7 +254,7 @@ export const ui = {
     privacyIntro:
       "STEM Girls Connect reçoit et examine tes réponses pour la campagne Girlhood Should Be Hers.",
     privacyAge:
-      "Ton âge exact est demandé de manière privée pour appliquer les règles de publication et comprendre qui participe. Il n’y a pas d’âge minimum de participation. Les réponses individuelles des moins de 13 ans ne sont jamais publiées.",
+      "Ton âge exact est demandé de manière privée pour appliquer les règles de publication et comprendre qui participe. Il n’y a pas d’âge minimum de participation. Les mots des moins de 13 ans peuvent apparaître sur le mur, toujours de façon anonyme, jamais avec un nom ou un lieu.",
     privacyChoices:
       "La publication sur le site, l’affichage du nom ou de la localisation, la réutilisation et l’analyse désidentifiée font l’objet de choix distincts et facultatifs. La modération ne remplace jamais tes choix.",
     privacyRetention:

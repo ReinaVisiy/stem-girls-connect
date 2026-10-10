@@ -64,6 +64,7 @@ const tabs = [
   "rejected",
   "withdrawn",
   "cleanup",
+  "place",
 ] as const;
 type Tab = (typeof tabs)[number];
 export default function AdminGirlhood() {
@@ -111,6 +112,10 @@ export default function AdminGirlhood() {
             "approved",
             "approved_redacted",
           ]);
+        else if (tab === "place")
+          query = query
+            .eq("moderation_status", "approved")
+            .eq("moderation_reason", "auto_place_pending");
         else if (tab === "cleanup")
           query = query.eq("reuse_cleanup_required", true);
         else query = query.eq("moderation_status", tab);
@@ -141,7 +146,7 @@ export default function AdminGirlhood() {
   useEffect(() => {
     if (!selected) return;
     setNotes(selected.moderation_notes ?? "");
-    setReason(selected.moderation_reason ?? "");
+    setReason(selected.moderation_reason === "auto_place_pending" ? "" : (selected.moderation_reason ?? ""));
     setOwner(selected.escalation_owner ?? "");
     setResolution(selected.escalation_resolution ?? "");
     setText({
@@ -151,8 +156,9 @@ export default function AdminGirlhood() {
     });
     setIdentity({
       name: selected.public_display_name ?? "",
-      country: selected.public_country ?? "",
-      city: selected.public_city ?? "",
+      // For a held country or city, start from what the participant wrote so it can be approved or edited.
+      country: selected.public_country ?? (selected.moderation_reason === "auto_place_pending" && selected.consent_display_country ? selected.country ?? "" : ""),
+      city: selected.public_city ?? (selected.moderation_reason === "auto_place_pending" && selected.consent_display_city ? selected.city_region ?? "" : ""),
     });
     setEvents([]);
     setAuditError(false);
@@ -201,7 +207,7 @@ export default function AdminGirlhood() {
     }
     if (['approved', 'approved_redacted', 'rejected', 'escalated'].includes(status)
       && !window.confirm(status.startsWith('approved')
-        ? (selected.age >= 13 && selected.consent_public ? 'Publish this reviewed text and the public identity shown in the preview?' : 'Approve for private review only? This response cannot be published.')
+        ? (selected.consent_public ? 'Publish this reviewed text and the public identity shown in the preview?' : 'Approve for private review only? This response cannot be published.')
         : `Confirm ${status} status for this contribution?`)) return;
     const redacted =
       text.q1.trim() !== selected.girlhood_response ||
@@ -401,12 +407,14 @@ export default function AdminGirlhood() {
             <p className="my-3 font-bold">
               {terminal
                 ? "WITHDRAWN — cannot be republished"
-                : selected.age < 13
-                  ? "PRIVATE — under 13"
-                  : !selected.consent_public
+                : !selected.consent_public
                     ? "PRIVATE — publication not permitted"
                     : publicEligible
-                      ? "PUBLIC"
+                      ? selected.age < 13
+                        ? "PUBLIC — anonymous (under 13)"
+                        : selected.moderation_reason === "auto_place_pending"
+                          ? "PUBLIC — country or city held until you approve it"
+                          : "PUBLIC"
                       : "Awaiting moderation"}
             </p>
             <p>
@@ -575,7 +583,7 @@ export default function AdminGirlhood() {
                     onClick={() => save("approved")}
                   >
                     Approve reviewed text
-                    {selected.age < 13 || !selected.consent_public
+                    {!selected.consent_public
                       ? " (private)"
                       : ""}
                   </AdminButton>

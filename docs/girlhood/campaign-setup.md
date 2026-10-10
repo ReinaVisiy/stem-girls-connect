@@ -10,7 +10,7 @@ The campaign uses one shared set of submissions and moderation records. Do not a
 
 Keep the program published if participants still need its receipt recovery, privacy and withdrawal pages; close new contributions using `GIRLHOOD_SUBMISSIONS_OPEN=false` instead of unpublishing the program.
 
-The age policy is preserved from the upload: under-13 responses can be stored privately; their name, country and city are discarded and publication/reuse disabled. This is not a blanket rejection of under-13 collection. Ages 13–17, 18–24 and 25+ receive distinct public categories, with allies categorized separately. Publication still requires consent and moderation. No legal eligibility threshold is inferred from these implementation rules.
+The age policy is preserved from the upload: under-13 responses can be shown on the wall, always anonymously: their name, country and city are discarded and reuse is disabled. (Updated 2026-10-10 at the owner's request; migration 20261010150000.) Under-18s show their name at once, but a country or city is held until a moderator approves it (Place review tab). This is not a blanket rejection of under-13 collection. Ages 13–17, 18–24 and 25+ receive distinct public categories, with allies categorized separately. Publication still requires consent and moderation. No legal eligibility threshold is inferred from these implementation rules.
 
 ## Start here
 
@@ -73,7 +73,7 @@ Only the recovery key is saved in this tab's session storage; answers are never 
 The server derives the withdrawal code using the existing secret and private token, and stores only hashes. No code or key is placed in URLs or logs. Recovery requires the unguessable token and is rate-limited. If both the saved codes and token are lost, contact the campaign team; there is no public identity lookup.
 
 ### Moderated identity
-Moderators can set a safe public nickname, country and city/region independently of the original details. Blank fields suppress identity. Publication still requires age 13+, publication consent, approval and no withdrawal; each identity field additionally requires its own consent. Age, original identity and consent stay protected from browser edits. Public identity changes are recorded in audit events; recovery hashes remain unavailable to browser admins.
+Moderators can set a safe public nickname, country and city/region independently of the original details. Blank fields suppress identity. Publication still requires publication consent, approval and no withdrawal; each identity field additionally requires its own consent. Age, original identity and consent stay protected from browser edits. Public identity changes are recorded in audit events; recovery hashes remain unavailable to browser admins.
 
 ### Newsletter
 New and duplicate subscriptions produce the same response. The endpoint validates input length, uses its independent atomic signup/limiter RPC, hides internal database errors and fails closed if configuration is unavailable. Direct public table access is revoked by the new migration. CSV exports quote cell contents and neutralise formula prefixes.
