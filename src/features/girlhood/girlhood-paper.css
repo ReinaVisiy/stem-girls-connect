@@ -884,3 +884,9 @@ body:has(.girlhood-composer[open]) {overflow:hidden;}
 .girlhood-composer-field > label:first-child {font-weight:600;margin-bottom:6px;}
 .girlhood-composer textarea {display:block;width:100%;max-width:100%;box-sizing:border-box;border:1px solid #55645a;padding:10px;font:inherit;font-size:16px;border-radius:6px;background:#fff;color:#123f2d;resize:vertical;}
 .girlhood-composer-include {display:flex;align-items:center;min-height:44px;margin:4px 0 0;}
+
+/* ---- wall note cards: prompt, answer, author -------------------------- */
+.girlhood-paper .girlhood-note-prompt {display:block;font-family:var(--girlhood-serif);font-weight:600;font-size:12px;line-height:1.2;margin-bottom:4px;opacity:0.8;}
+.girlhood-paper .girlhood-note-author {display:block;margin-top:6px;font-family:var(--girlhood-serif);font-style:italic;font-size:12px;line-height:1.2;opacity:0.8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.girlhood-paper .girlhood-note-excerpt {-webkit-line-clamp:4;}
+@media(min-width:768px) {.girlhood-paper .girlhood-note-prompt,.girlhood-paper .girlhood-note-author {font-size:clamp(12px,1.5vw,16px);}}

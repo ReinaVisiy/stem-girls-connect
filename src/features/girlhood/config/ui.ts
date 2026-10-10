@@ -1,7 +1,8 @@
 export const ui = {
   en: {
     home: "Campaign home",
-    voices: "In Their Own Words",
+    voices: "What Others Are Saying",
+    wallTitle: "What Others Are Saying About Girlhood",
     add: "Write your version",
     privacy: "Privacy & your choices",
     withdraw: "Withdraw your voice",
@@ -38,7 +39,7 @@ export const ui = {
       "Join a collection of voices centred on girls and young women.",
     featured: "Featured voices",
     day: "International Day of the Girl 2026",
-    viewAll: "Explore all voices",
+    viewAll: "See what others are saying",
     steps: ["About your voice", "Your thoughts", "Sharing choices", "Review"],
     age: "How old are you?",
     ageHelp:
@@ -127,7 +128,8 @@ export const ui = {
   },
   fr: {
     home: "Accueil de la campagne",
-    voices: "Avec leurs propres mots",
+    voices: "Ce que disent les autres",
+    wallTitle: "Ce que les autres disent de l’enfance des filles",
     add: "Écris ta version",
     privacy: "Confidentialité et tes choix",
     withdraw: "Retirer ta voix",
@@ -164,7 +166,7 @@ export const ui = {
       "Rejoins une collection de voix centrée sur les filles et les jeunes femmes.",
     featured: "Voix à la une",
     day: "Journée internationale de la fille 2026",
-    viewAll: "Découvrir toutes les voix",
+    viewAll: "Voir ce que les autres disent",
     steps: [
       "À propos de ta voix",
       "Tes réflexions",
