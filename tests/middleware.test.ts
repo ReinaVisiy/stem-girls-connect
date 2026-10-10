@@ -53,6 +53,13 @@ describe('middleware: /programs/:slug', () => {
     expect(html).toContain('<meta property="og:image" content="https://img/x.jpg" />');
   });
 
+  it('the girlhood campaign uses its own share card, not the program cover photo', async () => {
+    programs = [{ ...live, page_template: 'girlhood' }];
+    const { html } = await get('/programs/girlhood');
+    expect(html).toContain('<meta property="og:image" content="https://stemgirlsconnect.org/girlhood-share.png" />');
+    expect(html).not.toContain('https://img/x.jpg');
+  });
+
   it('queries only published programs with a supported template (drafts/unsupported never fetched)', async () => {
     programs = [live];
     await get('/programs/girls-in-code');
