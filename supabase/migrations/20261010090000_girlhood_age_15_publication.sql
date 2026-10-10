@@ -7,9 +7,7 @@ alter table public.girlhood_submissions drop constraint if exists under_13_never
 
 alter table public.girlhood_submissions
   add column if not exists country_review_status text not null default 'not_applicable'
-    check (country_review_status in ('not_applicable','pending','approved','rejected')),
-  add column if not exists guardian_authorization_status text not null default 'not_required'
-    check (guardian_authorization_status in ('not_required','required','recorded'));
+    check (country_review_status in ('not_applicable','pending','approved','rejected'));
 
 -- Rows saved before this change keep their state. Nothing private or pending is published here.
 update public.girlhood_submissions
@@ -50,9 +48,6 @@ begin
      and (tg_op = 'INSERT' or old.moderation_status not in ('approved','approved_redacted')) then
     if tg_op = 'INSERT' or auth.uid() is null then
       raise exception 'Responses from participants under 15 need human approval before publication';
-    end if;
-    if new.guardian_authorization_status = 'required' then
-      raise exception 'Record guardian authorization before publishing this response';
     end if;
   end if;
   -- Under 18: a country is public only after its own review.
@@ -131,7 +126,7 @@ from public.girlhood_submissions
 where consent_public = true
   and moderation_status in ('approved','approved_redacted') and withdrawn_at is null;
 
-grant select (country_review_status,guardian_authorization_status) on public.girlhood_submissions to authenticated;
-grant update (country_review_status,guardian_authorization_status) on public.girlhood_submissions to authenticated;
+grant select (country_review_status) on public.girlhood_submissions to authenticated;
+grant update (country_review_status) on public.girlhood_submissions to authenticated;
 
 commit;

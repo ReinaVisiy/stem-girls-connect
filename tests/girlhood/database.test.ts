@@ -263,18 +263,18 @@ test("PostgreSQL migration, grants, privacy, moderation, withdrawal, counts and 
     },
   );
   await t.test(
-    "under 15 needs a signed-in reviewer and recorded guardian authorization; country needs its own review",
+    "under 15 needs a signed-in reviewer; country needs its own review",
     async () => {
       await db.exec("reset role");
       const cols =
-        "public_reference,withdrawal_hash,age,perspective,public_category,language,girlhood_response,public_girlhood_response,consent_public,consent_display_country,consent_version,country,public_country,moderation_status,guardian_authorization_status,country_review_status";
+        "public_reference,withdrawal_hash,age,perspective,public_category,language,girlhood_response,public_girlhood_response,consent_public,consent_display_country,consent_version,country,public_country,moderation_status,country_review_status";
       await assert.rejects(
         db.exec(
-          `insert into public.girlhood_submissions(${cols}) values('U15A','h',10,'own','girl','en','x','x',true,false,'t',null,null,'approved','not_required','not_applicable')`,
+          `insert into public.girlhood_submissions(${cols}) values('U15A','h',10,'own','girl','en','x','x',true,false,'t',null,null,'approved','not_applicable')`,
         ),
       );
       await db.exec(
-        `insert into public.girlhood_submissions(${cols}) values('U15B','h',10,'own','girl','en','x','x',true,true,'t','Country','Country','pending','required','pending')`,
+        `insert into public.girlhood_submissions(${cols}) values('U15B','h',10,'own','girl','en','x','x',true,true,'t','Country','Country','pending','pending')`,
       );
       await db.exec("set role service_role");
       await assert.rejects(
@@ -282,12 +282,6 @@ test("PostgreSQL migration, grants, privacy, moderation, withdrawal, counts and 
       );
       await db.exec("reset role");
       await db.exec(`select set_config('request.jwt.claim.sub','${admin}',false); set role authenticated`);
-      await assert.rejects(
-        db.exec("update public.girlhood_submissions set moderation_status='approved' where public_reference='U15B'"),
-      );
-      await db.exec(
-        "update public.girlhood_submissions set guardian_authorization_status='recorded' where public_reference='U15B'",
-      );
       await db.exec(
         "update public.girlhood_submissions set moderation_status='approved' where public_reference='U15B'",
       );

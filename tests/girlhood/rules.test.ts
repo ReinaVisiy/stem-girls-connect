@@ -72,15 +72,9 @@ test("15 and over publish at once when consented and safe; declined stays privat
     assert.equal(record.consent_public, false);
     assert.equal(record.moderation_status, "pending");
     assert.equal(record.public_display_name, null);
-    assert.equal(record.guardian_authorization_status, "not_required");
   }
   for (const age of [8, 16, 30])
     assert.equal(submissionRecord({ ...input, age, girlhoodResponse: "write to a@b.com" }).moderation_status, "pending");
-});
-test("guardian authorization is required below 15 unless switched off, and never above", () => {
-  assert.equal(submissionRecord({ ...input, age: 12 }).guardian_authorization_status, "required");
-  assert.equal(submissionRecord({ ...input, age: 12 }, { guardianAuthorizationRequired: false }).guardian_authorization_status, "not_required");
-  assert.equal(submissionRecord({ ...input, age: 15 }).guardian_authorization_status, "not_required");
 });
 test("names and countries are separate decisions; under 18 countries wait for review", () => {
   const blank = submissionRecord({ ...input, age: 16, displayName: "", consentDisplayName: true });

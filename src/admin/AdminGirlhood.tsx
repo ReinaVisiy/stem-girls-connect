@@ -53,12 +53,11 @@ interface Submission {
   escalation_resolution: string | null;
   reuse_cleanup_required: boolean;
   country_review_status: "not_applicable" | "pending" | "approved" | "rejected";
-  guardian_authorization_status: "not_required" | "required" | "recorded";
 }
 const originalColumns =
   "id,public_reference,age,perspective,public_category,language,display_name,country,city_region,girlhood_response,future_response,support_response,public_girlhood_response,public_future_response,public_support_response,consent_public,consent_display_name,consent_display_country,consent_display_city,consent_reuse,consent_analysis,moderation_status,moderation_reason,moderation_notes,featured,created_at,updated_at,withdrawn_at,reviewed_by,reviewed_at,escalation_owner,escalation_resolution,reuse_cleanup_required";
 const columns =
-  originalColumns + ",public_display_name,public_country,public_city,country_review_status,guardian_authorization_status";
+  originalColumns + ",public_display_name,public_country,public_city,country_review_status";
 const tabs = [
   "under15",
   "flagged",
@@ -598,24 +597,8 @@ export default function AdminGirlhood() {
                   {selected.age < 15 && selected.consent_public && (
                     <p className="w-full text-sm font-bold">
                       Under 15: publication needs your explicit approval.
-                      {selected.guardian_authorization_status === "required"
-                        ? " Guardian authorization is not yet recorded, so approval will be refused."
-                        : ""}
                     </p>
                   )}
-                  {selected.age < 15 &&
-                    selected.guardian_authorization_status === "required" && (
-                      <AdminButton
-                        disabled={saving}
-                        variant="ghost"
-                        onClick={() => {
-                          if (window.confirm("Confirm that valid parent or guardian authorization has been obtained and kept on file?"))
-                            save(selected.moderation_status, { guardian_authorization_status: "recorded" });
-                        }}
-                      >
-                        Record guardian authorization
-                      </AdminButton>
-                    )}
                   {selected.age < 18 &&
                     selected.consent_display_country &&
                     selected.country_review_status === "pending" && (

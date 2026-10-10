@@ -45,9 +45,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(429).json({ error: message(req, "limited") });
     }
     const { withdrawalCode, requestHash } = receiptCredentials(token);
-    const record = recoverOnly ? null : submissionRecord(req.body, {
-          guardianAuthorizationRequired: process.env.GIRLHOOD_GUARDIAN_AUTH !== "off",
-        });
+    const record = recoverOnly ? null : submissionRecord(req.body);
     const payloadHash = record
       ? hashWithdrawalCode("payload-v1:" + JSON.stringify(record))
       : null;

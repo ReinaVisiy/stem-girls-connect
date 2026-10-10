@@ -126,12 +126,8 @@ export function autoReviewIssues(texts: string[]): string[] {
   }
   return [...issues];
 }
-export function submissionRecord(
-  input: Record<string, unknown>,
-  options: { guardianAuthorizationRequired?: boolean } = {},
-) {
+export function submissionRecord(input: Record<string, unknown>) {
   const age = input.age as number;
-  const guardianRequired = options.guardianAuthorizationRequired !== false;
   const consent = input.consentPublic === true;
   const q1 = plain(input.girlhoodResponse),
     q2 = plain(input.futureResponse) || null,
@@ -177,8 +173,6 @@ export function submissionRecord(
     public_city:
       autoApproved && adult && input.consentDisplayCity === true ? city || null : null,
     country_review_status: !adult && wantsCountry ? "pending" : "not_applicable",
-    guardian_authorization_status:
-      consent && age < AUTO_PUBLISH_MIN_AGE && guardianRequired ? "required" : "not_required",
     moderation_status: autoApproved ? "approved" : "pending",
     moderation_reason: autoApproved
       ? "auto_checks_passed"
