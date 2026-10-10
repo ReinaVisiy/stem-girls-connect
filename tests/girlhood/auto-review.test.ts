@@ -57,3 +57,16 @@ test("a submission must say whether it is from a girl or woman, or from an ally"
   assert.ok(!validate({ ...form, perspective: "own" }).includes("perspective"));
   assert.ok(!validate({ ...form, perspective: "ally" }).includes("perspective"));
 });
+
+test("an instantly published note carries the public name and place the person agreed to show", () => {
+  const shown = submissionRecord({ ...base, age: 25, displayName: "Ada", country: "Cameroon", cityRegion: "Douala", consentDisplayName: true, consentDisplayCountry: true, consentDisplayCity: false });
+  assert.equal(shown.moderation_status, "approved");
+  assert.equal(shown.public_display_name, "Ada");
+  assert.equal(shown.public_country, "Cameroon");
+  assert.equal(shown.public_city, null);
+  const hidden = submissionRecord({ ...base, age: 25, displayName: "Ada", country: "Cameroon" });
+  assert.equal(hidden.public_display_name, null);
+  assert.equal(hidden.public_country, null);
+  const waiting = submissionRecord({ ...base, age: 15, displayName: "Ada", consentDisplayName: true });
+  assert.equal(waiting.public_display_name, null);
+});
