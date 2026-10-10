@@ -7,7 +7,7 @@ export default function PersonalImageComposer({words, language, onClose}: {words
   const fr = language === 'fr', t = copy[language];
   const dialog = useRef<HTMLDialogElement>(null);
   const [format, setFormat] = useState<'portrait' | 'story'>('portrait');
-  const [signature, setSignature] = useState('');
+  const [signature, setSignature] = useState(words.name ?? '');
   const [included, setIncluded] = useState([true, true, true]);
   const [pages, setPages] = useState<RenderedPage[]>([]);
   const [busy, setBusy] = useState(true), [error, setError] = useState('');
