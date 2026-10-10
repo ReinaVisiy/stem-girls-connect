@@ -31,7 +31,7 @@ test("population and measure stay faithful to the sources", () => {
   assert.match(en[1], /rape or sexual assault before turning 18/);
   assert.match(en[2], /230 million girls and women/);
   assert.match(en[3], /^About one in five girls is married before age 18\.$/);
-  assert.match(en[4], /35% of STEM graduates worldwide.*unchanged in ten years.*Biases and social norms/);
+  assert.match(en[4], /35% of STEM graduates worldwide.*Gender stereotypes and bias/);
   const fr = rights.fr.facts.map(plain);
   assert.match(fr[1], /filles et les femmes qui vivent aujourd’hui/);
   assert.match(fr[1], /avant ses 18 ans/);

@@ -33,6 +33,7 @@ test("PostgreSQL migration, grants, privacy, moderation, withdrawal, counts and 
   );
   const admin = "00000000-0000-0000-0000-000000000001";
   await db.exec(await readFile("supabase/migrations/20261008231632_girlhood_note_lengths.sql", "utf8"));
+  await db.exec(await readFile("supabase/migrations/20261010090000_girlhood_age_15_publication.sql", "utf8"));
   await t.test("short and long notes survive the database, oversize is rejected", async () => {
     for (const answer of ["Safe.", "é".repeat(2000)]) {
       const result = await db.query<{girlhood_response:string}>("insert into public.girlhood_submissions (public_reference,withdrawal_hash,age,perspective,public_category,language,girlhood_response,consent_version) values (gen_random_uuid()::text,'hash',12,'own','girl','en',$1,'test') returning girlhood_response", [answer]);
@@ -80,10 +81,13 @@ test("PostgreSQL migration, grants, privacy, moderation, withdrawal, counts and 
           "select * from public.girlhood_submissions where age=8",
         )
       ).rows[0];
-      assert.equal(child.consent_public, false);
-      assert.equal(child.display_name, null);
-      assert.equal(child.city_region, null);
-      assert.equal(child.consent_display_country, false);
+      // A young participant's choices are kept as given, but nothing is public until a person approves.
+      assert.equal(child.consent_public, true);
+      assert.equal(child.moderation_status, "pending");
+      assert.equal(
+        visible.rows.some((r) => r.public_reference === child.public_reference),
+        false,
+      );
       assert.deepEqual(
         (
           await db.query<Record<string, unknown>>(
@@ -158,11 +162,19 @@ test("PostgreSQL migration, grants, privacy, moderation, withdrawal, counts and 
           [ids.get(17), admin],
         ),
       );
-      await assert.rejects(() =>
-        db.query<Record<string, unknown>>(
-          "update public.girlhood_submissions set featured=true where id=$1",
-          [ids.get(8)],
-        ),
+      // A note that is not approved can never stay featured, at any age.
+      await db.query(
+        "update public.girlhood_submissions set featured=true where id=$1",
+        [ids.get(8)],
+      );
+      assert.equal(
+        (
+          await db.query<{ featured: boolean }>(
+            "select featured from public.girlhood_submissions where id=$1",
+            [ids.get(8)],
+          )
+        ).rows[0].featured,
+        false,
       );
       await db.query<Record<string, unknown>>(
         "update public.girlhood_submissions set moderation_status='approved_redacted',public_girlhood_response='A safer public response' where id=$1",
@@ -246,8 +258,55 @@ test("PostgreSQL migration, grants, privacy, moderation, withdrawal, counts and 
             "select count(*)::int n from public.girlhood_public_responses",
           )
         ).rows[0].n,
-        6,
+        5,
       );
+    },
+  );
+  await t.test(
+    "under 15 needs a signed-in reviewer and recorded guardian authorization; country needs its own review",
+    async () => {
+      await db.exec("reset role");
+      const cols =
+        "public_reference,withdrawal_hash,age,perspective,public_category,language,girlhood_response,public_girlhood_response,consent_public,consent_display_country,consent_version,country,public_country,moderation_status,guardian_authorization_status,country_review_status";
+      await assert.rejects(
+        db.exec(
+          `insert into public.girlhood_submissions(${cols}) values('U15A','h',10,'own','girl','en','x','x',true,false,'t',null,null,'approved','not_required','not_applicable')`,
+        ),
+      );
+      await db.exec(
+        `insert into public.girlhood_submissions(${cols}) values('U15B','h',10,'own','girl','en','x','x',true,true,'t','Country','Country','pending','required','pending')`,
+      );
+      await db.exec("set role service_role");
+      await assert.rejects(
+        db.exec("update public.girlhood_submissions set moderation_status='approved' where public_reference='U15B'"),
+      );
+      await db.exec("reset role");
+      await db.exec(`select set_config('request.jwt.claim.sub','${admin}',false); set role authenticated`);
+      await assert.rejects(
+        db.exec("update public.girlhood_submissions set moderation_status='approved' where public_reference='U15B'"),
+      );
+      await db.exec(
+        "update public.girlhood_submissions set guardian_authorization_status='recorded' where public_reference='U15B'",
+      );
+      await db.exec(
+        "update public.girlhood_submissions set moderation_status='approved' where public_reference='U15B'",
+      );
+      await db.exec(`reset role; select set_config('request.jwt.claim.sub','',false); set role service_role`);
+      const shown = await db.query<{ safe_country: string | null }>(
+        "select safe_country from public.girlhood_public_responses where public_reference='U15B'",
+      );
+      assert.equal(shown.rows.length, 1);
+      assert.equal(shown.rows[0].safe_country, null);
+      await db.exec("reset role");
+      await db.exec("update public.girlhood_submissions set country_review_status='approved', public_country='Country' where public_reference='U15B'");
+      await db.exec("set role service_role");
+      assert.equal(
+        (await db.query<{ safe_country: string | null }>("select safe_country from public.girlhood_public_responses where public_reference='U15B'")).rows[0].safe_country,
+        "Country",
+      );
+      await db.exec("reset role");
+      await db.exec("delete from public.girlhood_submissions where public_reference in ('U15A','U15B')");
+      await db.exec("set role service_role");
     },
   );
   await t.test(
@@ -291,7 +350,7 @@ test("PostgreSQL migration, grants, privacy, moderation, withdrawal, counts and 
             "select public.girlhood_public_stats() stats",
           )
         ).rows[0].stats.publicVoices,
-        1055,
+        1054,
       );
     },
   );

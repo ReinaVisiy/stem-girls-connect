@@ -14,6 +14,8 @@ export const copy = {
     inviteText:
       "Finish the sentence in your own words. You can keep your name private, and you can make a card to keep or share.",
     previewTitle: "What others are saying",
+    previewEmpty:
+      "No notes are on the wall yet. Be one of the first to share what girlhood should be.",
     q1: "Girlhood should be...",
     q1Help:
       "What should every girl have the freedom to experience while growing up?",
@@ -41,6 +43,8 @@ export const copy = {
     inviteText:
       "Termine la phrase avec tes mots. Tu peux garder ton nom privé, et créer une carte à garder ou à partager.",
     previewTitle: "Ce que les autres disent",
+    previewEmpty:
+      "Aucun mot n’est encore affiché sur le mur. Sois l’une des premières à dire ce que l’enfance des filles devrait être.",
     q1: "L’enfance des filles devrait être…",
     q1Help:
       "Qu’est-ce que chaque fille devrait être libre de vivre en grandissant ?",

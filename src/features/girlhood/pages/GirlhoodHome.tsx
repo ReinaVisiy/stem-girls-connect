@@ -20,6 +20,7 @@ export default function GirlhoodHome() {
   const { language } = useGirlhoodLanguage();
   const t = copy[language];
   const [voices, setVoices] = useState<GirlhoodPublicResponse[]>([]);
+  const [loaded, setLoaded] = useState(false);
   useEffect(() => {
     const controller = new AbortController();
     request("/api/girlhood/wall?page=1&featured=true", {
@@ -30,7 +31,10 @@ export default function GirlhoodHome() {
         return response.json();
       })
       .then((data) => {
-        if (!controller.signal.aborted) setVoices(data.responses.slice(0, 6));
+        if (!controller.signal.aborted) {
+          setVoices(data.responses.slice(0, 6));
+          setLoaded(true);
+        }
       })
       .catch(() => {
         /* The invitation remains available when featured notes cannot load. */
@@ -93,6 +97,9 @@ export default function GirlhoodHome() {
               />
             ))}
           </div>
+        )}
+        {loaded && voices.length === 0 && (
+          <p className="girlhood-preview-empty">{t.previewEmpty}</p>
         )}
         <p className="girlhood-preview-more">
           <Link className="girlhood-quiet-link" to={basePath + "/wall"}>

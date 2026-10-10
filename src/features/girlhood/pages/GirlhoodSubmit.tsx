@@ -79,6 +79,17 @@ function Choice({
     </label>
   );
 }
+/** Remember, on this device only, which public references this browser submitted. */
+function rememberOwn(reference: string) {
+  try {
+    const raw = JSON.parse(localStorage.getItem("sgc-girlhood-own") || "[]");
+    const list: string[] = Array.isArray(raw) ? raw.filter((r) => typeof r === "string") : [];
+    if (!list.includes(reference)) list.push(reference);
+    localStorage.setItem("sgc-girlhood-own", JSON.stringify(list.slice(-20)));
+  } catch {
+    /* Storage unavailable: the neutral share message is used. */
+  }
+}
 export default function GirlhoodSubmit() {
   const { request, preview: isPreview } = useGirlhoodRuntime();
   const basePath = useGirlhoodBasePath();
@@ -225,6 +236,7 @@ export default function GirlhoodSubmit() {
         typeof data.withdrawalCode !== "string"
       )
         throw new Error(x.retryHelp);
+      rememberOwn(data.publicReference);
       setSuccess(data);
       setForm(empty);
     } catch (err) {
@@ -314,6 +326,7 @@ export default function GirlhoodSubmit() {
       )
         throw new Error(l.sendError);
       setSnapshot(currentWords);
+      rememberOwn(data.publicReference);
       setSuccess(data);
       setForm(empty);
     } catch (err) {

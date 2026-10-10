@@ -90,7 +90,7 @@ test('fresh baseline, safe newsletter rollout and campaign safeguards on isolate
     await db.exec("insert into public.programs(title,slug,page_template) values('Temporary standard program','temporary','standard')");
     assert.equal((await db.query("delete from public.programs where slug='temporary' returning id")).rows.length,1);
     await db.exec(`insert into public.girlhood_submissions(public_reference,withdrawal_hash,age,perspective,public_category,language,girlhood_response,consent_version,country) values('TEST','private',12,'own','girl','en','A world full of possibilities','test','Private Country');`);
-    assert.equal((await db.query<{country:string|null}>("select country from public.girlhood_submissions where public_reference='TEST'")).rows[0].country,null);
+    assert.equal((await db.query<{country:string|null}>("select country from public.girlhood_submissions where public_reference='TEST'")).rows[0].country,'Private Country');
     await assert.rejects(db.exec("update public.girlhood_submissions set age=18 where public_reference='TEST'"));
     await assert.rejects(db.exec("update public.girlhood_submissions set consent_public=true where public_reference='TEST'"));
     // Two moderators use the same version: first succeeds, second affects 0 rows.

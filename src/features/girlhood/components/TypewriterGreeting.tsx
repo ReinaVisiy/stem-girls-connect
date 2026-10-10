@@ -1,8 +1,8 @@
 import type { GirlhoodLanguage } from '../types';
 
 const text: Record<GirlhoodLanguage, string> = {
-  en: 'Happy International Day of the Girl Child',
-  fr: 'Joyeuse Journée internationale de la fille',
+  en: 'Happy International Day of the Girl Child!',
+  fr: 'Joyeuse Journée internationale de la fille !',
 };
 
 /** The greeting is shown during October, the month of 11 October (International Day of the Girl Child). */

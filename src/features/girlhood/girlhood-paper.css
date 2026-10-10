@@ -954,3 +954,22 @@ body:has(.girlhood-composer[open]) {overflow:hidden;}
   font-weight: 700;
   color: var(--girlhood-plum);
 }
+
+/* ---- public note typography hierarchy and mobile layout ---------------- */
+.girlhood-paper .girlhood-note-prompt,
+.girlhood-paper .girlhood-paper-prompt { color: #6d4465; }
+.girlhood-paper .girlhood-note-excerpt,
+.girlhood-paper .girlhood-paper-answer { color: #22252e; opacity: 1; }
+.girlhood-paper .girlhood-note-author,
+.girlhood-paper .girlhood-paper-signature { color: #6d4465; font-style: italic; opacity: 1; }
+.girlhood-paper .girlhood-note-prompt { font-size: 14px; }
+.girlhood-paper .girlhood-note-excerpt { font-size: 17px; line-height: 1.4; -webkit-line-clamp: 6; }
+.girlhood-paper .girlhood-note-author { font-size: 14px; }
+.girlhood-notes-grid { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+@media (min-width: 600px) { .girlhood-notes-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 900px) { .girlhood-notes-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 1200px) { .girlhood-notes-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.girlhood-age-notice { margin: 0.75rem 0; padding: 0.9rem 1rem; border-radius: 12px; background: #fff7fb; border: 1px solid #d9b8cf; color: #3a2236; }
+.girlhood-age-notice p { margin: 0 0 0.6rem; }
+.girlhood-age-inline { font-size: 0.9rem; margin: 0.5rem 0; }
+.girlhood-public-share textarea { width: 100%; box-sizing: border-box; font: inherit; }

@@ -66,6 +66,11 @@ begin
 end;
 $$;
 
+revoke all on function public.girlhood_guard_private_data() from public,anon,authenticated;
+drop trigger if exists girlhood_00_guard on public.girlhood_submissions;
+create trigger girlhood_00_guard before insert or update on public.girlhood_submissions
+for each row execute function public.girlhood_guard_private_data();
+
 -- Re-create the audited moderation trigger function without the old age-13 floor on featuring.
 create or replace function public.log_girlhood_moderation_event()
 returns trigger language plpgsql security invoker set search_path = '' as $$

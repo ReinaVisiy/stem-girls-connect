@@ -82,10 +82,10 @@ export const rights: Record<GirlhoodLanguage, RightsCopy> = {
       },
       { strong: "About one in five girls", after: " is married before age 18.", source: 3 },
       {
-        before: "Women make up only ",
+        before: "Women make up just ",
         strong: "35% of STEM graduates worldwide",
         after:
-          ", a figure unchanged in ten years. Biases and social norms are among the barriers holding girls back.",
+          ". Gender stereotypes and bias are among the barriers that influence which girls are encouraged to pursue STEM, who feels they belong, and whose potential is taken seriously.",
         source: 4,
       },
     ],
@@ -138,7 +138,7 @@ export const rights: Record<GirlhoodLanguage, RightsCopy> = {
         before: "Les femmes ne représentent que ",
         strong: `35${nb}% des diplômés des filières STEM dans le monde`,
         after:
-          ", une proportion inchangée depuis dix ans. Les préjugés et les normes sociales font partie des obstacles qui freinent les filles.",
+          ". Les stéréotypes de genre et les préjugés font partie des obstacles qui influencent les filles que l’on encourage vers les filières STEM, celles qui sentent qu’elles y ont leur place, et celles dont le potentiel est pris au sérieux.",
         source: 4,
       },
     ],

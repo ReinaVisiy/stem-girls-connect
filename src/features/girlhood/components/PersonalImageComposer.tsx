@@ -11,7 +11,7 @@ export default function PersonalImageComposer({words, language, onClose}: {words
   const [included, setIncluded] = useState([true, true, true]);
   // Edits live only in this dialog. They never touch the submission, the form or the database.
   const [draft, setDraft] = useState<[string, string, string]>(words.answers);
-  const [view, setView] = useState<'edit' | 'preview'>('preview');
+  const [view, setView] = useState<'edit' | 'preview'>('edit');
   const [rendering, setRendering] = useState<{answers: [string, string, string]; signature: string}>({answers: words.answers, signature: words.name ?? ''});
   useEffect(() => {
     const id = window.setTimeout(() => setRendering({answers: draft, signature}), 450);
@@ -44,14 +44,14 @@ export default function PersonalImageComposer({words, language, onClose}: {words
     <p>{fr ? 'Créée sur ton appareil. Tes mots ne sont pas envoyés pour créer cette image.' : 'Created on your device. Your words are not uploaded to make this image.'}</p>
     <p>{words.younger || !words.ageKnown ? (fr ? 'Avant de partager ailleurs, demande à un adulte de confiance. Évite ton nom complet et tes coordonnées.' : 'Before sharing elsewhere, ask a trusted adult. Avoid your full name and contact details.') : (fr ? 'Vérifie ce que tu souhaites partager ailleurs. Évite les informations privées.' : 'Check what you want to share elsewhere. Leave out private information.')}</p>
     <div className="girlhood-composer-tabs" role="group" aria-label={fr ? 'Affichage' : 'View'}>
-      <button type="button" className="girlhood-composer-tab" aria-pressed={view === 'edit'} onClick={() => setView('edit')}>{fr ? 'Modifier ma carte' : 'Edit My Card'}</button>
-      <button type="button" className="girlhood-composer-tab" aria-pressed={view === 'preview'} onClick={() => setView('preview')}>{fr ? 'Aperçu de la carte' : 'Preview Card'}</button>
+      <button type="button" className="girlhood-composer-tab" aria-pressed={view === 'edit'} onClick={() => setView('edit')}>{fr ? 'Modifier ma carte' : 'Edit my card'}</button>
+      <button type="button" className="girlhood-composer-tab" aria-pressed={view === 'preview'} onClick={() => setView('preview')}>{fr ? 'Aperçu de la carte' : 'Preview card'}</button>
     </div>
     {view === 'edit' && <div className="girlhood-composer-edit">
       <p>{fr ? 'Ces changements ne concernent que cette carte. Ils ne modifient pas ce que tu as envoyé.' : 'These changes only affect this card. They do not change anything you submitted.'}</p>
       {[t.q1,t.q2,t.q3].map((prompt,i) => (words.answers[i] || draft[i]) && <div key={prompt} className="girlhood-composer-field">
         <label htmlFor={'card-answer-' + i}>{prompt}</label>
-        <textarea id={'card-answer-' + i} rows={3} maxLength={1200} value={draft[i]} onChange={e => {const v = e.target.value; setDraft(d => d.map((x, n) => n === i ? v : x) as [string, string, string]);}} />
+        <textarea id={'card-answer-' + i} rows={3} maxLength={2000} value={draft[i]} onChange={e => {const v = e.target.value; setDraft(d => d.map((x, n) => n === i ? v : x) as [string, string, string]);}} />
         <label className="girlhood-composer-include"><input type="checkbox" checked={included[i]} onChange={e => setIncluded(values => values.map((v,n) => n === i ? e.target.checked : v))}/>{fr ? 'Inclure dans la carte' : 'Include on the card'}</label>
       </div>)}
       <label>{fr ? 'Nom sur la carte (facultatif)' : 'Name on the card (optional)'}<input value={signature} maxLength={60} onChange={e => setSignature(e.target.value)} /></label>
