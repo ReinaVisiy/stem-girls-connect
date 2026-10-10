@@ -900,3 +900,43 @@ body:has(.girlhood-composer[open]) {overflow:hidden;}
   font-size: clamp(1.35rem, 6vw, 2.4rem);
   letter-spacing: -0.01em;
 }
+
+/* ---- greeting: centred, word-by-word rise ----------------------------- */
+.girlhood-hero .girlhood-greeting {
+  text-align: center;
+  margin-inline: auto;
+  max-width: 15ch;
+}
+.girlhood-hero .girlhood-greeting-live {
+  display: inline;
+}
+.girlhood-greeting-word {
+  display: inline-block;
+  white-space: pre;
+  opacity: 0;
+  transform: translateY(0.45em);
+  filter: blur(6px);
+  animation: girlhood-word-in 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+@keyframes girlhood-word-in {
+  to { opacity: 1; transform: none; filter: blur(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .girlhood-greeting-word { animation: none; opacity: 1; transform: none; filter: none; }
+}
+@media (min-width: 900px) {
+  .girlhood-hero .girlhood-greeting { text-align: left; margin-inline: 0; }
+}
+
+/* ---- rights pills: two per row ---------------------------------------- */
+.girlhood-rights-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem;
+  max-width: 28rem;
+  margin-inline: auto;
+}
+.girlhood-rights-list span {
+  text-align: center;
+  padding: 0.55rem 0.8rem;
+}
