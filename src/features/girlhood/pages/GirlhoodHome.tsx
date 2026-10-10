@@ -8,6 +8,7 @@ import { copy } from "../config/copy";
 import GirlhoodResponseCard from "../components/GirlhoodResponseCard";
 import GirlhoodRights from "../components/GirlhoodRights";
 import GirlhoodPaperFrame from "../paper/GirlhoodPaperFrame";
+import HeroParticles from "../components/HeroParticles";
 import TypewriterGreeting, { isGreetingSeason } from "../components/TypewriterGreeting";
 import { useGirlhoodLanguage } from "../hooks/useGirlhoodLanguage";
 import type { GirlhoodPublicResponse } from "../types";
@@ -44,32 +45,45 @@ export default function GirlhoodHome() {
       />
       <section
         className={
-          "girlhood-invitation girlhood-hero" +
-          (isGreetingSeason() ? " has-greeting" : "")
+          "girlhood-hero" + (isGreetingSeason() ? " has-greeting" : "")
         }
       >
-        <div className="girlhood-hero-text">
-          {isGreetingSeason() && <TypewriterGreeting language={language} />}
-          <p className="girlhood-small-heading">{t.eyebrow}</p>
-          <h1>{t.heroTitle}</h1>
-          <p className="girlhood-hero-question">{t.question}</p>
-          <p className="girlhood-invitation-copy">{t.intro}</p>
-          <div className="girlhood-invitation-actions">
-            <ContributionLink>
-              {t.addVoice} <span aria-hidden="true">↗</span>
-            </ContributionLink>
-            <Link className="girlhood-quiet-link" to={basePath + "/wall"}>
-              {t.wall}
-            </Link>
+        <HeroParticles />
+        <div className="girlhood-hero-inner">
+          <div className="girlhood-hero-text">
+            <p className="girlhood-small-heading">{t.eyebrow}</p>
+            {isGreetingSeason() && <TypewriterGreeting language={language} />}
+            <h1>{t.heroTitle}</h1>
+            <p className="girlhood-invitation-copy">{t.intro}</p>
+            <div className="girlhood-invitation-actions">
+              <ContributionLink>
+                {t.addVoice} <span aria-hidden="true">↗</span>
+              </ContributionLink>
+              <Link className="girlhood-quiet-link" to={basePath + "/wall"}>
+                {t.wall}
+              </Link>
+            </div>
           </div>
-        </div>
-        <div className="girlhood-hero-art" aria-hidden="true">
-          <GirlhoodPaperFrame reference="girlhood-hero" slices="small" />
+          <div className="girlhood-hero-art" aria-hidden="true">
+            <GirlhoodPaperFrame reference="girlhood-hero" slices="small" />
+          </div>
         </div>
       </section>
       <GirlhoodRights language={language} />
-      {voices.length > 0 && (
-        <section className="girlhood-home-notes" aria-label={t.wall}>
+      <section className="girlhood-invite" aria-labelledby="girlhood-invite-title">
+        <h2 id="girlhood-invite-title">{t.inviteTitle}</h2>
+        <p>{t.inviteText}</p>
+        <ContributionLink>
+          {t.addVoice} <span aria-hidden="true">↗</span>
+        </ContributionLink>
+      </section>
+      <section className="girlhood-home-notes" aria-labelledby="girlhood-preview-title">
+        <h2 id="girlhood-preview-title" className="girlhood-preview-title">
+          {t.previewTitle}
+        </h2>
+        {voices.length === 0 ? (
+          <p className="girlhood-preview-empty">{t.previewEmpty}</p>
+        ) : (
           <div className="girlhood-notes-grid">
             {voices.map((response) => (
               <GirlhoodResponseCard
@@ -80,8 +94,13 @@ export default function GirlhoodHome() {
               />
             ))}
           </div>
-        </section>
-      )}
+        )}
+        <p className="girlhood-preview-more">
+          <Link className="girlhood-quiet-link" to={basePath + "/wall"}>
+            {t.wall}
+          </Link>
+        </p>
+      </section>
     </>
   );
 }

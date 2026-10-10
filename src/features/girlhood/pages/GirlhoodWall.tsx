@@ -60,11 +60,11 @@ export default function GirlhoodWall() {
   return (
     <section className="girlhood-wall-page">
       <Seo
-        title={t.voices + " | Girlhood Should Be Hers"}
+        title={t.wallTitle + " | Girlhood Should Be Hers"}
         description={t.wallIntro}
         path={basePath + "/wall"}
       />
-      <h1 className="girlhood-page-title">{t.voices}</h1>
+      <h1 className="girlhood-page-title">{t.wallTitle}</h1>
       <p className="mt-4 max-w-2xl">{t.wallIntro}</p>
       <ContributionLink className="girlhood-button mt-6 inline-block">
         {t.add}

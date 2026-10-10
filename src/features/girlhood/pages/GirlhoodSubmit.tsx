@@ -103,7 +103,7 @@ export default function GirlhoodSubmit() {
     [feedback, setFeedback] = useState("");
   const [imageOpen, setImageOpen] = useState(false);
   const [snapshot, setSnapshot] = useState<PersonalWords | null>(null);
-  const currentWords = useMemo<PersonalWords>(() => ({ answers: [form.girlhoodResponse, form.futureResponse, form.supportResponse], under13: typeof form.age === 'number' && form.age < 13, ageKnown: typeof form.age === 'number' }), [form.girlhoodResponse, form.futureResponse, form.supportResponse, form.age]);
+  const currentWords = useMemo<PersonalWords>(() => ({ answers: [form.girlhoodResponse, form.futureResponse, form.supportResponse], under13: typeof form.age === 'number' && form.age < 13, ageKnown: typeof form.age === 'number', name: form.displayName }), [form.girlhoodResponse, form.futureResponse, form.supportResponse, form.age, form.displayName]);
   const imageWords = success ? snapshot : currentWords;
   const heading = useRef<HTMLHeadingElement>(null),
     alert = useRef<HTMLDivElement>(null),
@@ -159,7 +159,6 @@ export default function GirlhoodSubmit() {
       const next = { ...f, [key]: value };
       if (key === "age" && typeof value === "number" && value < 13)
         Object.assign(next, {
-          displayName: "",
           country: "",
           cityRegion: "",
           consentPublic: false,
@@ -189,7 +188,12 @@ export default function GirlhoodSubmit() {
           ? l.acknowledgeError
           : l.choiceError;
   }
-  const input = { ...form, language };
+  // Under 13s may type a nickname for their own image, but identity and place are never sent.
+  const input = {
+    ...form,
+    language,
+    ...(under13 ? { displayName: "", country: "", cityRegion: "" } : {}),
+  };
   const errors = validateGirlhoodSubmission(input);
   function tokenForAttempt() {
     if (!requestToken.current) {
@@ -519,6 +523,31 @@ export default function GirlhoodSubmit() {
               </div>
             ))}
           </div>
+          <div className="girlhood-signature-field">
+            <label htmlFor="note-name">
+              {language === "fr"
+                ? "Ton nom ou surnom (facultatif)"
+                : "Your name or nickname (optional)"}
+            </label>
+            <input
+              id="note-name"
+              className="girlhood-signature-input"
+              value={form.displayName}
+              maxLength={80}
+              autoComplete="nickname"
+              aria-describedby="note-name-help"
+              onChange={(e) => update("displayName", e.target.value)}
+            />
+            <p id="note-name-help">
+              {under13
+                ? language === "fr"
+                  ? "Utilisé seulement sur ta propre image. Jamais publié."
+                  : "Only used on your own image. Never published."
+                : language === "fr"
+                  ? "Ton nom n’est affiché publiquement que si tu le choisis plus bas."
+                  : "Your name is only shown publicly if you choose that below."}
+            </p>
+          </div>
           </GirlhoodPaperFrame>
           <p>{language === 'fr' ? 'Tu peux garder une image sans envoyer tes mots.' : 'You can keep an image without sending your words.'}</p>
           <button type="button" className="girlhood-button girlhood-create-image" disabled={!currentWords.answers.some(answer => answer.trim())} onClick={() => setImageOpen(true)}>{language === 'fr' ? 'Créer mon image' : 'Create my image'}</button>
@@ -577,43 +606,66 @@ export default function GirlhoodSubmit() {
                     ? "Ton âge reste privé."
                     : "Your age stays private."}
                 </p>
+                {!under13 && (
+                  <Field
+                    label={
+                      language === "fr"
+                        ? "Dans quel pays vis-tu ? (facultatif)"
+                        : "Which country are you in? (optional)"
+                    }
+                  >
+                    <input
+                      className="girlhood-input girlhood-country"
+                      value={form.country}
+                      maxLength={100}
+                      autoComplete="country-name"
+                      onChange={(e) => update("country", e.target.value)}
+                    />
+                  </Field>
+                )}
               </div>
               {under13 ? (
                 <p className="girlhood-private-note">{l.under13}</p>
               ) : (
-                <Choice
-                  label={l.publish}
-                  checked={form.consentPublic}
-                  onChange={(v) => update("consentPublic", v)}
-                />
+                <>
+                  <Choice
+                    label={l.publish}
+                    checked={form.consentPublic}
+                    onChange={(v) => update("consentPublic", v)}
+                  />
+                  {form.consentPublic && (
+                    <div className="girlhood-public-choices">
+                      <Choice
+                        label={l.showName}
+                        checked={form.consentDisplayName}
+                        onChange={(v) => update("consentDisplayName", v)}
+                      />
+                      <Choice
+                        label={
+                          language === "fr"
+                            ? "Afficher mon pays avec mon petit mot"
+                            : "Show my country with my note"
+                        }
+                        checked={form.consentDisplayCountry}
+                        onChange={(v) => update("consentDisplayCountry", v)}
+                      />
+                    </div>
+                  )}
+                </>
               )}
               <details className="girlhood-extra-choices">
                 <summary>
                   {language === "fr"
-                    ? "Signature et autres permissions (facultatif)"
-                    : "Signature and other permissions (optional)"}
+                    ? "Autres choix (facultatif)"
+                    : "More choices (optional)"}
                 </summary>
                 {!under13 && (
                   <div className="girlhood-identity">
                     <Field
                       label={
                         language === "fr"
-                          ? "Nom ou surnom (facultatif)"
-                          : "Your name or nickname (optional)"
-                      }
-                    >
-                      <input
-                        className="girlhood-input"
-                        value={form.displayName}
-                        maxLength={80}
-                        onChange={(e) => update("displayName", e.target.value)}
-                      />
-                    </Field>
-                    <Field
-                      label={
-                        language === "fr"
                           ? "D’où écris-tu ? (facultatif)"
-                          : "Where are you writing from? (optional)"
+                          : "City or region (optional)"
                       }
                     >
                       <input
@@ -624,22 +676,15 @@ export default function GirlhoodSubmit() {
                       />
                     </Field>
                     {form.consentPublic && (
-                      <>
-                        <Choice
-                          label={l.showName}
-                          checked={form.consentDisplayName}
-                          onChange={(v) => update("consentDisplayName", v)}
-                        />
-                        <Choice
-                          label={
-                            language === "fr"
-                              ? "Afficher ce lieu avec mon petit mot"
-                              : "Show this location with my note"
-                          }
-                          checked={form.consentDisplayCity}
-                          onChange={(v) => update("consentDisplayCity", v)}
-                        />
-                      </>
+                      <Choice
+                        label={
+                          language === "fr"
+                            ? "Afficher cette ville ou région avec mon petit mot"
+                            : "Show this city or region with my note"
+                        }
+                        checked={form.consentDisplayCity}
+                        onChange={(v) => update("consentDisplayCity", v)}
+                      />
                     )}
                   </div>
                 )}

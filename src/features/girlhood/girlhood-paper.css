@@ -531,54 +531,12 @@ body:has(.girlhood-composer[open]) {overflow:hidden;}
     radial-gradient(80% 50% at 10% 92%, rgb(216 238 224 / 0.7), transparent 70%),
     #fffaf3;
 }
-.girlhood-shell::before,
-.girlhood-shell::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-}
-.girlhood-shell::before {
-  background:
-    radial-gradient(circle at 18% 22%, rgb(255 255 255 / 0.9) 0 2px, transparent 3px),
-    radial-gradient(circle at 78% 14%, rgb(255 255 255 / 0.9) 0 2px, transparent 3px),
-    radial-gradient(circle at 62% 38%, rgb(255 240 200 / 0.95) 0 2.5px, transparent 4px),
-    radial-gradient(circle at 12% 58%, rgb(255 255 255 / 0.9) 0 2px, transparent 3px),
-    radial-gradient(circle at 88% 70%, rgb(255 240 200 / 0.95) 0 2.5px, transparent 4px),
-    radial-gradient(circle at 40% 84%, rgb(255 255 255 / 0.9) 0 2px, transparent 3px);
-  animation: girlhood-twinkle 7s ease-in-out infinite alternate;
-}
-.girlhood-shell::after {
-  background:
-    radial-gradient(40% 30% at 30% 20%, rgb(255 200 225 / 0.35), transparent 70%),
-    radial-gradient(35% 28% at 75% 65%, rgb(214 196 255 / 0.3), transparent 70%);
-  animation: girlhood-drift 26s ease-in-out infinite alternate;
-}
-@keyframes girlhood-twinkle {
-  from { opacity: 0.35; }
-  to { opacity: 1; }
-}
-@keyframes girlhood-drift {
-  from { transform: translate3d(0, 0, 0) scale(1); }
-  to { transform: translate3d(3%, 2%, 0) scale(1.06); }
-}
 .dark .girlhood-shell {
   background:
     radial-gradient(70% 45% at 8% 4%, rgb(130 36 109 / 0.35), transparent 70%),
     radial-gradient(60% 40% at 96% 10%, rgb(90 70 170 / 0.3), transparent 70%),
     radial-gradient(80% 50% at 10% 92%, rgb(40 90 80 / 0.3), transparent 70%),
     #221d25;
-}
-.dark .girlhood-shell::before {
-  opacity: 0.5;
-  animation: none;
-}
-@media (prefers-reduced-motion: reduce) {
-  .girlhood-shell::before,
-  .girlhood-shell::after {
-    animation: none;
-  }
 }
 
 /* heading glow: same font and colour, just a soft light behind it */
@@ -624,3 +582,311 @@ body:has(.girlhood-composer[open]) {overflow:hidden;}
   border-radius: 24px;
   box-shadow: 0 30px 80px rgb(92 48 104 / 0.3);
 }
+
+/* ---- visible signature field on the writing paper ------------------ */
+.girlhood-signature-field {
+  margin: 1.25rem 0 0.25rem;
+  text-align: left;
+}
+.girlhood-signature-field label {
+  display: block;
+  font-family: var(--girlhood-serif);
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--girlhood-forest);
+  margin-bottom: 0.35rem;
+}
+.girlhood-signature-input {
+  width: min(22rem, 100%);
+  min-height: 48px;
+  padding: 0.55rem 0.9rem;
+  font-family: var(--girlhood-serif);
+  font-size: 1.2rem;
+  color: var(--girlhood-forest);
+  background: rgb(255 255 255 / 0.45);
+  border: 1px solid rgb(18 63 45 / 0.28);
+  border-radius: 12px;
+}
+.girlhood-signature-field p {
+  margin: 0.35rem 0 0;
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 0.8rem;
+  color: var(--girlhood-muted);
+}
+.girlhood-public-choices {
+  margin: 0 0 0.4rem 1.75rem;
+}
+
+/* ---- plum hero ------------------------------------------------------- */
+.girlhood-hero {
+  --hero-plum: #35122e;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  display: block;
+  text-align: center;
+  color: #fbeff6;
+  background:
+    radial-gradient(60% 55% at 12% 0%, rgb(150 52 120 / 0.42), transparent 70%),
+    radial-gradient(55% 50% at 100% 100%, rgb(110 40 100 / 0.5), transparent 70%),
+    var(--hero-plum);
+}
+.girlhood-hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2.75rem 1.25rem 3.25rem;
+  display: grid;
+  gap: 2.5rem;
+  justify-items: center;
+}
+.girlhood-hero-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+}
+.girlhood-hero .girlhood-small-heading,
+.dark .girlhood-hero .girlhood-small-heading {
+  color: #e9c3dc;
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin: 0 0 1.1rem;
+}
+.girlhood-hero .girlhood-greeting {
+  filter: none;
+  margin: 0 auto 1.4rem;
+  max-width: 14ch;
+  font-size: clamp(2.5rem, 11vw, 5rem);
+}
+.girlhood-hero .girlhood-greeting-live,
+.dark .girlhood-hero .girlhood-greeting-live {
+  background: none;
+  color: #fff;
+  -webkit-text-fill-color: #fff;
+}
+.girlhood-hero .girlhood-cursor,
+.dark .girlhood-hero .girlhood-cursor {
+  background: #f3b9dd;
+}
+.girlhood-hero h1,
+.dark .girlhood-hero h1,
+.girlhood-hero.has-greeting h1 {
+  color: #f6cfe6;
+  text-shadow: none;
+  font-size: clamp(1.9rem, 7vw, 3rem);
+  line-height: 1.1;
+  max-width: 16ch;
+  margin: 0 auto 1.1rem;
+}
+.girlhood-hero .girlhood-invitation-copy {
+  color: #f1dce8;
+  max-width: 34rem;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin: 0 auto 1.8rem;
+}
+.girlhood-hero .girlhood-invitation-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.8rem;
+  width: 100%;
+  max-width: 22rem;
+  margin: 0 auto;
+}
+.girlhood-hero .girlhood-button,
+.girlhood-hero .girlhood-quiet-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding: 0.75rem 1.6rem;
+  border-radius: 999px;
+  font-weight: 600;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+.girlhood-hero .girlhood-button {
+  background: #fff;
+  color: var(--hero-plum);
+  box-shadow: 0 8px 26px rgb(0 0 0 / 0.25);
+}
+.girlhood-hero .girlhood-button:hover:not(:disabled) {
+  background: #fdeaf5;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.32);
+}
+.girlhood-hero .girlhood-quiet-link {
+  color: #fff;
+  background: transparent;
+  border: 1.5px solid rgb(255 255 255 / 0.7);
+}
+.girlhood-hero .girlhood-quiet-link:hover {
+  background: rgb(255 255 255 / 0.12);
+}
+.girlhood-hero :focus-visible {
+  outline: 3px solid #f3b9dd;
+  outline-offset: 3px;
+}
+.girlhood-hero-art {
+  display: none;
+}
+.girlhood-particles {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.girlhood-particles i {
+  position: absolute;
+  border-radius: 50%;
+  background: #fff;
+  opacity: var(--o);
+  animation: girlhood-float var(--t) ease-in-out var(--d) infinite alternate;
+  will-change: transform;
+}
+.girlhood-particles i.is-fade {
+  animation-name: girlhood-float, girlhood-breathe;
+  animation-duration: var(--t), calc(var(--t) / 3);
+  animation-delay: var(--d), var(--d);
+  animation-iteration-count: infinite, infinite;
+  animation-direction: alternate, alternate;
+}
+@keyframes girlhood-float {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(var(--dx), var(--dy), 0); }
+}
+@keyframes girlhood-breathe {
+  from { opacity: calc(var(--o) * 0.3); }
+  to { opacity: var(--o); }
+}
+@media (max-width: 640px) {
+  .girlhood-particles i:nth-child(even) { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .girlhood-particles i,
+  .girlhood-particles i.is-fade { animation: none; }
+}
+@media (min-width: 900px) {
+  .girlhood-hero-inner {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+    align-items: center;
+    gap: 3rem;
+    padding: 4.5rem 1.5rem 4.5rem;
+    justify-items: stretch;
+  }
+  .girlhood-hero { text-align: left; }
+  .girlhood-hero-text { align-items: flex-start; }
+  .girlhood-hero .girlhood-greeting,
+  .girlhood-hero h1,
+  .girlhood-hero .girlhood-invitation-copy { margin-left: 0; margin-right: 0; }
+  .girlhood-hero .girlhood-invitation-actions {
+    flex-direction: row;
+    max-width: none;
+    margin: 0;
+    width: auto;
+  }
+  .girlhood-hero-art {
+    display: block;
+    max-width: 340px;
+    justify-self: center;
+    width: 100%;
+    transform: rotate(2deg);
+  }
+}
+
+/* ---- flow: why it matters (cream), invitation, preview --------------- */
+.girlhood-rights {
+  max-width: none;
+  background: #fffaf3;
+  padding-inline: 1.25rem;
+}
+.girlhood-rights > * {
+  max-width: 720px;
+  margin-inline: auto;
+}
+.girlhood-rights-title {
+  font-weight: 600;
+  font-size: clamp(2.2rem, 7vw, 3.4rem);
+  line-height: 1.1;
+  color: var(--girlhood-heading);
+  margin: 0;
+}
+.girlhood-rights .girlhood-rights-lead {
+  font-size: clamp(1.3rem, 4vw, 1.7rem);
+  margin: 1rem auto 0;
+}
+.dark .girlhood-rights {
+  background: transparent;
+}
+.girlhood-sources > summary {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 0.4rem;
+  font-weight: 600;
+  color: var(--girlhood-plum);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.girlhood-sources[open] > summary {
+  margin-bottom: 0.5rem;
+}
+.girlhood-invite {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 4rem 1.25rem 2rem;
+  text-align: center;
+}
+.girlhood-invite h2,
+.girlhood-preview-title {
+  font-family: var(--girlhood-serif);
+  font-weight: 600;
+  font-size: clamp(1.8rem, 5.5vw, 2.6rem);
+  line-height: 1.15;
+  color: var(--girlhood-heading);
+  margin: 0 0 0.8rem;
+  text-wrap: balance;
+}
+.girlhood-invite p {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin: 0 auto 1.6rem;
+  max-width: 34rem;
+}
+.girlhood-home-notes .girlhood-preview-title {
+  text-align: center;
+}
+.girlhood-preview-empty {
+  text-align: center;
+  max-width: 30rem;
+  margin: 0 auto 1.5rem;
+  line-height: 1.6;
+  opacity: 0.85;
+}
+.girlhood-preview-more {
+  text-align: center;
+  margin: 1.5rem 0 0;
+}
+
+/* ---- card composer: edit and preview --------------------------------- */
+.girlhood-composer-tabs {display:flex;gap:8px;margin:16px 0;}
+.girlhood-composer-tab {flex:1;min-height:48px;padding:0 12px;border-radius:999px;border:1.5px solid #82246d;background:transparent;color:#82246d;font-weight:600;cursor:pointer;}
+.girlhood-composer-tab[aria-pressed=true] {background:#82246d;color:#fff;}
+.girlhood-composer-field {margin:16px 0;}
+.girlhood-composer-field > label:first-child {font-weight:600;margin-bottom:6px;}
+.girlhood-composer textarea {display:block;width:100%;max-width:100%;box-sizing:border-box;border:1px solid #55645a;padding:10px;font:inherit;font-size:16px;border-radius:6px;background:#fff;color:#123f2d;resize:vertical;}
+.girlhood-composer-include {display:flex;align-items:center;min-height:44px;margin:4px 0 0;}
+
+/* ---- wall note cards: prompt, answer, author -------------------------- */
+.girlhood-paper .girlhood-note-prompt {display:block;font-family:var(--girlhood-serif);font-weight:600;font-size:12px;line-height:1.2;margin-bottom:4px;opacity:0.8;}
+.girlhood-paper .girlhood-note-author {display:block;margin-top:6px;font-family:var(--girlhood-serif);font-style:italic;font-size:12px;line-height:1.2;opacity:0.8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.girlhood-paper .girlhood-note-excerpt {-webkit-line-clamp:4;}
+@media(min-width:768px) {.girlhood-paper .girlhood-note-prompt,.girlhood-paper .girlhood-note-author {font-size:clamp(12px,1.5vw,16px);}}

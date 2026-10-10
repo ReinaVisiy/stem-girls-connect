@@ -21,7 +21,6 @@ export const experience = {
       },
     ],
     invitation: "There is no perfect answer. There is your voice.",
-    small: "English or French · Your privacy, your choice",
     journey: "A few moments. Your own words.",
     journeyHelp:
       "Imagine freely. Choose what to share. Help us picture something better.",
@@ -87,7 +86,6 @@ export const experience = {
       },
     ],
     invitation: "Pas de réponse parfaite. Simplement ta voix.",
-    small: "Français ou anglais · Ta vie privée, ton choix",
     journey: "Quelques instants. Tes propres mots.",
     journeyHelp:
       "Imagine librement. Choisis quoi partager. Dessinons un avenir meilleur.",
