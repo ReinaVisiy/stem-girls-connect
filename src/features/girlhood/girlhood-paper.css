@@ -800,3 +800,78 @@ body:has(.girlhood-composer[open]) {overflow:hidden;}
     transform: rotate(2deg);
   }
 }
+
+/* ---- flow: why it matters (cream), invitation, preview --------------- */
+.girlhood-rights {
+  max-width: none;
+  background: #fffaf3;
+  padding-inline: 1.25rem;
+}
+.girlhood-rights > * {
+  max-width: 720px;
+  margin-inline: auto;
+}
+.girlhood-rights-title {
+  font-weight: 600;
+  font-size: clamp(2.2rem, 7vw, 3.4rem);
+  line-height: 1.1;
+  color: var(--girlhood-heading);
+  margin: 0;
+}
+.girlhood-rights .girlhood-rights-lead {
+  font-size: clamp(1.3rem, 4vw, 1.7rem);
+  margin: 1rem auto 0;
+}
+.dark .girlhood-rights {
+  background: transparent;
+}
+.girlhood-sources > summary {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 0.4rem;
+  font-weight: 600;
+  color: var(--girlhood-plum);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.girlhood-sources[open] > summary {
+  margin-bottom: 0.5rem;
+}
+.girlhood-invite {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 4rem 1.25rem 2rem;
+  text-align: center;
+}
+.girlhood-invite h2,
+.girlhood-preview-title {
+  font-family: var(--girlhood-serif);
+  font-weight: 600;
+  font-size: clamp(1.8rem, 5.5vw, 2.6rem);
+  line-height: 1.15;
+  color: var(--girlhood-heading);
+  margin: 0 0 0.8rem;
+  text-wrap: balance;
+}
+.girlhood-invite p {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin: 0 auto 1.6rem;
+  max-width: 34rem;
+}
+.girlhood-home-notes .girlhood-preview-title {
+  text-align: center;
+}
+.girlhood-preview-empty {
+  text-align: center;
+  max-width: 30rem;
+  margin: 0 auto 1.5rem;
+  line-height: 1.6;
+  opacity: 0.85;
+}
+.girlhood-preview-more {
+  text-align: center;
+  margin: 1.5rem 0 0;
+}

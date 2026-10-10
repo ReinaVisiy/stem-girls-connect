@@ -31,6 +31,7 @@ export interface RightsCopy {
   facts: RightsFact[];
   closing: { before: string; strong: string };
   sourcesHeading: string;
+  viewSources: string;
   sourcesNote?: string;
   sourceLink: (n: number, label: string) => string;
   newTab: string;
@@ -63,7 +64,7 @@ export const rightsSources: RightsSource[] = [
 
 export const rights: Record<GirlhoodLanguage, RightsCopy> = {
   en: {
-    heading: "Every girl has rights",
+    heading: "Why Girlhood Matters",
     lead: "Every girl has rights.",
     rights: ["To learn.", "To be safe.", "To be healthy.", "To be heard."],
     bridge: "Yet for millions of girls, these rights are still promises on paper.",
@@ -83,22 +84,25 @@ export const rights: Record<GirlhoodLanguage, RightsCopy> = {
       },
       { strong: "About one in five girls", after: " is married before age 18.", source: 3 },
       {
-        before: "Women make up just ",
-        strong: "35% of STEM graduates",
-        after: ", a share that has not changed in a decade.",
+        before: "Women make up only ",
+        strong: "35% of STEM graduates worldwide",
+        after:
+          ", a figure unchanged in ten years. Biases and social norms are among the barriers holding girls back.",
         source: 4,
       },
     ],
     closing: {
-      before: "These numbers speak of rights denied. ",
+      before:
+        "Girls deserve safety, education and the freedom to choose their own futures. Stereotypes should never decide what a girl can become. ",
       strong: "Girlhood should be hers.",
     },
     sourcesHeading: "Sources",
+    viewSources: "View sources",
     sourceLink: (n, label) => `Source ${n}: ${label}`,
     newTab: "opens in a new tab",
   },
   fr: {
-    heading: "Chaque fille a des droits",
+    heading: "Pourquoi l’enfance des filles compte",
     lead: "Chaque fille a des droits.",
     rights: [
       "Apprendre.",
@@ -135,16 +139,19 @@ export const rights: Record<GirlhoodLanguage, RightsCopy> = {
       },
       {
         before: "Les femmes ne représentent que ",
-        strong: `35${nb}% des diplômés des filières STEM`,
-        after: ", une proportion inchangée depuis dix ans.",
+        strong: `35${nb}% des diplômés des filières STEM dans le monde`,
+        after:
+          ", une proportion inchangée depuis dix ans. Les préjugés et les normes sociales font partie des obstacles qui freinent les filles.",
         source: 4,
       },
     ],
     closing: {
-      before: "Ces chiffres parlent de droits refusés. ",
+      before:
+        "Chaque fille mérite la sécurité, l’éducation et la liberté de choisir son avenir. Les stéréotypes ne devraient jamais décider de ce qu’une fille peut devenir. ",
       strong: "Que l’enfance soit la sienne.",
     },
     sourcesHeading: "Sources",
+    viewSources: "Voir les sources",
     sourcesNote: "Sources en anglais.",
     sourceLink: (n, label) => `Source ${n}${nb}: ${label}`,
     newTab: "s’ouvre dans un nouvel onglet",

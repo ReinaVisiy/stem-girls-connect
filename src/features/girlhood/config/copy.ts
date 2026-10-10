@@ -10,6 +10,12 @@ export const copy = {
     tagline: "Her childhood. Her curiosity. Her future to design.",
     intro:
       "Every girl deserves the freedom to enjoy her childhood and shape her future. Share what you believe girlhood should be, and see what others are saying.",
+    inviteTitle: "What should girlhood be?",
+    inviteText:
+      "Finish the sentence in your own words. You can keep your name private, and you can make a card to keep or share.",
+    previewTitle: "What others are saying",
+    previewEmpty:
+      "Notes appear here once they are shared and approved. Be one of the first to write yours.",
     q1: "Girlhood should be...",
     q1Help:
       "What should every girl have the freedom to experience while growing up?",
@@ -33,6 +39,12 @@ export const copy = {
     tagline: "Son enfance. Sa curiosité. Son avenir à imaginer.",
     intro:
       "Chaque fille mérite la liberté de profiter de son enfance et de façonner son avenir. Dis-nous ce que l’enfance des filles devrait être, et découvre ce que les autres en disent.",
+    inviteTitle: "Que devrait être l’enfance des filles ?",
+    inviteText:
+      "Termine la phrase avec tes mots. Tu peux garder ton nom privé, et créer une carte à garder ou à partager.",
+    previewTitle: "Ce que les autres disent",
+    previewEmpty:
+      "Les notes apparaissent ici une fois partagées et approuvées. Sois l’une des premières à écrire la tienne.",
     q1: "L’enfance des filles devrait être…",
     q1Help:
       "Qu’est-ce que chaque fille devrait être libre de vivre en grandissant ?",

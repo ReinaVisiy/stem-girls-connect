@@ -1,4 +1,4 @@
-import { Fragment, useId } from "react";
+import { Fragment, useId, useRef } from "react";
 import { rights, rightsSources } from "../config/rights";
 import type { GirlhoodLanguage } from "../types";
 
@@ -15,6 +15,7 @@ export default function GirlhoodRights({
 }) {
   const c = rights[language];
   const uid = useId();
+  const sources = useRef<HTMLDetailsElement>(null);
   const headingId = uid + "-heading";
   const sourceId = (i: number) => `${uid}-source-${i + 1}`;
   return (
@@ -23,9 +24,10 @@ export default function GirlhoodRights({
       aria-labelledby={headingId}
       lang={language}
     >
-      <h2 id={headingId} className="girlhood-rights-lead">
-        {c.lead}
+      <h2 id={headingId} className="girlhood-rights-title">
+        {c.heading}
       </h2>
+      <p className="girlhood-rights-lead">{c.lead}</p>
       <p className="girlhood-rights-list">
         {c.rights.map((right) => (
           <span key={right}>{right}</span>
@@ -41,6 +43,9 @@ export default function GirlhoodRights({
             <a
               className="girlhood-rights-ref"
               href={"#" + sourceId(fact.source)}
+              onClick={() => {
+                if (sources.current) sources.current.open = true;
+              }}
               aria-label={c.sourceLink(
                 fact.source + 1,
                 rightsSources[fact.source].label,
@@ -55,8 +60,9 @@ export default function GirlhoodRights({
         {c.closing.before}
         <strong>{c.closing.strong}</strong>
       </p>
-      <div className="girlhood-sources">
-        <h3>{c.sourcesHeading}</h3>
+      <details className="girlhood-sources" ref={sources}>
+        <summary>{c.viewSources}</summary>
+        <h3 className="sr-only">{c.sourcesHeading}</h3>
         <ol>
           {rightsSources.map((source, i) => (
             <li id={sourceId(i)} key={source.url}>
@@ -72,7 +78,7 @@ export default function GirlhoodRights({
             <p className="girlhood-sources-note">{c.sourcesNote}</p>
           </Fragment>
         )}
-      </div>
+      </details>
     </section>
   );
 }

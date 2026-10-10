@@ -31,7 +31,7 @@ test("population and measure stay faithful to the sources", () => {
   assert.match(en[1], /rape or sexual assault before turning 18/);
   assert.match(en[2], /230 million girls and women/);
   assert.match(en[3], /^About one in five girls is married before age 18\.$/);
-  assert.match(en[4], /35% of STEM graduates.*not changed in a decade/);
+  assert.match(en[4], /35% of STEM graduates worldwide.*unchanged in ten years.*Biases and social norms/);
   const fr = rights.fr.facts.map(plain);
   assert.match(fr[1], /filles et les femmes qui vivent aujourd’hui/);
   assert.match(fr[1], /avant ses 18 ans/);
@@ -49,6 +49,13 @@ test("hero copy matches the approved wording and has no rhetorical question", ()
   for (const lang of ["en", "fr"] as const) {
     assert.ok(!("question" in copy[lang]), "the question is removed in " + lang);
   }
+});
+
+test("the closing lines and sources disclosure are present", () => {
+  assert.equal(rights.en.heading, "Why Girlhood Matters");
+  assert.match(rights.en.closing.before, /Stereotypes should never decide what a girl can become\./);
+  assert.equal(rights.en.closing.strong, "Girlhood should be hers.");
+  assert.equal(rights.en.viewSources, "View sources");
 });
 
 test("no em dashes in campaign copy", () => {

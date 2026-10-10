@@ -70,8 +70,20 @@ export default function GirlhoodHome() {
         </div>
       </section>
       <GirlhoodRights language={language} />
-      {voices.length > 0 && (
-        <section className="girlhood-home-notes" aria-label={t.wall}>
+      <section className="girlhood-invite" aria-labelledby="girlhood-invite-title">
+        <h2 id="girlhood-invite-title">{t.inviteTitle}</h2>
+        <p>{t.inviteText}</p>
+        <ContributionLink>
+          {t.addVoice} <span aria-hidden="true">↗</span>
+        </ContributionLink>
+      </section>
+      <section className="girlhood-home-notes" aria-labelledby="girlhood-preview-title">
+        <h2 id="girlhood-preview-title" className="girlhood-preview-title">
+          {t.previewTitle}
+        </h2>
+        {voices.length === 0 ? (
+          <p className="girlhood-preview-empty">{t.previewEmpty}</p>
+        ) : (
           <div className="girlhood-notes-grid">
             {voices.map((response) => (
               <GirlhoodResponseCard
@@ -82,8 +94,13 @@ export default function GirlhoodHome() {
               />
             ))}
           </div>
-        </section>
-      )}
+        )}
+        <p className="girlhood-preview-more">
+          <Link className="girlhood-quiet-link" to={basePath + "/wall"}>
+            {t.wall}
+          </Link>
+        </p>
+      </section>
     </>
   );
 }
