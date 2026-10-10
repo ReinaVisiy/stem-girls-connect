@@ -38,19 +38,16 @@ test("population and measure stay faithful to the sources", () => {
 });
 
 test("French typography uses non-breaking spaces before high punctuation", () => {
-  assert.ok(copy.fr.question.endsWith(nbsp + "?"));
-  assert.ok(copy.fr.intro.endsWith(nbsp + "?"));
   assert.ok(rights.fr.facts[4].strong.includes(nbsp + "%"));
   assert.ok(rights.fr.facts[0].strong.includes(`120${nbsp}millions`));
 });
 
-test("hero copy matches the approved wording and omits the question from the speech", () => {
+test("hero copy matches the approved wording and has no rhetorical question", () => {
   assert.equal(copy.en.heroTitle, "Girlhood Should Be Hers.");
-  assert.equal(copy.en.question, "What if girls wrote the rules?");
   assert.equal(copy.fr.heroTitle, "Girlhood Should Be Hers.");
+  assert.equal(copy.en.wall, "See what others are saying");
   for (const lang of ["en", "fr"] as const) {
-    const speech = JSON.stringify(rights[lang]);
-    assert.ok(!speech.includes(copy[lang].question), "question appears once, in the hero");
+    assert.ok(!("question" in copy[lang]), "the question is removed in " + lang);
   }
 });
 

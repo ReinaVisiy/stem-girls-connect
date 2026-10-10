@@ -3,14 +3,13 @@ import type { GirlhoodLanguage } from "../types";
 export const copy = {
   en: {
     addVoice: "Write your version",
-    wall: "In their own words",
+    wall: "See what others are saying",
     title: "Girlhood Should Be Hers",
-    eyebrow: "International Day of the Girl · 11 October",
+    eyebrow: "11 October | International Day of the Girl",
     heroTitle: "Girlhood Should Be Hers.",
-    question: "What if girls wrote the rules?",
     tagline: "Her childhood. Her curiosity. Her future to design.",
     intro:
-      "If you could decide what growing up a girl should be like, what would you change?",
+      "Every girl deserves the freedom to enjoy her childhood and shape her future. Share what you believe girlhood should be, and see what others are saying.",
     q1: "Girlhood should be...",
     q1Help:
       "What should every girl have the freedom to experience while growing up?",
@@ -27,14 +26,13 @@ export const copy = {
   },
   fr: {
     addVoice: "Écris ta version",
-    wall: "Avec leurs propres mots",
+    wall: "Voir ce que les autres disent",
     title: "Girlhood Should Be Hers",
-    eyebrow: "Journée internationale de la fille · 11 octobre",
+    eyebrow: "11 octobre | Journée internationale de la fille",
     heroTitle: "Girlhood Should Be Hers.",
-    question: "Et si les filles écrivaient les règles ?",
     tagline: "Son enfance. Sa curiosité. Son avenir à imaginer.",
     intro:
-      "Si tu pouvais décider de ce que devrait être l’enfance d’une fille, que changerais-tu ?",
+      "Chaque fille mérite la liberté de profiter de son enfance et de façonner son avenir. Dis-nous ce que l’enfance des filles devrait être, et découvre ce que les autres en disent.",
     q1: "L’enfance des filles devrait être…",
     q1Help:
       "Qu’est-ce que chaque fille devrait être libre de vivre en grandissant ?",
