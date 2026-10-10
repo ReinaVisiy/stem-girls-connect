@@ -103,7 +103,7 @@ export default function GirlhoodSubmit() {
     [feedback, setFeedback] = useState("");
   const [imageOpen, setImageOpen] = useState(false);
   const [snapshot, setSnapshot] = useState<PersonalWords | null>(null);
-  const currentWords = useMemo<PersonalWords>(() => ({ answers: [form.girlhoodResponse, form.futureResponse, form.supportResponse], under13: typeof form.age === 'number' && form.age < 13, ageKnown: typeof form.age === 'number', name: form.displayName }), [form.girlhoodResponse, form.futureResponse, form.supportResponse, form.age, form.displayName]);
+  const currentWords = useMemo<PersonalWords>(() => ({ answers: [form.girlhoodResponse, form.futureResponse, form.supportResponse], younger: typeof form.age === 'number' && form.age < 15, ageKnown: typeof form.age === 'number', name: form.displayName }), [form.girlhoodResponse, form.futureResponse, form.supportResponse, form.age, form.displayName]);
   const imageWords = success ? snapshot : currentWords;
   const heading = useRef<HTMLHeadingElement>(null),
     alert = useRef<HTMLDivElement>(null),
@@ -150,23 +150,19 @@ export default function GirlhoodSubmit() {
       document.removeEventListener("click", remind, true);
     };
   }, [success, receiptSaved, x.receiptHelp]);
-  const under13 = typeof form.age === "number" && form.age < 13;
+  const under15 = typeof form.age === "number" && form.age < 15;
+  const under18 = typeof form.age === "number" && form.age < 18;
+  const [ageNoticeOpen, setAgeNoticeOpen] = useState(false);
+  const [ageNoticeSeen, setAgeNoticeSeen] = useState<number | null>(null);
+  const ageDone = () => {
+    if (under15 && ageNoticeSeen !== form.age) setAgeNoticeOpen(true);
+  };
   const update = <K extends keyof GirlhoodSubmissionInput>(
     key: K,
     value: GirlhoodSubmissionInput[K],
   ) => {
     setForm((f) => {
       const next = { ...f, [key]: value };
-      if (key === "age" && typeof value === "number" && value < 13)
-        Object.assign(next, {
-          country: "",
-          cityRegion: "",
-          consentPublic: false,
-          consentDisplayName: false,
-          consentDisplayCountry: false,
-          consentDisplayCity: false,
-          consentReuse: false,
-        });
       if (key === "consentPublic" && value === false)
         Object.assign(next, {
           consentDisplayName: false,
@@ -188,12 +184,7 @@ export default function GirlhoodSubmit() {
           ? l.acknowledgeError
           : l.choiceError;
   }
-  // Under 13s may type a nickname for their own image, but identity and place are never sent.
-  const input = {
-    ...form,
-    language,
-    ...(under13 ? { displayName: "", country: "", cityRegion: "" } : {}),
-  };
+  const input = { ...form, language };
   const errors = validateGirlhoodSubmission(input);
   function tokenForAttempt() {
     if (!requestToken.current) {
@@ -539,13 +530,9 @@ export default function GirlhoodSubmit() {
               onChange={(e) => update("displayName", e.target.value)}
             />
             <p id="note-name-help">
-              {under13
-                ? language === "fr"
-                  ? "Utilisé seulement sur ta propre image. Jamais publié."
-                  : "Only used on your own image. Never published."
-                : language === "fr"
-                  ? "Ton nom n’est affiché publiquement que si tu le choisis plus bas."
-                  : "Your name is only shown publicly if you choose that below."}
+              {language === "fr"
+                ? "Ce nom apparaît sur ta carte. Il n’est affiché publiquement que si tu le choisis plus bas."
+                : "This name appears on your card. It is only shown publicly if you choose that below."}
             </p>
           </div>
           </GirlhoodPaperFrame>
@@ -599,6 +586,13 @@ export default function GirlhoodSubmit() {
                     }
                     className="girlhood-input girlhood-age"
                     aria-describedby="age-help"
+                    onBlur={ageDone}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        ageDone();
+                        if (under15) e.preventDefault();
+                      }
+                    }}
                   />
                 </Field>
                 <p id="age-help">
@@ -606,7 +600,27 @@ export default function GirlhoodSubmit() {
                     ? "Ton âge reste privé."
                     : "Your age stays private."}
                 </p>
-                {!under13 && (
+                {ageNoticeOpen && under15 && (
+                  <div className="girlhood-age-notice" role="group" aria-labelledby="age-notice-title">
+                    <p id="age-notice-title"><strong>{language === "fr" ? "Un petit mot sur le partage" : "A little note about sharing"}</strong></p>
+                    <p>
+                      {language === "fr"
+                        ? "Tu peux partager tes idées ! Comme tu as moins de 15 ans, ta réponse sera relue par l’équipe de STEM Girls Connect avant de pouvoir apparaître sur le mur public."
+                        : "You're welcome to share your thoughts! Because you're under 15, your response will be reviewed by the STEM Girls Connect team before it can appear on the public wall."}
+                    </p>
+                    <button type="button" className="girlhood-button" onClick={() => { setAgeNoticeSeen(typeof form.age === "number" ? form.age : null); setAgeNoticeOpen(false); }}>
+                      {language === "fr" ? "J’ai compris" : "Got it"}
+                    </button>
+                  </div>
+                )}
+                {typeof form.age === "number" && !under15 && (
+                  <p className="girlhood-age-inline">
+                    {language === "fr"
+                      ? "Ta réponse peut apparaître sur le mur public après l’envoi si tu choisis de la partager et si elle passe nos contrôles de sécurité."
+                      : "Your response can appear on the public wall after submission if you choose to share it publicly and it passes our safety checks."}
+                  </p>
+                )}
+                {(
                   <>
                   <Field
                     label={
@@ -641,10 +655,7 @@ export default function GirlhoodSubmit() {
                   </>
                 )}
               </div>
-              {under13 ? (
-                <p className="girlhood-private-note">{l.under13}</p>
-              ) : (
-                <>
+              <>
                   <Choice
                     label={l.publish}
                     checked={form.consentPublic}
@@ -660,8 +671,8 @@ export default function GirlhoodSubmit() {
                       <Choice
                         label={
                           language === "fr"
-                            ? "Afficher mon pays avec mon petit mot"
-                            : "Show my country with my note"
+                            ? under18 ? "Afficher mon pays avec mon petit mot (vérifié séparément par l’équipe)" : "Afficher mon pays avec mon petit mot"
+                            : under18 ? "Show my country with my note (reviewed separately by the team)" : "Show my country with my note"
                         }
                         checked={form.consentDisplayCountry}
                         onChange={(v) => update("consentDisplayCountry", v)}
@@ -677,8 +688,7 @@ export default function GirlhoodSubmit() {
                       />
                     </div>
                   )}
-                </>
-              )}
+              </>
               <div className="girlhood-required-checks" role="group" aria-labelledby="required-checks-title">
                 <p id="required-checks-title" className="girlhood-required-title">
                   {language === "fr" ? "Avant d’envoyer (obligatoire)" : "Before you share (required)"}

@@ -66,11 +66,9 @@ export const ui = {
     analysis:
       "My de-identified response may be included in campaign analysis and aggregate findings.",
     review:
-      "I understand that notes shared publicly appear right away if they pass automatic safety checks, and that others wait for a team review.",
+      "I understand that public notes from people aged 15 and over appear right away if they pass automatic safety checks, and that notes from people under 15 or flagged by the checks wait for a team review.",
     privateInfo:
       "My response does not intentionally include another person’s private contact details, address or sensitive information.",
-    under13:
-      "Your response will not be displayed publicly because you are under 13.",
     ageRequired: "Enter your age as a whole number between 0 and 120.",
     perspectiveQuestion: "I am writing as",
     perspectiveOwn: "A girl or woman",
@@ -109,9 +107,9 @@ export const ui = {
     privacyIntro:
       "STEM Girls Connect receives and moderates your answers for the Girlhood Should Be Hers campaign.",
     privacyAge:
-      "We ask your exact age privately to apply publication rules and understand who is participating. There is no minimum participation age. Individual responses from participants under 13 never appear publicly.",
+      "We ask your exact age privately to apply publication rules and understand who is participating. Your exact age is never shown publicly. Anyone of any age can take part. If you are 15 or older and choose to share, your response can appear on the public wall once it passes our safety checks. If you are under 15, a member of our team must read and approve your response first, and we may need permission from a parent or guardian before it appears.",
     privacyChoices:
-      "Website publication, displaying your chosen name or location, campaign reuse and de-identified analysis are separate choices. All are optional. Moderation approval never overrides your choices.",
+      "Website publication, displaying your chosen name or location, campaign reuse and de-identified analysis are separate choices. All are optional. Moderation approval never overrides your choices. Your name and your country are separate decisions. If you are under 18, your country is checked separately by our team before it can appear, and your city or region is never shown automatically.",
     privacyRetention:
       "Private contributions are available only to authorised campaign administrators. Response-level records are scheduled for deletion in daily maintenance once they reach 12 months after submission. Properly anonymised aggregate findings may be kept.",
     privacyNoAnalysis:
@@ -198,11 +196,9 @@ export const ui = {
     analysis:
       "Ma réponse désidentifiée peut être incluse dans l’analyse et les résultats globaux de la campagne.",
     review:
-      "Je comprends que les notes partagées publiquement apparaissent tout de suite si elles passent des contrôles de sécurité automatiques, et que les autres attendent une relecture de l’équipe.",
+      "Je comprends que les notes publiques des personnes de 15 ans et plus apparaissent tout de suite si elles passent des contrôles de sécurité automatiques, et que les notes des moins de 15 ans ou signalées par les contrôles attendent une relecture de l’équipe.",
     privateInfo:
       "Ma réponse ne contient pas intentionnellement les coordonnées privées, l’adresse ou d’autres informations sensibles d’une autre personne.",
-    under13:
-      "Ta réponse ne sera pas affichée publiquement car tu as moins de 13 ans.",
     ageRequired: "Saisis ton âge en nombre entier entre 0 et 120.",
     perspectiveQuestion: "J’écris en tant que",
     perspectiveOwn: "Une fille ou une femme",
@@ -242,9 +238,9 @@ export const ui = {
     privacyIntro:
       "STEM Girls Connect reçoit et examine tes réponses pour la campagne Girlhood Should Be Hers.",
     privacyAge:
-      "Ton âge exact est demandé de manière privée pour appliquer les règles de publication et comprendre qui participe. Il n’y a pas d’âge minimum de participation. Les réponses individuelles des moins de 13 ans ne sont jamais publiées.",
+      "Ton âge exact est demandé de manière privée pour appliquer les règles de publication et comprendre qui participe. Ton âge exact n’est jamais affiché publiquement. Toute personne, quel que soit son âge, peut participer. Si tu as 15 ans ou plus et que tu choisis de partager, ta réponse peut apparaître sur le mur public après nos contrôles de sécurité. Si tu as moins de 15 ans, un membre de notre équipe doit d’abord lire et approuver ta réponse, et l’accord d’un parent ou d’un tuteur peut être nécessaire avant sa publication.",
     privacyChoices:
-      "La publication sur le site, l’affichage du nom ou de la localisation, la réutilisation et l’analyse désidentifiée font l’objet de choix distincts et facultatifs. La modération ne remplace jamais tes choix.",
+      "La publication sur le site, l’affichage du nom ou de la localisation, la réutilisation et l’analyse désidentifiée font l’objet de choix distincts et facultatifs. La modération ne remplace jamais tes choix. Ton nom et ton pays sont des décisions distinctes. Si tu as moins de 18 ans, ton pays est vérifié séparément par notre équipe avant de pouvoir apparaître, et ta ville ou région n’est jamais affichée automatiquement.",
     privacyRetention:
       "Les contributions privées sont accessibles uniquement aux administrateurs autorisés. Les données individuelles sont supprimées lors de la maintenance quotidienne après 12 mois de conservation suivant l’envoi. Les résultats globaux correctement anonymisés peuvent être conservés.",
     privacyNoAnalysis:

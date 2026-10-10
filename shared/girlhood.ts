@@ -1,4 +1,5 @@
 export const CONSENT_VERSION = "2026-10-08-v2";
+export const AUTO_PUBLISH_MIN_AGE = 15;
 export const PUBLIC_STATUSES = ["approved", "approved_redacted"];
 export function plain(value: unknown, max = 10000): string {
   return typeof value === "string"
@@ -19,14 +20,14 @@ export function deriveCategory(age: number, perspective: string) {
         ? "young_woman"
         : "woman";
 }
+/** A response is public only with consent, an approved status and no withdrawal. Age never bars it. */
 export function eligible(
-  age: number,
+  _age: number,
   consent: boolean,
   status: string,
   withdrawn: unknown,
 ) {
   return (
-    age >= 13 &&
     consent === true &&
     PUBLIC_STATUSES.includes(status) &&
     !withdrawn
@@ -125,39 +126,35 @@ export function autoReviewIssues(texts: string[]): string[] {
   }
   return [...issues];
 }
-export function submissionRecord(input: Record<string, unknown>) {
+export function submissionRecord(
+  input: Record<string, unknown>,
+  options: { guardianAuthorizationRequired?: boolean } = {},
+) {
   const age = input.age as number;
-  const under13 = age < 13;
-  const consent = !under13 && input.consentPublic === true;
+  const guardianRequired = options.guardianAuthorizationRequired !== false;
+  const consent = input.consentPublic === true;
   const q1 = plain(input.girlhoodResponse),
     q2 = plain(input.futureResponse) || null,
     q3 = plain(input.supportResponse) || null;
-  const showsIdentity =
-    consent &&
-    (input.consentDisplayName === true ||
-      input.consentDisplayCountry === true ||
-      input.consentDisplayCity === true);
-  // Published at once only for 13+ who agreed to publish, when every public text passes the
-  // automatic checks. Under 18s who also choose to show a name or place wait for a person.
+  const name = plain(input.displayName, 80),
+    country = plain(input.country, 100),
+    city = plain(input.cityRegion, 100);
+  const adult = age >= 18;
+  // Only 15 and over may publish without a person reading the note first. Younger participants can
+  // take part fully, but a human must approve every public word. Flagged text always waits.
   const autoApproved =
     consent &&
-    (age >= 18 || !showsIdentity) &&
-    autoReviewIssues([
-      q1,
-      q2 ?? "",
-      q3 ?? "",
-      plain(input.displayName, 80),
-      plain(input.country, 100),
-      plain(input.cityRegion, 100),
-    ]).length === 0;
+    age >= AUTO_PUBLISH_MIN_AGE &&
+    autoReviewIssues([q1, q2 ?? "", q3 ?? "", name, country, city]).length === 0;
+  const wantsCountry = consent && input.consentDisplayCountry === true && country !== "";
   return {
     age,
     perspective: input.perspective,
     language: input.language,
     public_category: deriveCategory(age, String(input.perspective)),
-    display_name: under13 ? null : plain(input.displayName, 80) || "Anonymous",
-    country: under13 ? null : plain(input.country, 100) || null,
-    city_region: under13 ? null : plain(input.cityRegion, 100) || null,
+    display_name: name || "Anonymous",
+    country: country || null,
+    city_region: city || null,
     girlhood_response: q1,
     future_response: q2,
     support_response: q3,
@@ -168,24 +165,27 @@ export function submissionRecord(input: Record<string, unknown>) {
     consent_display_name: consent && input.consentDisplayName === true,
     consent_display_country: consent && input.consentDisplayCountry === true,
     consent_display_city: consent && input.consentDisplayCity === true,
-    consent_reuse: !under13 && input.consentReuse === true,
+    consent_reuse: input.consentReuse === true,
     consent_analysis: input.consentAnalysis === true,
     consent_version: CONSENT_VERSION,
-    // The public view shows the name and place from these columns, so an instantly published note
-    // needs them filled (a moderator fills them for notes that wait for review).
+    // Under 15: names stay empty until a moderator approves a public-safe name.
     public_display_name:
-      autoApproved && input.consentDisplayName === true && !under13
-        ? plain(input.displayName, 80) || null
-        : null,
-    public_country:
-      autoApproved && input.consentDisplayCountry === true && !under13
-        ? plain(input.country, 100) || null
-        : null,
+      autoApproved && input.consentDisplayName === true ? name || null : null,
+    // Under 18: country and city are never published automatically. A moderator reviews the
+    // country separately, and that review never delays the text of a 15 to 17 note.
+    public_country: autoApproved && adult && wantsCountry ? country : null,
     public_city:
-      autoApproved && input.consentDisplayCity === true && !under13
-        ? plain(input.cityRegion, 100) || null
-        : null,
+      autoApproved && adult && input.consentDisplayCity === true ? city || null : null,
+    country_review_status: !adult && wantsCountry ? "pending" : "not_applicable",
+    guardian_authorization_status:
+      consent && age < AUTO_PUBLISH_MIN_AGE && guardianRequired ? "required" : "not_required",
     moderation_status: autoApproved ? "approved" : "pending",
-    moderation_reason: autoApproved ? "auto_checks_passed" : null,
+    moderation_reason: autoApproved
+      ? "auto_checks_passed"
+      : consent
+        ? age < AUTO_PUBLISH_MIN_AGE
+          ? "under_15_review"
+          : "auto_flagged"
+        : null,
   };
 }

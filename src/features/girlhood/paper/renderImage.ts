@@ -3,7 +3,7 @@ import { fitLayout, wrapText } from './textLayout';
 import { copy } from '../config/copy';
 import type { GirlhoodLanguage } from '../types';
 
-export type PersonalWords = { answers: [string, string, string]; under13: boolean; ageKnown: boolean; name?: string };
+export type PersonalWords = { answers: [string, string, string]; younger: boolean; ageKnown: boolean; name?: string };
 export type RenderedPage = { url: string; file: File };
 const load = (url: string) => new Promise<HTMLImageElement>((resolve, reject) => {
   const img = new Image(); img.onload = () => resolve(img); img.onerror = reject; img.src = url;

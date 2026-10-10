@@ -52,24 +52,40 @@ interface Submission {
   escalation_owner: string | null;
   escalation_resolution: string | null;
   reuse_cleanup_required: boolean;
+  country_review_status: "not_applicable" | "pending" | "approved" | "rejected";
+  guardian_authorization_status: "not_required" | "required" | "recorded";
 }
 const originalColumns =
   "id,public_reference,age,perspective,public_category,language,display_name,country,city_region,girlhood_response,future_response,support_response,public_girlhood_response,public_future_response,public_support_response,consent_public,consent_display_name,consent_display_country,consent_display_city,consent_reuse,consent_analysis,moderation_status,moderation_reason,moderation_notes,featured,created_at,updated_at,withdrawn_at,reviewed_by,reviewed_at,escalation_owner,escalation_resolution,reuse_cleanup_required";
 const columns =
-  originalColumns + ",public_display_name,public_country,public_city";
+  originalColumns + ",public_display_name,public_country,public_city,country_review_status,guardian_authorization_status";
 const tabs = [
-  "pending",
+  "under15",
+  "flagged",
   "approved",
-  "escalated",
+  "private",
+  "country",
   "rejected",
+  "escalated",
   "withdrawn",
   "cleanup",
 ] as const;
+const tabLabels: Record<(typeof tabs)[number], string> = {
+  under15: "Awaiting approval: under 15",
+  flagged: "Flagged: 15 and above",
+  approved: "Approved",
+  private: "Private",
+  country: "Country approval",
+  rejected: "Rejected",
+  escalated: "Escalated",
+  withdrawn: "Withdrawn",
+  cleanup: "Cleanup",
+};
 type Tab = (typeof tabs)[number];
 export default function AdminGirlhood() {
   const savingRef = useRef(false);
   const [feedback, setFeedback] = useState('');
-  const [tab, setTab] = useState<Tab>("pending"),
+  const [tab, setTab] = useState<Tab>("under15"),
     [language, setLanguage] = useState("all"),
     [search, setSearch] = useState(""),
     [page, setPage] = useState(1);
@@ -113,6 +129,14 @@ export default function AdminGirlhood() {
           ]);
         else if (tab === "cleanup")
           query = query.eq("reuse_cleanup_required", true);
+        else if (tab === "under15")
+          query = query.eq("moderation_status", "pending").eq("consent_public", true).lt("age", 15);
+        else if (tab === "flagged")
+          query = query.eq("moderation_status", "pending").eq("consent_public", true).gte("age", 15);
+        else if (tab === "private")
+          query = query.eq("consent_public", false).is("withdrawn_at", null).not("moderation_status", "in", "(rejected,escalated,withdrawn)");
+        else if (tab === "country")
+          query = query.eq("country_review_status", "pending").is("withdrawn_at", null);
         else query = query.eq("moderation_status", tab);
         if (language !== "all") query = query.eq("language", language);
         const reference = search.trim().replace(/[^A-Za-z0-9-]/g, "");
@@ -201,7 +225,7 @@ export default function AdminGirlhood() {
     }
     if (['approved', 'approved_redacted', 'rejected', 'escalated'].includes(status)
       && !window.confirm(status.startsWith('approved')
-        ? (selected.age >= 13 && selected.consent_public ? 'Publish this reviewed text and the public identity shown in the preview?' : 'Approve for private review only? This response cannot be published.')
+        ? (selected.consent_public ? 'Publish this reviewed text and the public identity shown in the preview?' : 'Approve for private review only? This response cannot be published.')
         : `Confirm ${status} status for this contribution?`)) return;
     const redacted =
       text.q1.trim() !== selected.girlhood_response ||
@@ -232,12 +256,15 @@ export default function AdminGirlhood() {
             public_display_name: selected.consent_display_name
               ? identity.name.trim() || null
               : null,
-            public_country: selected.consent_display_country
-              ? identity.country.trim() || null
-              : null,
-            public_city: selected.consent_display_city
-              ? identity.city.trim() || null
-              : null,
+            public_country:
+              selected.consent_display_country &&
+              (selected.age >= 18 || selected.country_review_status === "approved")
+                ? identity.country.trim() || null
+                : null,
+            public_city:
+              selected.consent_display_city && selected.age >= 18
+                ? identity.city.trim() || null
+                : null,
           }
         : {}),
       ...extra,
@@ -304,7 +331,7 @@ export default function AdminGirlhood() {
               tab === s ? "girlhood-button" : "rounded-full border px-4 py-2"
             }
           >
-            {s === "cleanup" ? "Reuse removal follow-up" : s}
+            {s === "cleanup" ? "Reuse removal follow-up" : tabLabels[s]}
           </button>
         ))}
       </div>
@@ -401,9 +428,7 @@ export default function AdminGirlhood() {
             <p className="my-3 font-bold">
               {terminal
                 ? "WITHDRAWN — cannot be republished"
-                : selected.age < 13
-                  ? "PRIVATE — under 13"
-                  : !selected.consent_public
+                : !selected.consent_public
                     ? "PRIVATE — publication not permitted"
                     : publicEligible
                       ? "PUBLIC"
@@ -458,7 +483,7 @@ export default function AdminGirlhood() {
                     />
                   </label>
                 ))}
-                {selected.age >= 13 && selected.consent_public && (
+                {selected.consent_public && (
                   <>
                     <h3 className="font-bold">Public name and location</h3>
                     <p className="text-sm">
@@ -570,12 +595,63 @@ export default function AdminGirlhood() {
             <div className="mt-6 flex flex-wrap gap-3">
               {!terminal && (
                 <>
+                  {selected.age < 15 && selected.consent_public && (
+                    <p className="w-full text-sm font-bold">
+                      Under 15: publication needs your explicit approval.
+                      {selected.guardian_authorization_status === "required"
+                        ? " Guardian authorization is not yet recorded, so approval will be refused."
+                        : ""}
+                    </p>
+                  )}
+                  {selected.age < 15 &&
+                    selected.guardian_authorization_status === "required" && (
+                      <AdminButton
+                        disabled={saving}
+                        variant="ghost"
+                        onClick={() => {
+                          if (window.confirm("Confirm that valid parent or guardian authorization has been obtained and kept on file?"))
+                            save(selected.moderation_status, { guardian_authorization_status: "recorded" });
+                        }}
+                      >
+                        Record guardian authorization
+                      </AdminButton>
+                    )}
+                  {selected.age < 18 &&
+                    selected.consent_display_country &&
+                    selected.country_review_status === "pending" && (
+                      <>
+                        <AdminButton
+                          disabled={saving}
+                          variant="ghost"
+                          onClick={() =>
+                            save(selected.moderation_status, {
+                              country_review_status: "approved",
+                              public_country: identity.country.trim() || null,
+                            })
+                          }
+                        >
+                          Approve country
+                        </AdminButton>
+                        <AdminButton
+                          disabled={saving}
+                          variant="ghost"
+                          onClick={() =>
+                            save(selected.moderation_status, {
+                              country_review_status: "rejected",
+                              public_country: null,
+                            })
+                          }
+                        >
+                          Withhold country
+                        </AdminButton>
+                      </>
+                    )}
                   <AdminButton
                     disabled={saving}
                     onClick={() => save("approved")}
                   >
                     Approve reviewed text
-                    {selected.age < 13 || !selected.consent_public
+                    {!selected.consent_public
                       ? " (private)"
                       : ""}
                   </AdminButton>

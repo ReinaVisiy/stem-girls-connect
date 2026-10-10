@@ -51,29 +51,61 @@ test("age must be explicitly supplied as an integer; false strings are never con
     ),
   );
 });
-test("under-13 public permissions and identity are stripped regardless of payload", () => {
-  const record = submissionRecord(input);
-  for (const key of [
-    "consent_public",
-    "consent_display_name",
-    "consent_display_country",
-    "consent_display_city",
-    "consent_reuse",
-  ])
-    assert.equal(record[key as keyof typeof record], false);
-  assert.equal(record.display_name, null);
-  assert.equal(record.city_region, null);
-  for (const status of [
-    "pending",
-    "approved",
-    "approved_redacted",
-    "withdrawn",
-    "escalated",
-  ])
-    assert.equal(eligible(12, true, status, null), false);
-  assert.equal(eligible(13, true, "approved", null), true);
-  assert.equal(eligible(13, false, "approved", null), false);
-  assert.equal(eligible(13, true, "approved", new Date()), false);
+test("everyone under 15 who asks to share waits for a person, whatever the age", () => {
+  for (const age of [0, 8, 10, 12, 13, 14]) {
+    const record = submissionRecord({ ...input, age, displayName: "", consentDisplayName: false, consentDisplayCity: false });
+    assert.equal(record.consent_public, true, `age ${age}`);
+    assert.equal(record.moderation_status, "pending", `age ${age}`);
+    assert.equal(record.moderation_reason, "under_15_review");
+    assert.equal(record.public_display_name, null);
+    assert.equal(record.public_country, null);
+    assert.equal(record.public_city, null);
+  }
+});
+test("15 and over publish at once when consented and safe; declined stays private; flagged waits", () => {
+  for (const age of [15, 16, 17, 18, 25]) {
+    const record = submissionRecord({ ...input, age, consentDisplayCountry: false, consentDisplayCity: false });
+    assert.equal(record.moderation_status, "approved", `age ${age}`);
+  }
+  for (const age of [8, 14, 15, 30]) {
+    const record = submissionRecord({ ...input, age, consentPublic: false });
+    assert.equal(record.consent_public, false);
+    assert.equal(record.moderation_status, "pending");
+    assert.equal(record.public_display_name, null);
+    assert.equal(record.guardian_authorization_status, "not_required");
+  }
+  for (const age of [8, 16, 30])
+    assert.equal(submissionRecord({ ...input, age, girlhoodResponse: "write to a@b.com" }).moderation_status, "pending");
+});
+test("guardian authorization is required below 15 unless switched off, and never above", () => {
+  assert.equal(submissionRecord({ ...input, age: 12 }).guardian_authorization_status, "required");
+  assert.equal(submissionRecord({ ...input, age: 12 }, { guardianAuthorizationRequired: false }).guardian_authorization_status, "not_required");
+  assert.equal(submissionRecord({ ...input, age: 15 }).guardian_authorization_status, "not_required");
+});
+test("names and countries are separate decisions; under 18 countries wait for review", () => {
+  const blank = submissionRecord({ ...input, age: 16, displayName: "", consentDisplayName: true });
+  assert.equal(blank.moderation_status, "approved");
+  assert.equal(blank.public_display_name, null);
+  const named = submissionRecord({ ...input, age: 16, displayName: "Reina", consentDisplayName: true, consentDisplayCountry: true, consentDisplayCity: true });
+  assert.equal(named.moderation_status, "approved");
+  assert.equal(named.public_display_name, "Reina");
+  assert.equal(named.public_country, null);
+  assert.equal(named.public_city, null);
+  assert.equal(named.country_review_status, "pending");
+  const noName = submissionRecord({ ...input, age: 16, displayName: "Reina", consentDisplayName: false });
+  assert.equal(noName.public_display_name, null);
+  const adult = submissionRecord({ ...input, age: 30, displayName: "Ada", consentDisplayName: true, consentDisplayCountry: true, consentDisplayCity: false });
+  assert.equal(adult.public_country, "Country");
+  assert.equal(adult.country_review_status, "not_applicable");
+});
+test("eligibility never depends on age, only consent, approval and withdrawal", () => {
+  for (const age of [8, 14, 15, 40]) {
+    assert.equal(eligible(age, true, "approved", null), true);
+    assert.equal(eligible(age, false, "approved", null), false);
+    assert.equal(eligible(age, true, "approved", new Date()), false);
+    for (const status of ["pending", "withdrawn", "escalated", "rejected"])
+      assert.equal(eligible(age, true, status, null), false);
+  }
 });
 test("strong reference and code generation, compatible hashing for existing codes", () => {
   process.env.GIRLHOOD_WITHDRAWAL_PEPPER = "test-only-pepper-".repeat(4);

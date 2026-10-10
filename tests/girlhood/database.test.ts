@@ -48,7 +48,7 @@ test("PostgreSQL migration, grants, privacy, moderation, withdrawal, counts and 
   const insert = async (
     age: number,
     consent = true,
-    status = "approved",
+    status = age < 15 ? "pending" : "approved",
     perspective = "own",
   ) => {
     const result = await db.query<{ id: string }>(
@@ -64,12 +64,12 @@ test("PostgreSQL migration, grants, privacy, moderation, withdrawal, counts and 
   await insert(20, true, "pending");
   await insert(20, true, "approved_redacted", "ally");
   await t.test(
-    "public projection excludes children, unconsented and pending records",
+    "public projection excludes unreviewed under-15, unconsented and pending records",
     async () => {
       const visible = await db.query<Record<string, unknown>>(
         "select * from public.girlhood_public_responses",
       );
-      assert.equal(visible.rows.length, 7);
+      assert.equal(visible.rows.length, 6);
       for (const row of visible.rows) {
         assert.ok(!("age" in row));
         assert.ok(!("withdrawal_hash" in row));
@@ -87,7 +87,7 @@ test("PostgreSQL migration, grants, privacy, moderation, withdrawal, counts and 
       assert.deepEqual(
         (
           await db.query<Record<string, unknown>>(
-            "select public_category from public.girlhood_submissions where age in (13,18,24,25) order by age",
+            "select public_category from public.girlhood_submissions where age in (17,18,24,25) order by age",
           )
         ).rows.map((r) => r.public_category),
         ["girl", "young_woman", "young_woman", "woman"],
@@ -155,7 +155,7 @@ test("PostgreSQL migration, grants, privacy, moderation, withdrawal, counts and 
       await assert.rejects(() =>
         db.query<Record<string, unknown>>(
           "insert into public.girlhood_moderation_events(submission_id,moderator_id,new_status) values($1,$2,'approved')",
-          [ids.get(13), admin],
+          [ids.get(17), admin],
         ),
       );
       await assert.rejects(() =>
@@ -166,13 +166,13 @@ test("PostgreSQL migration, grants, privacy, moderation, withdrawal, counts and 
       );
       await db.query<Record<string, unknown>>(
         "update public.girlhood_submissions set moderation_status='approved_redacted',public_girlhood_response='A safer public response' where id=$1",
-        [ids.get(13)],
+        [ids.get(17)],
       );
       assert.equal(
         (
           await db.query<Record<string, unknown>>(
             "select reviewed_by from public.girlhood_submissions where id=$1",
-            [ids.get(13)],
+            [ids.get(17)],
           )
         ).rows[0].reviewed_by,
         admin,
@@ -181,7 +181,7 @@ test("PostgreSQL migration, grants, privacy, moderation, withdrawal, counts and 
         (
           await db.query<Record<string, unknown>>(
             "select * from public.girlhood_moderation_events where submission_id=$1",
-            [ids.get(13)],
+            [ids.get(17)],
           )
         ).rows.length,
         1,
@@ -218,12 +218,12 @@ test("PostgreSQL migration, grants, privacy, moderation, withdrawal, counts and 
     async () => {
       await db.query<Record<string, unknown>>(
         "update public.girlhood_submissions set moderation_status='withdrawn' where id=$1",
-        [ids.get(13)],
+        [ids.get(17)],
       );
       const row = (
         await db.query<Record<string, unknown>>(
           "select withdrawn_at,consent_public,consent_reuse,consent_analysis,reuse_cleanup_required from public.girlhood_submissions where id=$1",
-          [ids.get(13)],
+          [ids.get(17)],
         )
       ).rows[0];
       assert.ok(row.withdrawn_at);
@@ -234,7 +234,7 @@ test("PostgreSQL migration, grants, privacy, moderation, withdrawal, counts and 
       await assert.rejects(() =>
         db.query<Record<string, unknown>>(
           "update public.girlhood_submissions set moderation_status='approved' where id=$1",
-          [ids.get(13)],
+          [ids.get(17)],
         ),
       );
       await db.exec(
@@ -301,7 +301,7 @@ test("PostgreSQL migration, grants, privacy, moderation, withdrawal, counts and 
       await db.exec("reset role");
       await db.query(
         "update public.girlhood_submissions set created_at=now()-interval '13 months' where id=$1",
-        [ids.get(13)],
+        [ids.get(17)],
       );
       await db.exec("set role service_role");
       assert.equal(
@@ -316,7 +316,7 @@ test("PostgreSQL migration, grants, privacy, moderation, withdrawal, counts and 
         (
           await db.query(
             "select id from public.girlhood_moderation_events where submission_id=$1",
-            [ids.get(13)],
+            [ids.get(17)],
           )
         ).rows.length,
         0,
