@@ -81,9 +81,7 @@ export default function GirlhoodHome() {
         <h2 id="girlhood-preview-title" className="girlhood-preview-title">
           {t.previewTitle}
         </h2>
-        {voices.length === 0 ? (
-          <p className="girlhood-preview-empty">{t.previewEmpty}</p>
-        ) : (
+        {voices.length > 0 && (
           <div className="girlhood-notes-grid">
             {voices.map((response) => (
               <GirlhoodResponseCard
