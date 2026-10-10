@@ -26,6 +26,7 @@ interface RouteMeta {
 
 const SITE_URL = 'https://stemgirlsconnect.org';
 const DEFAULT_IMAGE = `${SITE_URL}/og-image.jpg`;
+const GIRLHOOD_SHARE_IMAGE = `${SITE_URL}/girlhood-share.png`;
 const DEFAULT_IMAGE_ALT = 'STEM Girls Connect volunteers leading a STEM outreach session with students';
 
 const CONTACT_EMAIL = 'info@stemgirlsconnect.org';
@@ -368,8 +369,14 @@ export default async function middleware(request: Request): Promise<Response> {
           meta = {
             title: `${title} | STEM Girls Connect`,
             description,
-            image: program.cover_image_url ? String(program.cover_image_url) : undefined,
-            imageAlt: title,
+            // The campaign has its own share card; every other program uses its cover image.
+            image:
+              program.page_template === 'girlhood'
+                ? GIRLHOOD_SHARE_IMAGE
+                : program.cover_image_url
+                  ? String(program.cover_image_url)
+                  : undefined,
+            imageAlt: program.page_template === 'girlhood' ? `${title}, 11 October, International Day of the Girl` : title,
             body: page(h1(title) + p(description)),
           };
         }
