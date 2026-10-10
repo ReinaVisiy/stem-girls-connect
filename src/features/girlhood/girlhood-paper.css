@@ -875,3 +875,12 @@ body:has(.girlhood-composer[open]) {overflow:hidden;}
   text-align: center;
   margin: 1.5rem 0 0;
 }
+
+/* ---- card composer: edit and preview --------------------------------- */
+.girlhood-composer-tabs {display:flex;gap:8px;margin:16px 0;}
+.girlhood-composer-tab {flex:1;min-height:48px;padding:0 12px;border-radius:999px;border:1.5px solid #82246d;background:transparent;color:#82246d;font-weight:600;cursor:pointer;}
+.girlhood-composer-tab[aria-pressed=true] {background:#82246d;color:#fff;}
+.girlhood-composer-field {margin:16px 0;}
+.girlhood-composer-field > label:first-child {font-weight:600;margin-bottom:6px;}
+.girlhood-composer textarea {display:block;width:100%;max-width:100%;box-sizing:border-box;border:1px solid #55645a;padding:10px;font:inherit;font-size:16px;border-radius:6px;background:#fff;color:#123f2d;resize:vertical;}
+.girlhood-composer-include {display:flex;align-items:center;min-height:44px;margin:4px 0 0;}
