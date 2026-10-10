@@ -890,3 +890,13 @@ body:has(.girlhood-composer[open]) {overflow:hidden;}
 .girlhood-paper .girlhood-note-author {display:block;margin-top:6px;font-family:var(--girlhood-serif);font-style:italic;font-size:12px;line-height:1.2;opacity:0.8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .girlhood-paper .girlhood-note-excerpt {-webkit-line-clamp:4;}
 @media(min-width:768px) {.girlhood-paper .girlhood-note-prompt,.girlhood-paper .girlhood-note-author {font-size:clamp(12px,1.5vw,16px);}}
+
+/* hero title on one line, a touch smaller */
+.girlhood-hero h1,
+.dark .girlhood-hero h1,
+.girlhood-hero.has-greeting h1 {
+  max-width: none;
+  white-space: nowrap;
+  font-size: clamp(1.35rem, 6vw, 2.4rem);
+  letter-spacing: -0.01em;
+}
