@@ -20,7 +20,7 @@ const Blog: React.FC = () => {
         subtitle="Updates and stories from our programs."
       />
 
-      <section className="container mx-auto px-6 py-20">
+      <section id="blog-posts" className="container mx-auto px-6 py-20">
         {loading && (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-6xl mx-auto">
             {[0, 1, 2].map((i) => (

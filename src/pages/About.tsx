@@ -62,8 +62,8 @@ const About: React.FC = () => {
         subtitle="Nurturing Women in STEM" 
       />
 
-      <section className="container mx-auto px-6 py-10">
-        <ScrollReveal className="max-w-3xl mx-auto mb-24">
+      <section id="about-content" className="container mx-auto px-6 py-10">
+        <ScrollReveal id="our-story" className="max-w-3xl mx-auto mb-24">
           <h2 className="text-2xl font-extrabold text-brandGreen mb-6 uppercase tracking-widest text-center">Our Story</h2>
           <p className="text-brandSlate text-lg leading-relaxed font-semibold text-justify mb-6">
             STEM Girls Connect began with a simple but uncomfortable observation. Walk into most engineering lecture halls, tech offices, or science labs across Cameroon, and women are still rare. It isn't a question of ability. One major barrier is awareness and exposure.
@@ -82,7 +82,7 @@ const About: React.FC = () => {
           </p>
         </ScrollReveal>
 
-        <ScrollReveal className="max-w-5xl mx-auto mb-24 bg-[#486e7c]/5 dark:bg-white/5 rounded-[50px] border border-gray-100 dark:border-slate-700 p-8 md:p-12">
+        <ScrollReveal id="about-ceo" className="max-w-5xl mx-auto mb-24 bg-[#486e7c]/5 dark:bg-white/5 rounded-[50px] border border-gray-100 dark:border-slate-700 p-8 md:p-12">
           <h2 className="text-2xl font-extrabold text-brandGreen mb-6 uppercase tracking-widest">About our CEO</h2>
           <div className="clear-both">
             <PhotoGallery images={[{ src: ceoPhoto.src, alt: ceoPhoto.alt }]}>
@@ -108,8 +108,8 @@ const About: React.FC = () => {
           </div>
         </ScrollReveal>
 
-        <div className="grid md:grid-cols-2 gap-12 mb-16">
-          <ScrollReveal className="bg-[#486e7c]/5 dark:bg-white/5 p-10 rounded-[50px] border border-gray-100 dark:border-slate-700 flex flex-col h-full hover:shadow-2xl transition-all">
+        <div id="mission-vision" className="grid md:grid-cols-2 gap-12 mb-16">
+          <ScrollReveal id="mission" className="bg-[#486e7c]/5 dark:bg-white/5 p-10 rounded-[50px] border border-gray-100 dark:border-slate-700 flex flex-col h-full hover:shadow-2xl transition-all">
             <Target color="#82246d" size={24} className="mb-6" />
             <h2 className="text-3xl font-extrabold text-brandGreen mb-6 uppercase tracking-tight">Mission</h2>
             <p className="text-brandSlate text-lg leading-relaxed text-justify font-bold">
@@ -117,7 +117,7 @@ const About: React.FC = () => {
             </p>
           </ScrollReveal>
           
-          <ScrollReveal delay={200} className="bg-[#486e7c]/5 dark:bg-white/5 p-10 rounded-[50px] border border-gray-100 dark:border-slate-700 flex flex-col h-full hover:shadow-2xl transition-all">
+          <ScrollReveal id="vision" delay={200} className="bg-[#486e7c]/5 dark:bg-white/5 p-10 rounded-[50px] border border-gray-100 dark:border-slate-700 flex flex-col h-full hover:shadow-2xl transition-all">
             <Eye color="#82246d" size={24} className="mb-6" />
             <h2 className="text-3xl font-extrabold text-brandGreen mb-6 uppercase tracking-tight">Vision</h2>
             <p className="text-brandSlate text-lg leading-relaxed text-justify font-bold">
@@ -126,8 +126,8 @@ const About: React.FC = () => {
           </ScrollReveal>
         </div>
 
-        <div className="max-w-3xl mx-auto mb-24 space-y-6">
-          <ScrollReveal delay={300} className="flex items-start gap-3">
+        <div id="motto-slogan" className="max-w-3xl mx-auto mb-24 space-y-6">
+          <ScrollReveal id="motto" delay={300} className="flex items-start gap-3">
             <Flag color="#82246d" size={22} className="mt-1 shrink-0" />
             <p className="text-brandSlate text-sm font-semibold italic text-justify">
               <span className="font-extrabold uppercase tracking-widest text-xs text-brandGreen not-italic mr-2">Motto</span>
@@ -135,7 +135,7 @@ const About: React.FC = () => {
             </p>
           </ScrollReveal>
 
-          <ScrollReveal delay={400} className="flex items-start gap-3">
+          <ScrollReveal id="slogan" delay={400} className="flex items-start gap-3">
             <Sparkles color="#82246d" size={22} className="mt-1 shrink-0" />
             <p className="text-brandSlate text-sm font-semibold italic text-justify">
               <span className="font-extrabold uppercase tracking-widest text-xs text-brandGreen not-italic mr-2">Slogan</span>
@@ -146,7 +146,7 @@ const About: React.FC = () => {
 
         <PhotoGallery images={[{ src: teamPhoto.src, alt: teamPhoto.alt }]}>
           {(open) => (
-            <ScrollReveal className="max-w-4xl mx-auto mb-24">
+            <ScrollReveal id="team-photo" className="max-w-4xl mx-auto mb-24">
               <img
                 src={teamPhoto.src}
                 alt={teamPhoto.alt}
@@ -157,7 +157,7 @@ const About: React.FC = () => {
           )}
         </PhotoGallery>
 
-        <ScrollReveal className="bg-white dark:bg-slate-800 p-5 rounded-[60px] border-2 border-brandPink/10 shadow-xl max-w-5xl mx-auto">
+        <ScrollReveal id="objectives" className="bg-white dark:bg-slate-800 p-5 rounded-[60px] border-2 border-brandPink/10 shadow-xl max-w-5xl mx-auto">
           <h2 className="text-3xl font-extrabold text-brandGreen mb-10 uppercase tracking-tighter text-center">Our Objectives</h2>
           <div className="grid md:[grid-template-columns:repeat(auto-fit,minmax(360px,500px))] md:justify-center gap-6">
             {objectives.map((obj, i) => (
@@ -170,7 +170,7 @@ const About: React.FC = () => {
         </ScrollReveal>
       </section>
 
-      <section className="bg-white dark:bg-slate-800 py-12">
+      <section id="bureau" className="bg-white dark:bg-slate-800 py-12">
         <div className="container mx-auto px-6">
           <ScrollReveal className="text-center mb-20">
             <Users color="#82246d" size={48} className="mx-auto mb-6" />

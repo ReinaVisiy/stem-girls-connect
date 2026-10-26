@@ -73,7 +73,7 @@ const JoinUs: React.FC = () => {
         subtitle="Join a community of girls, young women, and mentors building futures in STEM." 
       />
 
-      <section className="container mx-auto px-6 py-16">
+      <section id="choose-your-path" className="container mx-auto px-6 py-16">
         <ScrollReveal className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-extrabold text-brandGreen uppercase tracking-tighter">Choose Your Path</h2>
           <div className="h-1.5 w-24 bg-brandPink mx-auto mt-4 rounded-full"></div>
@@ -94,7 +94,7 @@ const JoinUs: React.FC = () => {
         </div>
       </section>
 
-      <section className="container mx-auto px-6">
+      <section id="join-photo" className="container mx-auto px-6">
         <PhotoGallery images={[{ src: heroPhoto.src, alt: heroPhoto.alt }]}>
           {(open) => (
             <ScrollReveal className="max-w-4xl mx-auto mb-16 rounded-[50px] overflow-hidden shadow-2xl border-4 border-brandPink/10 aspect-[3/2]">
@@ -109,7 +109,7 @@ const JoinUs: React.FC = () => {
         </PhotoGallery>
       </section>
 
-      <section className="bg-white dark:bg-slate-800 py-6">
+      <section id="benefits" className="bg-white dark:bg-slate-800 py-6">
         <div className="container mx-auto px-6">
           <ScrollReveal className="text-center mb-20">
             <h2 className="text-3xl md:text-4xl font-extrabold text-brandGreen uppercase tracking-tighter">What’s in it for you?</h2>
@@ -128,7 +128,7 @@ const JoinUs: React.FC = () => {
         </div>
       </section>
 
-      <section className="bg-brandPink py-16 text-white mb-24 relative overflow-hidden">
+      <section id="join-community" className="bg-brandPink py-16 text-white mb-24 relative overflow-hidden">
         <div className="container mx-auto px-6 text-center relative z-10">
           <ScrollReveal>
             <MessageSquare color="#FFFFFF" size={48} className="mx-auto mb-6 opacity-80" />
@@ -147,7 +147,7 @@ const JoinUs: React.FC = () => {
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -mr-32 -mt-32"></div>
       </section>
 
-      <section className="container mx-auto px-6 py-8">
+      <section id="membership" className="container mx-auto px-6 py-8">
         <ScrollReveal className="max-w-4xl mx-auto bg-white dark:bg-slate-800 rounded-[50px] shadow-2xl overflow-hidden border border-gray-100 dark:border-slate-700">
           <div className="p-10 flex flex-col md:flex-row items-center md:items-center gap-6 md:gap-8">
             <UserPlus color="#82246d" size={40} className="flex-shrink-0" />

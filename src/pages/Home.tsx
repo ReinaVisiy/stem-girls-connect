@@ -37,7 +37,7 @@ const Home: React.FC = () => {
         description="STEM Girls Connect is a nonprofit training and mentoring girls and young women in science, technology, engineering, and mathematics through workshops, mentorship, and advocacy."
         path="/"
       />
-      <section className="relative overflow-hidden min-h-[640px] sm:min-h-[600px] md:min-h-[720px] flex items-center">
+      <section id="hero" className="relative overflow-hidden min-h-[640px] sm:min-h-[600px] md:min-h-[720px] flex items-center">
         {/* Background photograph */}
         <img
           src={heroPhoto.src}
@@ -78,7 +78,7 @@ const Home: React.FC = () => {
       </section>
 
       {!statsLoading && stats && stats.length > 0 && (
-        <section className="py-24 bg-white dark:bg-slate-800">
+        <section id="impact-stats" className="py-24 bg-white dark:bg-slate-800">
           <div className="container mx-auto px-6">
             <ScrollReveal className="text-center mb-16">
               <h2 className="text-2xl font-extrabold text-brandGreen uppercase tracking-widest">Our Impact So Far</h2>
@@ -103,7 +103,7 @@ const Home: React.FC = () => {
       )}
 
       {!postsLoading && latestPost && (
-        <section className="py-20 bg-[#486e7c]/5 dark:bg-white/5 border-y border-gray-100 dark:border-slate-700">
+        <section id="whats-new" className="py-20 bg-[#486e7c]/5 dark:bg-white/5 border-y border-gray-100 dark:border-slate-700">
           <div className="container mx-auto px-6">
             <ScrollReveal className="text-center mb-12">
               <h2 className="text-2xl font-extrabold text-brandGreen uppercase tracking-widest">What's New</h2>
@@ -120,7 +120,7 @@ const Home: React.FC = () => {
         </section>
       )}
 
-      <section className="py-14 bg-white dark:bg-slate-800 border-t border-gray-100 dark:border-slate-700">
+      <section id="partners" className="py-14 bg-white dark:bg-slate-800 border-t border-gray-100 dark:border-slate-700">
         <div className="container mx-auto px-6">
           <ScrollReveal className="text-center mb-8">
             <h2 className="text-2xl font-extrabold text-brandGreen uppercase tracking-widest mb-2">Our Partners</h2>
@@ -130,7 +130,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      <section className="py-24 bg-brandSlate text-white relative">
+      <section id="support-our-mission" className="py-24 bg-brandSlate text-white relative">
         <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
           <ScrollReveal>
             <h2 className="text-4xl font-extrabold mb-8 uppercase tracking-tighter italic">Support Our Mission</h2>

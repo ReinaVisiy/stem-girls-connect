@@ -64,19 +64,19 @@ const Programs: React.FC = () => {
         subtitle="Turning Passion Into Profession Through STEM Training and Mentorship" 
       />
 
-      <section className="container mx-auto px-6 py-20">
-        <ScrollReveal className="max-w-4xl mx-auto text-center mb-16">
+      <section id="programs-overview" className="container mx-auto px-6 py-20">
+        <ScrollReveal id="programs-intro" className="max-w-4xl mx-auto text-center mb-16">
           <p className="text-xl md:text-2xl text-brandSlate font-bold leading-relaxed text-justify">
             We create opportunities for girls and young women to learn, grow, connect, and build their futures in STEM through training, mentorship, career support, outreach, and access to opportunities.
           </p>
           <div className="h-1.5 w-24 bg-brandPink mx-auto mt-10 rounded-full"></div>
         </ScrollReveal>
 
-        <ScrollReveal delay={100}>
+        <ScrollReveal id="programs-slideshow" delay={100}>
           <HomeSlideshow />
         </ScrollReveal>
 
-        <div className="grid md:[grid-template-columns:repeat(auto-fit,minmax(300px,380px))] md:justify-center gap-12 mb-24">
+        <div id="program-pillars" className="grid md:[grid-template-columns:repeat(auto-fit,minmax(300px,380px))] md:justify-center gap-12 mb-24">
           {pillars.map((pillar, i) => {
             const Icon = pillar.icon;
             return (

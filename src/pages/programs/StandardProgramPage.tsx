@@ -103,7 +103,7 @@ const StandardProgramPage: React.FC<{ program: ProgramDetail; preview?: boolean 
       )}
 
       {/* 1. Hero */}
-      <section className="relative bg-brandPink text-white overflow-hidden">
+      <section id="program-hero" className="relative bg-brandPink text-white overflow-hidden">
         {program.cover_image_url && (
           <img src={program.cover_image_url} alt="" className="absolute inset-0 w-full h-full object-cover" />
         )}
@@ -127,7 +127,7 @@ const StandardProgramPage: React.FC<{ program: ProgramDetail; preview?: boolean 
 
       {/* 2. Quick facts */}
       {quickFacts.length > 0 && (
-        <section aria-label="Quick facts" className="container mx-auto px-6 -mt-10 relative z-10">
+        <section id="quick-facts" aria-label="Quick facts" className="container mx-auto px-6 -mt-10 relative z-10">
           <dl className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto bg-white dark:bg-slate-800 rounded-[32px] border border-gray-100 dark:border-slate-700 shadow-xl p-6 md:p-8">
             {quickFacts.map((fact) => (
               <div key={fact.label}>
@@ -143,7 +143,7 @@ const StandardProgramPage: React.FC<{ program: ProgramDetail; preview?: boolean 
         {/* 3. About */}
         {(overviewParagraphs.length > 0 || objectives.length > 0) && (
           <ScrollReveal className="pt-20">
-            <section aria-labelledby="about-heading">
+            <section id="about-program" aria-labelledby="about-heading">
               <SectionHeading id="about-heading">About the Program</SectionHeading>
               {overviewParagraphs.length > 0 && <div className="space-y-4">
                 {overviewParagraphs.map((para, i) => (
@@ -172,7 +172,7 @@ const StandardProgramPage: React.FC<{ program: ProgramDetail; preview?: boolean 
         {/* 4. How it works */}
         {phases.length > 0 && (
           <ScrollReveal className="pt-20">
-            <section aria-labelledby="phases-heading">
+            <section id="how-it-works" aria-labelledby="phases-heading">
               <SectionHeading id="phases-heading">How the Program Works</SectionHeading>
               <ol className="space-y-4">
                 {phases.map((phase, i) => (
@@ -197,7 +197,7 @@ const StandardProgramPage: React.FC<{ program: ProgramDetail; preview?: boolean 
         {/* 5. Eligibility */}
         {eligibility.length > 0 && (
           <ScrollReveal className="pt-20">
-            <section aria-labelledby="eligibility-heading">
+            <section id="eligibility" aria-labelledby="eligibility-heading">
               <SectionHeading id="eligibility-heading">Who Can Participate?</SectionHeading>
               <ul className="space-y-3">
                 {eligibility.map((item, i) => (
@@ -214,7 +214,7 @@ const StandardProgramPage: React.FC<{ program: ProgramDetail; preview?: boolean 
         {/* 6. Benefits */}
         {benefits.length > 0 && (
           <ScrollReveal className="pt-20">
-            <section aria-labelledby="benefits-heading">
+            <section id="benefits" aria-labelledby="benefits-heading">
               <SectionHeading id="benefits-heading">What Participants Gain</SectionHeading>
               <ul className="space-y-3">
                 {benefits.map((item, i) => (
@@ -231,7 +231,7 @@ const StandardProgramPage: React.FC<{ program: ProgramDetail; preview?: boolean 
         {/* 7. Important dates */}
         {importantDates.length > 0 && (
           <ScrollReveal className="pt-20">
-            <section aria-labelledby="dates-heading">
+            <section id="important-dates" aria-labelledby="dates-heading">
               <SectionHeading id="dates-heading">Important Dates</SectionHeading>
               <dl className="bg-[#486e7c]/5 dark:bg-white/5 rounded-[32px] border border-gray-100 dark:border-slate-700 divide-y divide-gray-100 dark:divide-slate-700">
                 {importantDates.map((d) => (
@@ -248,7 +248,7 @@ const StandardProgramPage: React.FC<{ program: ProgramDetail; preview?: boolean 
         {/* 8. How to apply / participate */}
         {showHowToApply && (
           <ScrollReveal className="pt-20">
-            <section aria-labelledby="apply-heading">
+            <section id="how-to-apply" aria-labelledby="apply-heading">
               <SectionHeading id="apply-heading">{applicationBased ? 'How to Apply' : 'How to Participate'}</SectionHeading>
               <div className="space-y-4 mb-8">
                 {howToApplyParagraphs.map((para, i) => (
@@ -263,7 +263,7 @@ const StandardProgramPage: React.FC<{ program: ProgramDetail; preview?: boolean 
         {/* 9. FAQ */}
         {faq.length > 0 && (
           <ScrollReveal className="pt-20">
-            <section aria-labelledby="faq-heading">
+            <section id="faq" aria-labelledby="faq-heading">
               <SectionHeading id="faq-heading">Frequently Asked Questions</SectionHeading>
               <div className="space-y-3">
                 {faq.map((item, i) => (
@@ -303,7 +303,7 @@ const StandardProgramPage: React.FC<{ program: ProgramDetail; preview?: boolean 
 
       {/* 10. Final CTA */}
       {showFinalCta && (
-        <section className="container mx-auto px-6 pt-20" aria-label="Get involved">
+        <section id="get-involved" className="container mx-auto px-6 pt-20" aria-label="Get involved">
           <div className="max-w-4xl mx-auto bg-gradient-to-br from-[#82246d] to-[#486e7c] text-white rounded-[40px] p-10 md:p-14 text-center">
             {showFinalApply && (
               <>

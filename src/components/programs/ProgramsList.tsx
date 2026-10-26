@@ -4,8 +4,8 @@ import ProgramCard from './ProgramCard';
 import { useApiData } from '../../hooks/useApiData';
 import { CURRENT_STATUSES, type ProgramSummary } from '../../lib/programs';
 
-const Group: React.FC<{ heading: string; programs: ProgramSummary[] }> = ({ heading, programs }) => (
-  <div className="mb-20 last:mb-0">
+const Group: React.FC<{ id: string; heading: string; programs: ProgramSummary[] }> = ({ id, heading, programs }) => (
+  <div id={id} className="mb-20 last:mb-0">
     <ScrollReveal className="text-center mb-12">
       <h2 className="text-3xl font-extrabold text-[#1d7448] dark:text-emerald-400 uppercase tracking-tighter">{heading}</h2>
     </ScrollReveal>
@@ -33,9 +33,9 @@ const ProgramsList: React.FC = () => {
   if (current.length === 0 && past.length === 0) return null;
 
   return (
-    <section className="container mx-auto px-6 pb-12">
-      {current.length > 0 && <Group heading="Current & Upcoming Programs" programs={current} />}
-      {past.length > 0 && <Group heading="Past Programs" programs={past} />}
+    <section id="programs-list" className="container mx-auto px-6 pb-12">
+      {current.length > 0 && <Group id="current-programs" heading="Current & Upcoming Programs" programs={current} />}
+      {past.length > 0 && <Group id="past-programs" heading="Past Programs" programs={past} />}
     </section>
   );
 };

@@ -38,7 +38,7 @@ const Impact: React.FC = () => {
         subtitle="Our work in numbers, stories, and reports."
       />
 
-      <section className="container mx-auto px-6 py-20">
+      <section id="by-the-numbers" className="container mx-auto px-6 py-20">
         <ScrollReveal className="text-center mb-16">
           <h2 className="text-3xl font-extrabold text-brandGreen uppercase tracking-tighter">By the Numbers</h2>
         </ScrollReveal>
@@ -72,7 +72,7 @@ const Impact: React.FC = () => {
         )}
       </section>
 
-      <section className="bg-white dark:bg-slate-800 border-t border-gray-100 dark:border-slate-700 py-20">
+      <section id="reports-and-records" className="bg-white dark:bg-slate-800 border-t border-gray-100 dark:border-slate-700 py-20">
         <div className="container mx-auto px-6">
           <ScrollReveal className="text-center mb-16">
             <FileText color="#82246d" size={40} className="mx-auto mb-4" />

@@ -5,9 +5,10 @@ interface ScrollRevealProps {
   children: React.ReactNode;
   delay?: number;
   className?: string;
+  id?: string;
 }
 
-const ScrollReveal: React.FC<ScrollRevealProps> = ({ children, delay = 0, className = '' }) => {
+const ScrollReveal: React.FC<ScrollRevealProps> = ({ children, delay = 0, className = '', id }) => {
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -35,6 +36,7 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({ children, delay = 0, classN
 
   return (
     <div
+      id={id}
       ref={ref}
       style={{ transitionDelay: `${delay}ms` }}
       className={`${className} transition-all duration-1000 transform ${

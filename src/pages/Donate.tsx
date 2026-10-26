@@ -21,7 +21,7 @@ const Donate: React.FC = () => {
         description="Support STEM Girls Connect's mission to empower girls and young women in STEM with a donation."
         path="/donate"
       />
-      <section className="relative overflow-hidden min-h-[520px] flex items-center">
+      <section id="donate-hero" className="relative overflow-hidden min-h-[520px] flex items-center">
         {/* Background photograph, cropped to keep the focus on the girls rather than the chalkboard above them */}
         <img
           src={heroPhoto.src}
@@ -49,7 +49,7 @@ const Donate: React.FC = () => {
         </div>
       </section>
 
-      <section className="container mx-auto px-6 pt-24 pb-24">
+      <section id="donate" className="container mx-auto px-6 pt-24 pb-24">
         <ScrollReveal className="max-w-xl mx-auto bg-white dark:bg-slate-800 p-12 rounded-[50px] shadow-2xl border-2 border-brandPink/10 flex flex-col items-center text-center hover:border-brandPink transition-all duration-300">
           <h3 className="text-2xl font-extrabold text-brandGreen mb-6 uppercase tracking-tight">Donate via Mobile Money or Orange Money</h3>
           <p className="text-brandSlate text-sm font-bold mb-10 leading-relaxed">

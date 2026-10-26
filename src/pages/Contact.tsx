@@ -49,9 +49,9 @@ const Contact: React.FC = () => {
         subtitle="We'd love to hear from you." 
       />
 
-      <section className="container mx-auto px-6 py-12">
+      <section id="contact-info" className="container mx-auto px-6 py-12">
         <div className="grid lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          <ScrollReveal className="bg-white dark:bg-slate-800 p-12 rounded-[40px] shadow-xl border border-gray-100 dark:border-slate-700 flex flex-col items-center text-center hover:shadow-2xl transition-all">
+          <ScrollReveal id="headquarters" className="bg-white dark:bg-slate-800 p-12 rounded-[40px] shadow-xl border border-gray-100 dark:border-slate-700 flex flex-col items-center text-center hover:shadow-2xl transition-all">
             <div className="bg-brandPink/10 w-16 h-16 rounded-2xl flex items-center justify-center mb-8">
               <MapPin color="#82246d" size={32} />
             </div>
@@ -61,7 +61,7 @@ const Contact: React.FC = () => {
             </p>
           </ScrollReveal>
 
-          <ScrollReveal delay={100} className="bg-white dark:bg-slate-800 p-12 rounded-[40px] shadow-xl border border-gray-100 dark:border-slate-700 flex flex-col items-center text-center hover:shadow-2xl transition-all">
+          <ScrollReveal id="contact-email" delay={100} className="bg-white dark:bg-slate-800 p-12 rounded-[40px] shadow-xl border border-gray-100 dark:border-slate-700 flex flex-col items-center text-center hover:shadow-2xl transition-all">
             <div className="bg-brandPink/10 w-16 h-16 rounded-2xl flex items-center justify-center mb-8">
               <Mail color="#82246d" size={32} />
             </div>
@@ -69,7 +69,7 @@ const Contact: React.FC = () => {
             <p className="text-brandSlate font-extrabold">{organization.contact.email}</p>
           </ScrollReveal>
 
-          <ScrollReveal delay={200} className="bg-white dark:bg-slate-800 p-12 rounded-[40px] shadow-xl border border-gray-100 dark:border-slate-700 flex flex-col items-center text-center hover:shadow-2xl transition-all">
+          <ScrollReveal id="contact-socials" delay={200} className="bg-white dark:bg-slate-800 p-12 rounded-[40px] shadow-xl border border-gray-100 dark:border-slate-700 flex flex-col items-center text-center hover:shadow-2xl transition-all">
             <div className="bg-brandPink/10 w-16 h-16 rounded-2xl flex items-center justify-center mb-8">
               <MessageSquare color="#82246d" size={32} />
             </div>
@@ -97,7 +97,7 @@ const Contact: React.FC = () => {
         </div>
       </section>
 
-      <section className="container mx-auto px-6 mb-20">
+      <section id="contact-form" className="container mx-auto px-6 mb-20">
         <ScrollReveal className="max-w-2xl mx-auto bg-white dark:bg-slate-800 p-10 md:p-14 rounded-[50px] shadow-2xl border border-gray-100 dark:border-slate-700">
           <h2 className="text-2xl font-extrabold text-brandGreen mb-8 uppercase tracking-tight text-center">Send Us a Message</h2>
           <form onSubmit={handleSubmit} className="space-y-5">
@@ -161,7 +161,7 @@ const Contact: React.FC = () => {
         </ScrollReveal>
       </section>
 
-      <section className="container mx-auto px-6 mb-20">
+      <section id="reach-out" className="container mx-auto px-6 mb-20">
         <ScrollReveal className="bg-brandSlate text-white p-12 md:p-24 rounded-[60px] text-center shadow-2xl overflow-hidden relative">
           <h2 className="text-3xl font-extrabold mb-6 uppercase tracking-tighter relative z-10 italic">
             Reach out
