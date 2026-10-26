@@ -3,6 +3,7 @@ import React, { Suspense, lazy } from 'react';
 import { Routes, Route, Outlet, useLocation, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import ScrollToHash from './components/ScrollToHash';
 import Home from './pages/Home';
 import About from './pages/About';
 import Programs from './pages/Programs';
@@ -62,6 +63,8 @@ const App: React.FC = () => {
   }, [location.pathname]);
 
   return (
+    <>
+    <ScrollToHash />
     <Routes>
       <Route element={<PublicLayout />}>
         <Route path="/" element={<Home />} />
@@ -114,6 +117,7 @@ const App: React.FC = () => {
         }
       />
     </Routes>
+    </>
   );
 };
 
